@@ -163,7 +163,7 @@ struct UserInfoView: View {
             if let error = error {
                 self.userInfo = "Error: \(error.localizedDescription)"
             } else if let data = data {
-                if let decodedData = try? JSONDecoder().decode(UserInfoResponse.self, from: data) {
+                if let decodedData = try? JSONDecoder().decode(UserInfo.self, from: data) {
                     self.userInfo = "User Info: \(decodedData.username)"
                 } else {
                     self.userInfo = "Error: Unable to decode data"
@@ -173,9 +173,39 @@ struct UserInfoView: View {
     }
 }
 
-struct UserInfoResponse: Codable {
+struct UserInfo: Codable {
     let username: String
 }
+
+struct FileObject: Codable {
+
+}
+
+struct SearchObject: Codable {
+    
+}
+
+struct FilterObject: Codable {
+    
+}
+
+struct Logs: Codable {
+    
+}
+
+
+func getUserInfo() -> Bool { return true }
+func downloadFiles(ids: [String], keepDirectoryStructure: Bool = false, noZip: Bool = false) -> Bool { return true }
+func uploadFiles(files: [Data], dest: String) -> Bool { return true }
+func renameFile(data: FileObject, newName: String) -> Bool { return true }
+func deleteFiles(data: [FileObject]) -> Bool { return true }
+func searchSimple(search: String, directory: String, pageSize: Int = 100, pageIndex: Int = 0) -> Bool { return true }
+func searchAdvanced(searchObj: SearchObject, directory: String, pageSize: Int = 100, pageIndex: Int = 0, sortField: String?, sortDirection: String?, FILTERS: FilterObject?) -> Bool { return true }
+func showDirectories(depth: Int = 0, paths: String = "/") -> Bool { return true }
+func createDirectory(path: String) -> Bool { return true }
+func getPreview(id: String) -> Bool { return true }
+func getDetails(id: String) -> Bool { return true }
+
 
 
 #Preview {
