@@ -199,12 +199,12 @@ func downloadFiles(ids: [String], keepDirectoryStructure: Bool = false, noZip: B
 func uploadFiles(files: [Data], dest: String) -> Bool { return true }
 func renameFile(data: FileObject, newName: String) -> Bool { return true }
 func deleteFiles(data: [FileObject]) -> Bool { return true }
-func searchSimple(search: String, directory: String, pageSize: Int = 100, pageIndex: Int = 0) -> Bool { return true }
-func searchAdvanced(searchObj: SearchObject, directory: String, pageSize: Int = 100, pageIndex: Int = 0, sortField: String?, sortDirection: String?, FILTERS: FilterObject?) -> Bool { return true }
-func showDirectories(depth: Int = 0, paths: String = "/") -> Bool { return true }
+func searchSimple(search: String, directory: String, pageSize: Int = 100, pageIndex: Int = 0) -> [FileObject]? { return nil }
+func searchAdvanced(searchObj: SearchObject, directory: String, pageSize: Int = 100, pageIndex: Int = 0, sortField: String?, sortDirection: String?, FILTERS: FilterObject?) -> [FileObject]? { return nil }
+func showDirectories(depth: Int = 0, paths: String = "/") -> [FileObject]? { return nil }
 func createDirectory(path: String) -> Bool { return true }
-func getPreview(id: String) -> Bool { return true }
-func getDetails(id: String) -> Bool { return true }
+func getPreview(id: String) -> String? { return nil }
+func getDetails(id: String) -> FileObject? { return nil }
 
 
 
