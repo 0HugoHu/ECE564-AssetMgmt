@@ -13,7 +13,7 @@ struct FileManagerRootViewDelegator: UIViewControllerRepresentable {
 
     func makeUIViewController(context: Context) -> PathListViewController {
         // Instantiate and configure your UIKit view controller here
-        return PathListViewController(style: .userPreferred, path: .root)
+        return PathListViewController()
     }
 
     func updateUIViewController(_ uiViewController: PathListViewController, context: Context) {

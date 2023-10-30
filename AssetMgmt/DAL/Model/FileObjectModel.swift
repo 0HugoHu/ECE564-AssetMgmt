@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct FileObject: Codable {
+struct CustomFileModel: Codable {
 
 }

@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct SearchObject: Codable {
+struct SearchModel: Codable {
     
 }

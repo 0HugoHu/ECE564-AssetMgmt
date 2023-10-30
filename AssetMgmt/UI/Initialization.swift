@@ -174,7 +174,7 @@ struct UserInfoView: View {
                 logger.error("Error: \(error.localizedDescription)")
                 self.userInfo = "Error"
             } else if let data = data {
-                if let decodedData = try? JSONDecoder().decode(UserInfo.self, from: data) {
+                if let decodedData = try? JSONDecoder().decode(UserInfoModel.self, from: data) {
                     logger.info("User Info: \(decodedData.username)")
                     self.userInfo = "User Info: \(decodedData.username)"
                 } else {

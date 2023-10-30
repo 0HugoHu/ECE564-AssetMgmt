@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FilterObject: Codable {
+struct FilterModel: Codable {
     
 }
 

@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct Logs: Codable {
+struct LogModel: Codable {
     
 }

@@ -46,23 +46,23 @@ func uploadFiles(files: [Data], dest: String) -> Bool { return true }
  Rename File
  
  - Parameters:
-    - data: FileObject to rename
+    - data: CustomFileModel to rename
     - newName: New name for file
  
  - Returns: Bool indicating success or failure
  */
-func renameFile(data: FileObject, newName: String) -> Bool { return true }
+func renameFile(data: CustomFileModel, newName: String) -> Bool { return true }
 
 
 /*
  Delete Files
  
  - Parameters:
-    - data: Array of FileObjects to delete
+    - data: Array of CustomFileModel to delete
  
  - Returns: Bool indicating success or failure
  */
-func deleteFiles(data: [FileObject]) -> Bool { return true }
+func deleteFiles(data: [CustomFileModel]) -> Bool { return true }
 
 
 /*
@@ -74,9 +74,9 @@ func deleteFiles(data: [FileObject]) -> Bool { return true }
     - pageSize: Number of results per page
     - pageIndex: Page index
  
- - Returns: Array of FileObjects
+ - Returns: Array of CustomFileModel
  */
-func searchSimple(search: String, directory: String, pageSize: Int = 100, pageIndex: Int = 0) -> [FileObject]? { return nil }
+func searchSimple(search: String, directory: String, pageSize: Int = 100, pageIndex: Int = 0) -> [CustomFileModel]? { return nil }
 
 
 /*
@@ -90,9 +90,9 @@ func searchSimple(search: String, directory: String, pageSize: Int = 100, pageIn
     - sortField: Field to sort by
     - sortDirection: Direction to sort
  
- - Returns: Array of FileObjects
+ - Returns: Array of CustomFileModel
  */
-func searchAdvanced(searchObj: SearchObject, directory: String, pageSize: Int = 100, pageIndex: Int = 0, sortField: String?, sortDirection: String?, FILTERS: FilterObject?) -> [FileObject]? { return nil }
+func searchAdvanced(searchObj: SearchModel, directory: String, pageSize: Int = 100, pageIndex: Int = 0, sortField: String?, sortDirection: String?, FILTERS: FilterModel?) -> [CustomFileModel]? { return nil }
 
 
 /*
@@ -102,9 +102,9 @@ func searchAdvanced(searchObj: SearchObject, directory: String, pageSize: Int = 
     - depth: Depth of directories to show
     - paths: Path to show
  
- - Returns: Array of FileObjects
+ - Returns: Array of CustomFileModel
  */
-func showDirectories(depth: Int = 0, paths: String = "/") -> [FileObject]? { return nil }
+func showDirectories(depth: Int = 0, paths: String = "/") -> [CustomFileModel]? { return nil }
 
 
 /*
@@ -135,6 +135,6 @@ func getPreview(id: String) -> String? { return nil }
  - Parameters:
     - id: File id
  
- - Returns: FileObject
+ - Returns: CustomFileModel
  */
-func getDetails(id: String) -> FileObject? { return nil }
+func getDetails(id: String) -> CustomFileModel? { return nil }
