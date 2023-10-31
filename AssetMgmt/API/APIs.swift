@@ -7,14 +7,23 @@
 
 import Foundation
 
-
 /*
  Get User Info
  
- - Returns: Bool indicating success or failure
+ - Returns: UserInfoAPIResponse
  */
-
-func getUserInfo() -> Bool { return true }
+func getUserInfo(completion: @escaping (UserInfoAPIResponse?) -> Void) {
+    fetchData(from: getUserInfoURL(), responseType: UserInfoAPIResponse.self) { result in
+        switch result {
+        case .success(let userInfo):
+            logger.info("Username: \(userInfo.username)")
+            completion(userInfo)
+        case .failure(let error):
+            logger.error("Error getting user info: \(error)")
+            completion(nil)
+        }
+    }
+}
 
 
 /*

@@ -6,9 +6,13 @@
 //
 
 import SwiftUI
+import Logging
+
+let logger = Logger(label: "AssetMgmt")
 
 @main
 struct AssetMgmtApp: App {
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

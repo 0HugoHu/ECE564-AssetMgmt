@@ -14,7 +14,15 @@ func getGetAPIKeyURL() -> URL {
 
 
 func getUserInfoURL() -> URL {
-    return URL(string: REST_API + "userInfo")!
+    return appendAuth(url: URL(string: REST_API + "userInfo")!)
+}
+
+
+func appendAuth(url: URL) -> URL {
+    if let authToken = UserDefaults.standard.string(forKey: "AuthToken") {
+        return URL(string: url.absoluteString + "?apikey=" + authToken)!
+    }
+    return url
 }
 
 
