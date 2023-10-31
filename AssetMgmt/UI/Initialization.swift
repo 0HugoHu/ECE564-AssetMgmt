@@ -7,9 +7,6 @@
 
 import SwiftUI
 import WebKit
-import Logging
-
-let logger = Logger(label: PACKAGE_NAME + ".UI.Initialization")
 
 /*
  TODO: Login View
@@ -125,7 +122,6 @@ struct WebView: UIViewRepresentable {
             }
         }
     }
-    
 }
 
 
@@ -141,8 +137,8 @@ struct UserInfoView: View {
                 .padding()
             
             Button(action: {
-                if let authToken = UserDefaults.standard.string(forKey: "AuthToken") {
-                    getUserInfo(withAuthToken: authToken)
+                getUserInfo { result in
+                    self.userInfo = result?.firstName ?? "Empty"
                 }
             }) {
                 Text("Get User Info")
@@ -153,36 +149,10 @@ struct UserInfoView: View {
             }
         }
         .onAppear {
-            if let authToken = UserDefaults.standard.string(forKey: "AuthToken") {
-                getUserInfo(withAuthToken: authToken)
+            getUserInfo { result in
+                self.userInfo = result?.firstName ?? "Empty"
             }
         }
-    }
-    
-    func getUserInfo(withAuthToken authToken: String) {
-        guard let url = URL(string: "https://mediabeacon.oit.duke.edu/wf/restapi/v2/userInfo?apikey=" + authToken) else {
-            self.userInfo = "Invalid URL"
-            logger.error("Invalid URL")
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                logger.error("Error: \(error.localizedDescription)")
-                self.userInfo = "Error"
-            } else if let data = data {
-                if let decodedData = try? JSONDecoder().decode(UserInfoModel.self, from: data) {
-                    logger.info("User Info: \(decodedData.username)")
-                    self.userInfo = "User Info: \(decodedData.username)"
-                } else {
-                    logger.error("Unable to decode data")
-                    self.userInfo = "Error"
-                }
-            }
-        }.resume()
     }
 }
 

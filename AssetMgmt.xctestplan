@@ -1,0 +1,35 @@
+{
+  "configurations" : [
+    {
+      "id" : "38D9F1CD-8D42-43FB-BA3F-CDAA1A639343",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:AssetMgmt.xcodeproj",
+      "identifier" : "C28A0B972AE5FB0C008258C8",
+      "name" : "AssetMgmt"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:AssetMgmt.xcodeproj",
+        "identifier" : "C28A0BA72AE5FB0D008258C8",
+        "name" : "AssetMgmtTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:AssetMgmt.xcodeproj",
+        "identifier" : "C28A0BB12AE5FB0D008258C8",
+        "name" : "AssetMgmtUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
