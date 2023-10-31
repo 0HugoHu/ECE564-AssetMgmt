@@ -31,11 +31,17 @@ final class APITest: XCTestCase {
         
     }
     
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testDownloadFiles() throws {
+        let expectation = XCTestExpectation(description: "downloadFiles completion called")
+        let savePath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("testDownloadFiles")
+        let testID = ["205596017"]
+        
+        downloadFiles(to: savePath, ids: testID) { success in
+            XCTAssertTrue(success)
+            expectation.fulfill()
         }
+        
+        wait(for: [expectation], timeout: 5)
     }
     
 }

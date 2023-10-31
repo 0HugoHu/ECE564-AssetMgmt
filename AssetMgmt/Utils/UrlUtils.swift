@@ -18,6 +18,21 @@ func getUserInfoURL() -> URL {
 }
 
 
+func getDownloadURL() -> URL {
+    return appendAuth(url: URL(string: REST_API + "download")!)
+}
+
+
+func getUploadURL() -> URL {
+    return appendAuth(url: URL(string: REST_API + "upload")!)
+}
+
+
+func getRenameURL() -> URL {
+    return appendAuth(url: URL(string: REST_API + "rename")!)
+}
+
+
 func appendAuth(url: URL) -> URL {
     if let authToken = UserDefaults.standard.string(forKey: "AuthToken") {
         return URL(string: url.absoluteString + "?apikey=" + authToken)!
