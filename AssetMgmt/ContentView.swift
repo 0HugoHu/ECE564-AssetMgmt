@@ -11,10 +11,10 @@ struct ContentView: View {
     
     var body: some View {
 //        TODO: Dismiss this view after successful login
-//        Initialization()
+        Initialization()
         
 //        TODO: Comment this for now
-        FileManagerRootViewDelegator()
+//        DirectoryBrowser()
     }
 }
 
