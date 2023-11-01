@@ -13,10 +13,15 @@ public struct DirectoryBrowser: View {
 
     public var body: some View {
         NavigationView {
-            List(urls, id:\.self) { url in
-                NavigationLink(url.lastPathComponent) {
-                    FolderView(documentsStore: DocumentsStore(root: url), title: url.lastPathComponent)
+            List {
+                ForEach(urls, id:\.self) { url in
+                    NavigationLink(url.lastPathComponent) {
+                        FolderView(documentsStore: DocumentsStore(root: url), title: url.lastPathComponent)
+                    }
                 }
+                NavigationLink(destination: PDFSwiftUIView(fileName: "Sample"), label: {
+                    Text("PDF viewer")
+                })
             }
         }
         .environmentObject(thumbnailer)
