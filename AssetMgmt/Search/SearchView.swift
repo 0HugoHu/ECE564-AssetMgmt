@@ -14,7 +14,7 @@ struct SearchView: View {
     @State private var isLoading = false
     
     let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
-
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -34,6 +34,16 @@ struct SearchView: View {
                     .padding(.trailing)
                 }
                 
+                HStack {
+                    Spacer()
+                    Text("\(searchResults.count) matched found")
+                        .font(.subheadline)
+                        .padding(.top)
+                        .padding(.trailing)
+                }
+
+                    
+                
                 if isLoading {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
@@ -42,15 +52,17 @@ struct SearchView: View {
                         LazyVGrid(columns: columns, spacing: 20) {
                             ForEach(searchResults, id: \.id) { item in
                                 // TODO: Blocked by the File Viewer
-//                                NavigationLink(destination: PreviewView(itemId: item.id)) {
-                                    VStack {
-                                        Text("ID: \(item.id)")
-                                            .font(.headline)
-                                    }
-                                    .padding()
-                                    .frame(height: 100)
-                                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.2)))
-//                                }
+                                // NavigationLink(destination: PreviewView(itemId: item.id)) {
+                                VStack {
+                                    getFileIcon(type: "placeholder")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 100, height: 100)
+                                    Text("\(item.id)")
+                                        .font(.subheadline)
+                                }
+//                            }
+                                .padding(5)
                             }
                         }
                         .padding()
@@ -74,14 +86,18 @@ struct SearchView: View {
     }
 }
 
-
-
-struct PreviewView: View {
-    var itemId: Int
-    
-    var body: some View {
-        Text("Preview for item ID: \(itemId)")
-            .padding()
+struct SearchView_Previews: PreviewProvider {
+    static var previews: some View {
+        SearchView()
     }
 }
+
+//struct PreviewView: View {
+//    var itemId: Int
+//    
+//    var body: some View {
+//        Text("Preview for item ID: \(itemId)")
+//            .padding()
+//    }
+//}
 

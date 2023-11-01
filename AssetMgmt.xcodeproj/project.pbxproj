@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2D266B112AF2ADBD00CCE3E8 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D266B102AF2ADBD00CCE3E8 /* SearchView.swift */; };
+		2DBFADBE2AF2C6EF00BFCDA5 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBFADBD2AF2C6EF00BFCDA5 /* ImageUtils.swift */; };
 		C28A0B9C2AE5FB0C008258C8 /* AssetMgmtApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28A0B9B2AE5FB0C008258C8 /* AssetMgmtApp.swift */; };
 		C28A0B9E2AE5FB0C008258C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28A0B9D2AE5FB0C008258C8 /* ContentView.swift */; };
 		C28A0BA02AE5FB0D008258C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C28A0B9F2AE5FB0D008258C8 /* Assets.xcassets */; };
@@ -65,6 +66,7 @@
 
 /* Begin PBXFileReference section */
 		2D266B102AF2ADBD00CCE3E8 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		2DBFADBD2AF2C6EF00BFCDA5 /* ImageUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
 		C28A0B982AE5FB0C008258C8 /* AssetMgmt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AssetMgmt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C28A0B9B2AE5FB0C008258C8 /* AssetMgmtApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetMgmtApp.swift; sourceTree = "<group>"; };
 		C28A0B9D2AE5FB0C008258C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 				C2FB20C02AEEDCCE002B3FCF /* Preview */,
 				C2FB20C12AEEDCE7002B3FCF /* DataOperation */,
 				C2FB20E02AEEE325002B3FCF /* UrlUtils.swift */,
+				2DBFADBD2AF2C6EF00BFCDA5 /* ImageUtils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -522,6 +525,7 @@
 				C2C797582AF1C1F0005D41DE /* Download.swift in Sources */,
 				C2C797412AF18117005D41DE /* Formatters.swift in Sources */,
 				C28A0B9C2AE5FB0C008258C8 /* AssetMgmtApp.swift in Sources */,
+				2DBFADBE2AF2C6EF00BFCDA5 /* ImageUtils.swift in Sources */,
 				C2C7974E2AF1A143005D41DE /* FetchData.swift in Sources */,
 				C2C7973C2AF18117005D41DE /* DocumentRow.swift in Sources */,
 				C2FB20E12AEEE325002B3FCF /* UrlUtils.swift in Sources */,
