@@ -129,9 +129,47 @@ func deleteFiles(data: [AssetInfoResponse]) -> Bool { return true }
  - pageSize: Number of results per page
  - pageIndex: Page index
  
- - Returns: Array of AssetInfoResponse
+ - Returns: Array of Ids
  */
-func searchSimple(search: String, directory: String, pageSize: Int = 100, pageIndex: Int = 0) -> [AssetInfoResponse]? { return nil }
+func simpleSearch(search: String, directory: String = "/", pageSize: Int = 100, pageIndex: Int = 0, completion: @escaping ([SimpleIDResponse]?) -> Void) {
+    guard var urlComponents = URLComponents(url: getSimpleSearchURL(), resolvingAgainstBaseURL: false) else {
+        logger.error("Error constructing the search URL")
+        return completion(nil)
+    }
+
+    var existingQueryItems = urlComponents.queryItems ?? []
+
+    let additionalQueryItems: [URLQueryItem] = [
+        URLQueryItem(name: "search", value: search),
+        URLQueryItem(name: "directory", value: directory),
+        URLQueryItem(name: "pageSize", value: String(pageSize)),
+        URLQueryItem(name: "pageIndex", value: String(pageIndex))
+    ]
+
+    existingQueryItems.append(contentsOf: additionalQueryItems)
+
+    urlComponents.queryItems = existingQueryItems
+
+    guard let finalURL = urlComponents.url else {
+        logger.error("Error constructing the final search URL")
+        return completion(nil)
+    }
+
+    logger.info("Query URL: \(finalURL)")
+
+    fetchData(from: finalURL, responseType: [SimpleIDResponse].self) { result in
+        switch result {
+        case .success(let assetsInfo):
+            logger.info("Asset Count: \(assetsInfo.count)")
+            completion(assetsInfo)
+        case .failure(let error):
+            logger.error("Error simple search: \(error)")
+            completion(nil)
+        }
+    }
+}
+
+
 
 
 /*
@@ -147,7 +185,7 @@ func searchSimple(search: String, directory: String, pageSize: Int = 100, pageIn
  
  - Returns: Array of AssetInfoResponse
  */
-//func searchAdvanced(searchObj: SearchModel, directory: String, pageSize: Int = 100, pageIndex: Int = 0, sortField: String?, sortDirection: String?, FILTERS: FilterModel?) -> [AssetInfoResponse]? { return nil }
+//func advancedSearch(searchObj: SearchModel, directory: String, pageSize: Int = 100, pageIndex: Int = 0, sortField: String?, sortDirection: String?, FILTERS: FilterModel?) -> [AssetInfoResponse]? { return nil }
 
 
 /*
