@@ -34,6 +34,12 @@ struct UserInfoAPIResponse: Codable {
     let blueEnabled: Bool
 }
 
+
+struct SimpleIDResponse: Codable {
+    let id: Int
+}
+
+
 struct AssetInfoResponse: Codable {
     let id: Int
     let name: String

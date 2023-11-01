@@ -32,6 +32,7 @@ func fetchData<T: Decodable>(from apiUrl: URL, responseType: T.Type, completion:
         }
 
         do {
+//            print(data.base64EncodedString())
             let decodedData = try JSONDecoder().decode(T.self, from: data)
             completion(.success(decodedData))
         } catch {

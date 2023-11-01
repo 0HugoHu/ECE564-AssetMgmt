@@ -31,6 +31,21 @@ final class APITest: XCTestCase {
         
     }
     
+    
+    func testSimpleSearch() throws {
+        let expectation = XCTestExpectation(description: "simpleSearch completion called")
+        let searchText = "pdf"
+        
+        simpleSearch(search: searchText) { assetsInfo in
+            XCTAssertNotNil(assetsInfo)
+            logger.info("First result name: \(assetsInfo![0].id)")
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 3)
+    }
+    
+    
     func testDownloadFiles() throws {
         let expectation = XCTestExpectation(description: "downloadFiles completion called")
         let savePath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("testDownloadFiles")
