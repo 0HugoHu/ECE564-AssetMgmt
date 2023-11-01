@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D266B112AF2ADBD00CCE3E8 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D266B102AF2ADBD00CCE3E8 /* SearchView.swift */; };
 		C28A0B9C2AE5FB0C008258C8 /* AssetMgmtApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28A0B9B2AE5FB0C008258C8 /* AssetMgmtApp.swift */; };
 		C28A0B9E2AE5FB0C008258C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28A0B9D2AE5FB0C008258C8 /* ContentView.swift */; };
 		C28A0BA02AE5FB0D008258C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C28A0B9F2AE5FB0D008258C8 /* Assets.xcassets */; };
@@ -63,6 +64,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2D266B102AF2ADBD00CCE3E8 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		C28A0B982AE5FB0C008258C8 /* AssetMgmt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AssetMgmt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C28A0B9B2AE5FB0C008258C8 /* AssetMgmtApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetMgmtApp.swift; sourceTree = "<group>"; };
 		C28A0B9D2AE5FB0C008258C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -130,6 +132,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2D266B0F2AF2ADA900CCE3E8 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				2D266B102AF2ADBD00CCE3E8 /* SearchView.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		C28A0B8F2AE5FB0C008258C8 = {
 			isa = PBXGroup;
 			children = (
@@ -154,6 +164,7 @@
 		C28A0B9A2AE5FB0C008258C8 /* AssetMgmt */ = {
 			isa = PBXGroup;
 			children = (
+				2D266B0F2AF2ADA900CCE3E8 /* Search */,
 				C2FB20C42AEEDD79002B3FCF /* DAL */,
 				C2FB20BF2AEEDCAF002B3FCF /* API */,
 				C2FB20BE2AEEDCA9002B3FCF /* UI */,
@@ -491,6 +502,7 @@
 				C2C7975A2AF1C3CA005D41DE /* Upload.swift in Sources */,
 				C2C797392AF18117005D41DE /* DocumentPicker.swift in Sources */,
 				C2FB20DC2AEEE266002B3FCF /* Colors.swift in Sources */,
+				2D266B112AF2ADBD00CCE3E8 /* SearchView.swift in Sources */,
 				C2FB20DE2AEEE283002B3FCF /* Urls.swift in Sources */,
 				C2C797472AF18133005D41DE /* DirectoryBrowser.swift in Sources */,
 				C2FB20DA2AEEE25E002B3FCF /* Strings.swift in Sources */,

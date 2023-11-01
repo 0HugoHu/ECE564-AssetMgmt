@@ -26,6 +26,9 @@ struct Initialization: View {
                 NavigationLink(destination: UserInfoView()) {
                     Text("Get User Info")
                 }
+                NavigationLink(destination: SearchView()) {
+                    Text("Search")
+                }
             }
             .listStyle(GroupedListStyle())
             .navigationBarTitle("Get API Key")
