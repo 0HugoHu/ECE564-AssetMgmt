@@ -27,7 +27,6 @@ func download(from url: URL, to destinationURL: URL, completion: @escaping (Bool
             completion(false)
             return
         }
-        
         guard let tempURL = tempURL, let response = response as? HTTPURLResponse else {
             logger.error("Invalid response or temporary URL")
             completion(false)
@@ -68,4 +67,3 @@ func download(from url: URL, to destinationURL: URL, completion: @escaping (Bool
     
     downloadTask.resume()
 }
-
