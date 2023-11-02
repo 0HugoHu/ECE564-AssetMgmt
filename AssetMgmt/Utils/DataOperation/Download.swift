@@ -35,14 +35,14 @@ func download(from url: URL, to destinationURL: URL, completion: @escaping (Bool
         
         if response.statusCode == 200 {
             do {
-                var updatedDestinationURL = destinationURL
+//                var updatedDestinationURL = destinationURL
                 
                 // Append file type
-                //                if let contentType = response.allHeaderFields["Content-Type"] as? String {
-                //                    if let fileExtension = fileExtensionForContentType(contentType) {
-                //                        updatedDestinationURL.appendPathExtension(fileExtension)
-                //                    }
-                //                }
+//                if let contentType = response.allHeaderFields["Content-Type"] as? String {
+//                    if let fileExtension = fileExtensionForContentType(contentType) {
+//                        updatedDestinationURL.appendPathExtension(fileExtension)
+//                    }
+//                }
                 
                 // Check if a file with the same name already exists
                 if FileManager.default.fileExists(atPath: destinationURL.path) {
