@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode
+AssetMgmt.xcodeproj/project.xcworkspace/xcuserdata/minghuizhu.xcuserdatad/
+AssetMgmt.xcodeproj/project.xcworkspace/xcshareddata/
+AssetMgmt.xcodeproj/xcuserdata/
+*.moved-aside
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
