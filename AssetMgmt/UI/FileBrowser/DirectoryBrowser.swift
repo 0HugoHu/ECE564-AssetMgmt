@@ -19,9 +19,21 @@ public struct DirectoryBrowser: View {
                         FolderView(documentsStore: DocumentsStore(root: url), title: url.lastPathComponent)
                     }
                 }
+                
+                NavigationLink(destination: SearchView()) {
+                    Text("Search")
+                }
                 NavigationLink(destination: PDFSwiftUIView(fileName: "Sample"), label: {
                     Text("PDF viewer")
                 })
+                NavigationLink(destination: DownloadView()
+                ) {
+                    Text("Download Test")
+                }
+                NavigationLink(destination: UploadView()
+                ) {
+                    Text("Upload Test")
+                }
             }
         }
         .environmentObject(thumbnailer)

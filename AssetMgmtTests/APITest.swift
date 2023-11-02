@@ -27,8 +27,8 @@ final class APITest: XCTestCase {
             expectation.fulfill()
         }
         
-        wait(for: [expectation], timeout: 3)
-        
+        // Actual time 0.37 s
+        wait(for: [expectation], timeout: 1)
     }
     
     
@@ -42,13 +42,14 @@ final class APITest: XCTestCase {
             expectation.fulfill()
         }
         
-        wait(for: [expectation], timeout: 3)
+        // Actual time 0.41 s
+        wait(for: [expectation], timeout: 1)
     }
     
     
     func testDownloadFiles() throws {
         let expectation = XCTestExpectation(description: "downloadFiles completion called")
-        let savePath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("testDownloadFiles")
+        let savePath = URL.documentsDirectory
         let testID = ["205596017"]
         
         downloadFiles(to: savePath, ids: testID) { success in
@@ -56,7 +57,8 @@ final class APITest: XCTestCase {
             expectation.fulfill()
         }
         
-        wait(for: [expectation], timeout: 5)
+        // Actual time 1.48 s
+        wait(for: [expectation], timeout: 3)
     }
     
 }

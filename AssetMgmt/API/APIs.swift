@@ -33,28 +33,31 @@ func getUserInfo(completion: @escaping (UserInfoAPIResponse?) -> Void) {
  - to: The position to save files
  - ids: Array of file ids to download
  - keepDirectoryStructure: Bool indicating whether to keep directory structure
- - noZip: Bool indicating whether to download as a zip file
+ - noZip: [Deprecated] Bool indicating whether to download as a zip file
  
  - Returns: Bool indicating success or failure
  */
-func downloadFiles(to: URL, ids: [String], keepDirectoryStructure: Bool = false, noZip: Bool = false, completion: @escaping (Bool) -> Void) {
-    var urlComponents = URLComponents(url: getDownloadURL(), resolvingAgainstBaseURL: false)
+func downloadFiles(to: URL, ids: [String], keepDirectoryStructure: Bool = false, completion: @escaping (Bool) -> Void) {
+    guard var urlComponents = URLComponents(url: getDownloadURL(), resolvingAgainstBaseURL: false) else {
+        logger.error("Error constructing the downloadFiles URL")
+        return completion(false)
+    }
     
-    var queryItems: [URLQueryItem] = []
-    
-    queryItems.append(URLQueryItem(name: "ids", value: ids.joined(separator: ",")))
+    var existingQueryItems = urlComponents.queryItems ?? []
+
+    existingQueryItems.append(URLQueryItem(name: "ids", value: ids.joined(separator: ",")))
     
     if keepDirectoryStructure {
-        queryItems.append(URLQueryItem(name: "keepDirectoryStructure", value: "true"))
+        existingQueryItems.append(URLQueryItem(name: "keepDirectoryStructure", value: "true"))
     }
     
-    if noZip {
-        queryItems.append(URLQueryItem(name: "noZip", value: "true"))
-    }
+//    if noZip {
+//        existingQueryItems.append(URLQueryItem(name: "noZip", value: "true"))
+//    }
     
-    urlComponents?.queryItems = queryItems
+    urlComponents.queryItems = existingQueryItems
     
-    guard let finalURL = urlComponents?.url else {
+    guard let finalURL = urlComponents.url else {
         logger.error("Error constructing the download URL")
         completion(false)
         return
@@ -62,7 +65,7 @@ func downloadFiles(to: URL, ids: [String], keepDirectoryStructure: Bool = false,
     
     logger.info("Downloading files from \(finalURL.absoluteString)")
     
-    download(from: finalURL, to: to) { success in
+    download(from: finalURL, to: to.appending(path: "/\(ids[0]).zip")) { success in
         completion(success)
     }
 }

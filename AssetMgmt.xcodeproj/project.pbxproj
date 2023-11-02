@@ -18,6 +18,13 @@
 		C28A0BAD2AE5FB0D008258C8 /* AssetMgmtTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28A0BAC2AE5FB0D008258C8 /* AssetMgmtTests.swift */; };
 		C28A0BB72AE5FB0D008258C8 /* AssetMgmtUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28A0BB62AE5FB0D008258C8 /* AssetMgmtUITests.swift */; };
 		C28A0BB92AE5FB0D008258C8 /* AssetMgmtUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28A0BB82AE5FB0D008258C8 /* AssetMgmtUITestsLaunchTests.swift */; };
+		C2B652622AF433BA00E45890 /* CustomUrlDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B652612AF433BA00E45890 /* CustomUrlDelegate.swift */; };
+		C2B652642AF4341F00E45890 /* GenerateUniqueUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B652632AF4341F00E45890 /* GenerateUniqueUrl.swift */; };
+		C2B652662AF435E600E45890 /* DownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B652652AF435E600E45890 /* DownloadView.swift */; };
+		C2B652682AF435EF00E45890 /* UploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B652672AF435EF00E45890 /* UploadView.swift */; };
+		C2B6526C2AF43D2D00E45890 /* GetFileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B6526B2AF43D2D00E45890 /* GetFileType.swift */; };
+		C2B6526E2AF43FBB00E45890 /* ZipUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B6526D2AF43FBB00E45890 /* ZipUtility.swift */; };
+		C2B652712AF4405D00E45890 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = C2B652702AF4405D00E45890 /* Zip */; };
 		C2C797392AF18117005D41DE /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C797272AF18116005D41DE /* DocumentPicker.swift */; };
 		C2C7973A2AF18117005D41DE /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C797282AF18116005D41DE /* PhotoPicker.swift */; };
 		C2C7973B2AF18117005D41DE /* SortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C7972B2AF18116005D41DE /* SortOption.swift */; };
@@ -45,6 +52,7 @@
 		C2FB20DA2AEEE25E002B3FCF /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB20D92AEEE25E002B3FCF /* Strings.swift */; };
 		C2FB20DC2AEEE266002B3FCF /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB20DB2AEEE266002B3FCF /* Colors.swift */; };
 		C2FB20DE2AEEE283002B3FCF /* Urls.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB20DD2AEEE283002B3FCF /* Urls.swift */; };
+		C2FB20E12AEEE325002B3FCF /* GetUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB20E02AEEE325002B3FCF /* GetUrl.swift */; };
 		C2FB20E12AEEE325002B3FCF /* UrlUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB20E02AEEE325002B3FCF /* UrlUtils.swift */; };
 		C2FB20E62AEEE5BF002B3FCF /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = C2FB20E52AEEE5BF002B3FCF /* Logging */; };
 /* End PBXBuildFile section */
@@ -81,6 +89,13 @@
 		C28A0BB22AE5FB0D008258C8 /* AssetMgmtUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AssetMgmtUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C28A0BB62AE5FB0D008258C8 /* AssetMgmtUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetMgmtUITests.swift; sourceTree = "<group>"; };
 		C28A0BB82AE5FB0D008258C8 /* AssetMgmtUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetMgmtUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		C2B652602AF4316B00E45890 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C2B652612AF433BA00E45890 /* CustomUrlDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUrlDelegate.swift; sourceTree = "<group>"; };
+		C2B652632AF4341F00E45890 /* GenerateUniqueUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateUniqueUrl.swift; sourceTree = "<group>"; };
+		C2B652652AF435E600E45890 /* DownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadView.swift; sourceTree = "<group>"; };
+		C2B652672AF435EF00E45890 /* UploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadView.swift; sourceTree = "<group>"; };
+		C2B6526B2AF43D2D00E45890 /* GetFileType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFileType.swift; sourceTree = "<group>"; };
+		C2B6526D2AF43FBB00E45890 /* ZipUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipUtility.swift; sourceTree = "<group>"; };
 		C2C797272AF18116005D41DE /* DocumentPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
 		C2C797282AF18116005D41DE /* PhotoPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		C2C7972B2AF18116005D41DE /* SortOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortOption.swift; sourceTree = "<group>"; };
@@ -108,6 +123,7 @@
 		C2FB20D92AEEE25E002B3FCF /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		C2FB20DB2AEEE266002B3FCF /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		C2FB20DD2AEEE283002B3FCF /* Urls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Urls.swift; sourceTree = "<group>"; };
+		C2FB20E02AEEE325002B3FCF /* GetUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetUrl.swift; sourceTree = "<group>"; };
 		C2FB20E02AEEE325002B3FCF /* UrlUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -116,6 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2B652712AF4405D00E45890 /* Zip in Frameworks */,
 				C2FB20E62AEEE5BF002B3FCF /* Logging in Frameworks */,
 				C2C7974A2AF18160005D41DE /* FilePreviews in Frameworks */,
 			);
@@ -171,6 +188,7 @@
 		C28A0B9A2AE5FB0C008258C8 /* AssetMgmt */ = {
 			isa = PBXGroup;
 			children = (
+				C2B652602AF4316B00E45890 /* Info.plist */,
 				C2FB20C42AEEDD79002B3FCF /* DAL */,
 				C2FB20BF2AEEDCAF002B3FCF /* API */,
 				C2FB20BE2AEEDCA9002B3FCF /* UI */,
@@ -216,6 +234,24 @@
 				ABBB0F812AF2E4B300CD812B /* Sample.pdf */,
 			);
 			path = TestFile;
+			sourceTree = "<group>";
+		};
+		C2B652692AF43D0C00E45890 /* Url */ = {
+			isa = PBXGroup;
+			children = (
+				C2FB20E02AEEE325002B3FCF /* GetUrl.swift */,
+				C2B652632AF4341F00E45890 /* GenerateUniqueUrl.swift */,
+			);
+			path = Url;
+			sourceTree = "<group>";
+		};
+		C2B6526A2AF43D1D00E45890 /* File */ = {
+			isa = PBXGroup;
+			children = (
+				C2B6526B2AF43D2D00E45890 /* GetFileType.swift */,
+				C2B6526D2AF43FBB00E45890 /* ZipUtility.swift */,
+			);
+			path = File;
 			sourceTree = "<group>";
 		};
 		C2C797262AF18116005D41DE /* Pickers */ = {
@@ -278,6 +314,11 @@
 		C2FB20BE2AEEDCA9002B3FCF /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				C2FB20D42AEEE15B002B3FCF /* Initialization.swift */,
+				C2FB20EE2AEEF0FE002B3FCF /* FileBrowser */,
+				2D72D0DF2AF414ED00C9208E /* SearchView.swift */,
+				C2B652652AF435E600E45890 /* DownloadView.swift */,
+				C2B652672AF435EF00E45890 /* UploadView.swift */,
 				2D72D0DF2AF414ED00C9208E /* SearchView.swift */,
 				C2FB20D42AEEE15B002B3FCF /* Initialization.swift */,
 				C2FB20EE2AEEF0FE002B3FCF /* FileBrowser */,
@@ -308,6 +349,7 @@
 				C2C7974D2AF1A143005D41DE /* FetchData.swift */,
 				C2C797572AF1C1F0005D41DE /* Download.swift */,
 				C2C797592AF1C3CA005D41DE /* Upload.swift */,
+				C2B652612AF433BA00E45890 /* CustomUrlDelegate.swift */,
 			);
 			path = DataOperation;
 			sourceTree = "<group>";
@@ -315,6 +357,10 @@
 		C2FB20C22AEEDCF4002B3FCF /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				C2B6526A2AF43D1D00E45890 /* File */,
+				C2B652692AF43D0C00E45890 /* Url */,
+				C2FB20C02AEEDCCE002B3FCF /* Preview */,
+				C2FB20C12AEEDCE7002B3FCF /* DataOperation */,
 				C2FB20C02AEEDCCE002B3FCF /* Preview */,
 				C2FB20C12AEEDCE7002B3FCF /* DataOperation */,
 				C2FB20E02AEEE325002B3FCF /* UrlUtils.swift */,
@@ -397,6 +443,7 @@
 			packageProductDependencies = (
 				C2FB20E52AEEE5BF002B3FCF /* Logging */,
 				C2C797492AF18160005D41DE /* FilePreviews */,
+				C2B652702AF4405D00E45890 /* Zip */,
 			);
 			productName = AssetMgmt;
 			productReference = C28A0B982AE5FB0C008258C8 /* AssetMgmt.app */;
@@ -473,6 +520,7 @@
 			packageReferences = (
 				C2FB20E42AEEE5BF002B3FCF /* XCRemoteSwiftPackageReference "swift-log" */,
 				C2C797482AF18160005D41DE /* XCRemoteSwiftPackageReference "FilePreviews" */,
+				C2B6526F2AF4405D00E45890 /* XCRemoteSwiftPackageReference "Zip" */,
 			);
 			productRefGroup = C28A0B992AE5FB0C008258C8 /* Products */;
 			projectDirPath = "";
@@ -519,6 +567,17 @@
 			files = (
 				C2C7975A2AF1C3CA005D41DE /* Upload.swift in Sources */,
 				C2C797392AF18117005D41DE /* DocumentPicker.swift in Sources */,
+				C2B652662AF435E600E45890 /* DownloadView.swift in Sources */,
+				C2FB20DC2AEEE266002B3FCF /* Colors.swift in Sources */,
+				ABBB0F7E2AF2E2C400CD812B /* PDFViewer.swift in Sources */,
+				C2FB20DE2AEEE283002B3FCF /* Urls.swift in Sources */,
+				C2B6526C2AF43D2D00E45890 /* GetFileType.swift in Sources */,
+				C2C797472AF18133005D41DE /* DirectoryBrowser.swift in Sources */,
+				C2FB20DA2AEEE25E002B3FCF /* Strings.swift in Sources */,
+				C2B652642AF4341F00E45890 /* GenerateUniqueUrl.swift in Sources */,
+				C2C797402AF18117005D41DE /* URL+Identifiable.swift in Sources */,
+				C28A0B9E2AE5FB0C008258C8 /* ContentView.swift in Sources */,
+				C2B652682AF435EF00E45890 /* UploadView.swift in Sources */,
 				C2FB20DC2AEEE266002B3FCF /* Colors.swift in Sources */,
 				ABBB0F7E2AF2E2C400CD812B /* PDFViewer.swift in Sources */,
 				C2FB20DE2AEEE283002B3FCF /* Urls.swift in Sources */,
@@ -543,6 +602,10 @@
 				C28A0B9C2AE5FB0C008258C8 /* AssetMgmtApp.swift in Sources */,
 				ABBB0F802AF2E3A400CD812B /* PDFSwiftUIView.swift in Sources */,
 				C2C7974E2AF1A143005D41DE /* FetchData.swift in Sources */,
+				C2B6526E2AF43FBB00E45890 /* ZipUtility.swift in Sources */,
+				C2C7973C2AF18117005D41DE /* DocumentRow.swift in Sources */,
+				C2B652622AF433BA00E45890 /* CustomUrlDelegate.swift in Sources */,
+				C2FB20E12AEEE325002B3FCF /* GetUrl.swift in Sources */,
 				C2C7973C2AF18117005D41DE /* DocumentRow.swift in Sources */,
 				C2FB20E12AEEE325002B3FCF /* UrlUtils.swift in Sources */,
 				C2C797502AF1A151005D41DE /* APIError.swift in Sources */,
@@ -723,6 +786,7 @@
 				DEVELOPMENT_TEAM = U6J58C8CJT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AssetMgmt/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -757,6 +821,7 @@
 				DEVELOPMENT_TEAM = U6J58C8CJT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AssetMgmt/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -910,6 +975,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		C2B6526F2AF4405D00E45890 /* XCRemoteSwiftPackageReference "Zip" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marmelroy/Zip";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.2;
+			};
+		};
 		C2C797482AF18160005D41DE /* XCRemoteSwiftPackageReference "FilePreviews" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ntsh/FilePreviews";
@@ -929,6 +1002,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		C2B652702AF4405D00E45890 /* Zip */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C2B6526F2AF4405D00E45890 /* XCRemoteSwiftPackageReference "Zip" */;
+			productName = Zip;
+		};
 		C2C797492AF18160005D41DE /* FilePreviews */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C2C797482AF18160005D41DE /* XCRemoteSwiftPackageReference "FilePreviews" */;
