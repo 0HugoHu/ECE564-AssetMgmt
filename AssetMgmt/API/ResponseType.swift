@@ -35,7 +35,7 @@ struct UserInfoAPIResponse: Codable {
 }
 
 
-struct SimpleIDResponse: Codable {
+struct SimpleIDResponse: Codable, Identifiable {
     let id: Int
 }
 
