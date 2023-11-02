@@ -171,8 +171,6 @@
 		C28A0B9A2AE5FB0C008258C8 /* AssetMgmt */ = {
 			isa = PBXGroup;
 			children = (
-				ABBB0F812AF2E4B300CD812B /* Sample.pdf */,
-				2D72D0DF2AF414ED00C9208E /* SearchView.swift */,
 				C2FB20C42AEEDD79002B3FCF /* DAL */,
 				C2FB20BF2AEEDCAF002B3FCF /* API */,
 				C2FB20BE2AEEDCA9002B3FCF /* UI */,
@@ -210,6 +208,14 @@
 				C28A0BB82AE5FB0D008258C8 /* AssetMgmtUITestsLaunchTests.swift */,
 			);
 			path = AssetMgmtUITests;
+			sourceTree = "<group>";
+		};
+		C2B6525F2AF42B3600E45890 /* TestFile */ = {
+			isa = PBXGroup;
+			children = (
+				ABBB0F812AF2E4B300CD812B /* Sample.pdf */,
+			);
+			path = TestFile;
 			sourceTree = "<group>";
 		};
 		C2C797262AF18116005D41DE /* Pickers */ = {
@@ -272,8 +278,9 @@
 		C2FB20BE2AEEDCA9002B3FCF /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				2D72D0DF2AF414ED00C9208E /* SearchView.swift */,
 				C2FB20D42AEEE15B002B3FCF /* Initialization.swift */,
-				C2FB20EE2AEEF0FE002B3FCF /* FileManager */,
+				C2FB20EE2AEEF0FE002B3FCF /* FileBrowser */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -342,6 +349,7 @@
 		C2FB20D62AEEE20F002B3FCF /* Resouces */ = {
 			isa = PBXGroup;
 			children = (
+				C2B6525F2AF42B3600E45890 /* TestFile */,
 				C2FB20D72AEEE234002B3FCF /* Constants */,
 			);
 			path = Resouces;
@@ -357,7 +365,7 @@
 			path = Constants;
 			sourceTree = "<group>";
 		};
-		C2FB20EE2AEEF0FE002B3FCF /* FileManager */ = {
+		C2FB20EE2AEEF0FE002B3FCF /* FileBrowser */ = {
 			isa = PBXGroup;
 			children = (
 				ABBB0F7C2AF2E2AC00CD812B /* PDFViewer */,
@@ -367,7 +375,7 @@
 				C2C797292AF18116005D41DE /* Screens */,
 				C2C797312AF18116005D41DE /* Utils */,
 			);
-			path = FileManager;
+			path = FileBrowser;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
