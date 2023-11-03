@@ -12,6 +12,9 @@ let logger = Logger(label: "AssetMgmt")
 
 @main
 struct AssetMgmtApp: App {
+    init() {
+        copyFilesToPicturesDirectory()
+    }
     
     var body: some Scene {
         WindowGroup {

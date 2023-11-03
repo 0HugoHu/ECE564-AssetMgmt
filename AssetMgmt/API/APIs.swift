@@ -44,16 +44,16 @@ func downloadFiles(to: URL, ids: [String], keepDirectoryStructure: Bool = false,
     }
     
     var existingQueryItems = urlComponents.queryItems ?? []
-
+    
     existingQueryItems.append(URLQueryItem(name: "ids", value: ids.joined(separator: ",")))
     
     if keepDirectoryStructure {
         existingQueryItems.append(URLQueryItem(name: "keepDirectoryStructure", value: "true"))
     }
     
-//    if noZip {
-//        existingQueryItems.append(URLQueryItem(name: "noZip", value: "true"))
-//    }
+    //    if noZip {
+    //        existingQueryItems.append(URLQueryItem(name: "noZip", value: "true"))
+    //    }
     
     urlComponents.queryItems = existingQueryItems
     
@@ -76,12 +76,40 @@ func downloadFiles(to: URL, ids: [String], keepDirectoryStructure: Bool = false,
  Upload Files
  
  - Parameters:
- - files: Array of files to upload
+ - filePaths: Array of file paths to upload
  - dest: Destination directory
  
  - Returns: Bool indicating success or failure
  */
-func uploadFiles(files: [Data], dest: String) -> Bool { return true }
+func uploadFiles(filePaths: [URL], dest: String, completion: @escaping (Bool) -> Void) {
+    guard var urlComponents = URLComponents(url: getUploadURL(), resolvingAgainstBaseURL: false) else {
+        logger.error("Error constructing the upload URL")
+        return completion(false)
+    }
+    
+    var existingQueryItems = urlComponents.queryItems ?? []
+    
+    let additionalQueryItems: [URLQueryItem] = [
+        URLQueryItem(name: "dest", value: dest),
+        URLQueryItem(name: "unzip", value: String(true)),
+        URLQueryItem(name: "version", value: String(true))
+    ]
+    
+    existingQueryItems.append(contentsOf: additionalQueryItems)
+    
+    urlComponents.queryItems = existingQueryItems
+    
+    guard let finalURL = urlComponents.url else {
+        logger.error("Error constructing the final upload URL")
+        return completion(false)
+    }
+    
+    logger.info("Upload URL: \(finalURL)")
+    
+    upload(baseURL: finalURL.absoluteString, files: filePaths) { success in
+        completion(success)
+    }
+}
 
 
 /*
@@ -95,17 +123,17 @@ func uploadFiles(files: [Data], dest: String) -> Bool { return true }
  */
 func renameFile(data: AssetInfoResponse, newName: String, completion: @escaping (Bool) -> Void) {
     var urlComponents = URLComponents(url: getRenameURL(), resolvingAgainstBaseURL: false)
-
+    
     urlComponents?.queryItems = [
         URLQueryItem(name: "data", value: "[{\"id\":\(data.id),\"name\":\"\(newName)\"}]")
     ]
-
+    
     guard let finalURL = urlComponents?.url else {
         logger.error("Error constructing the rename URL")
         completion(false)
         return
     }
-
+    
     postRequest(to: finalURL) { success in
         completion(success)
     }
@@ -139,27 +167,27 @@ func simpleSearch(search: String, directory: String = "/", pageSize: Int = 100, 
         logger.error("Error constructing the search URL")
         return completion(nil)
     }
-
+    
     var existingQueryItems = urlComponents.queryItems ?? []
-
+    
     let additionalQueryItems: [URLQueryItem] = [
         URLQueryItem(name: "search", value: search),
         URLQueryItem(name: "directory", value: directory),
         URLQueryItem(name: "pageSize", value: String(pageSize)),
         URLQueryItem(name: "pageIndex", value: String(pageIndex))
     ]
-
+    
     existingQueryItems.append(contentsOf: additionalQueryItems)
-
+    
     urlComponents.queryItems = existingQueryItems
-
+    
     guard let finalURL = urlComponents.url else {
         logger.error("Error constructing the final search URL")
         return completion(nil)
     }
-
+    
     logger.info("Query URL: \(finalURL)")
-
+    
     fetchData(from: finalURL, responseType: [SimpleIDResponse].self) { result in
         switch result {
         case .success(let assetsInfo):

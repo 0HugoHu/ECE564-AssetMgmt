@@ -6,7 +6,7 @@ public struct DirectoryBrowser: View {
     private var urls: [URL]
 
     public init(
-        urls: [URL] = [.documentsDirectory, .libraryDirectory, .temporaryDirectory]
+        urls: [URL] = [.documentsDirectory, .libraryDirectory, .picturesDirectory, .temporaryDirectory]
     ) {
         self.urls = urls
     }

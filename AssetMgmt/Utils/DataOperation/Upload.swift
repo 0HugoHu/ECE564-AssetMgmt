@@ -6,33 +6,50 @@
 //
 
 import Foundation
+import Alamofire
 
 
 /*
- Upload a file from a URL to a destination URL
+ Upload files from the URLs to a destination directory on cloud
  
  - Parameters:
-    - url: The URL to upload from
-    - destinationURL: The URL to upload to
-    - completion: A closure that is called when the upload is complete
+ - baseURL: The base URL of the server
+ - files: The URLs of the files to upload
  */
-func postRequest(to url: URL, completion: @escaping (Bool) -> Void) {
-    var request = URLRequest(url: url)
-    request.httpMethod = "POST"
-    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-    URLSession.shared.dataTask(with: request) { _, response, error in
-        if let error = error {
-            logger.error("Error making the request: \(error)")
-            completion(false)
-            return
-        }
-
-        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-            completion(true)
-        } else {
-            logger.error("Request returned an error status code")
-            completion(false)
-        }
-    }.resume()
+func upload(baseURL: String, files: [URL], completion: @escaping (Bool) -> Void) {
+    do {
+        let zipURL = try ZipUtility.zipFiles(files, fileName: "tmp.zip", destinationURL: .temporaryDirectory)
+        
+        logger.info("\(zipURL)")
+        
+        AF.upload(multipartFormData: { multipartFormData in
+            multipartFormData.append(zipURL, withName: "file")
+        }, to: baseURL, method: .post, headers: ["Content-Type": "application/zip"])
+            .uploadProgress { progress in
+                print("Upload Progress: \(progress.fractionCompleted)")
+            }
+            .downloadProgress { progress in
+                print("Download Progress: \(progress.fractionCompleted)")
+            }
+            .responseData { response in
+                print(response)
+                
+                switch response.result {
+                case .success:
+                    if let data = response.value {
+                        // TODO: Write into log
+                        completion(true)
+                    } else {
+                        logger.error("Upload request is nil)")
+                        completion(false)
+                    }
+                case .failure(let error):
+                    logger.error("Upload request failed with error: \(error)")
+                    completion(false)
+                }
+            }
+    } catch {
+        logger.error("Error zipping files: \(error)")
+        completion(false)
+    }
 }

@@ -32,6 +32,11 @@
 		C2B6527B2AF44F6D00E45890 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB20D92AEEE25E002B3FCF /* Strings.swift */; };
 		C2B6527C2AF44F6D00E45890 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB20DB2AEEE266002B3FCF /* Colors.swift */; };
 		C2B6527D2AF44F6D00E45890 /* Urls.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB20DD2AEEE283002B3FCF /* Urls.swift */; };
+		C2B652862AF453DB00E45890 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C2B652852AF453DB00E45890 /* Alamofire */; };
+		C2B652882AF4575400E45890 /* NC-MICS-265.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C2B652872AF4575400E45890 /* NC-MICS-265.jpg */; };
+		C2B6528A2AF459C300E45890 /* CopyResourcesToLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B652892AF459C300E45890 /* CopyResourcesToLocal.swift */; };
+		C2B6528C2AF45B2800E45890 /* PostRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B6528B2AF45B2800E45890 /* PostRequest.swift */; };
+		C2B6528E2AF46C3E00E45890 /* RemoveFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B6528D2AF46C3E00E45890 /* RemoveFile.swift */; };
 		C2C797392AF18117005D41DE /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C797272AF18116005D41DE /* DocumentPicker.swift */; };
 		C2C7973A2AF18117005D41DE /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C797282AF18116005D41DE /* PhotoPicker.swift */; };
 		C2C7973B2AF18117005D41DE /* SortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C7972B2AF18116005D41DE /* SortOption.swift */; };
@@ -95,6 +100,10 @@
 		C2B652672AF435EF00E45890 /* UploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadView.swift; sourceTree = "<group>"; };
 		C2B6526B2AF43D2D00E45890 /* GetFileType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFileType.swift; sourceTree = "<group>"; };
 		C2B6526D2AF43FBB00E45890 /* ZipUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipUtility.swift; sourceTree = "<group>"; };
+		C2B652872AF4575400E45890 /* NC-MICS-265.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "NC-MICS-265.jpg"; sourceTree = "<group>"; };
+		C2B652892AF459C300E45890 /* CopyResourcesToLocal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyResourcesToLocal.swift; sourceTree = "<group>"; };
+		C2B6528B2AF45B2800E45890 /* PostRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRequest.swift; sourceTree = "<group>"; };
+		C2B6528D2AF46C3E00E45890 /* RemoveFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveFile.swift; sourceTree = "<group>"; };
 		C2C797272AF18116005D41DE /* DocumentPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
 		C2C797282AF18116005D41DE /* PhotoPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		C2C7972B2AF18116005D41DE /* SortOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortOption.swift; sourceTree = "<group>"; };
@@ -131,6 +140,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2B652712AF4405D00E45890 /* Zip in Frameworks */,
+				C2B652862AF453DB00E45890 /* Alamofire in Frameworks */,
 				C2FB20E62AEEE5BF002B3FCF /* Logging in Frameworks */,
 				C2C7974A2AF18160005D41DE /* FilePreviews in Frameworks */,
 			);
@@ -186,15 +196,15 @@
 		C28A0B9A2AE5FB0C008258C8 /* AssetMgmt */ = {
 			isa = PBXGroup;
 			children = (
+				C28A0B9B2AE5FB0C008258C8 /* AssetMgmtApp.swift */,
+				C28A0B9D2AE5FB0C008258C8 /* ContentView.swift */,
+				C28A0B9F2AE5FB0D008258C8 /* Assets.xcassets */,
 				C2B652602AF4316B00E45890 /* Info.plist */,
 				C2FB20C42AEEDD79002B3FCF /* DAL */,
 				C2FB20BF2AEEDCAF002B3FCF /* API */,
 				C2FB20BE2AEEDCA9002B3FCF /* UI */,
 				C2FB20C22AEEDCF4002B3FCF /* Utils */,
 				C2FB20D62AEEE20F002B3FCF /* Resouces */,
-				C28A0B9B2AE5FB0C008258C8 /* AssetMgmtApp.swift */,
-				C28A0B9D2AE5FB0C008258C8 /* ContentView.swift */,
-				C28A0B9F2AE5FB0D008258C8 /* Assets.xcassets */,
 				C28A0BA12AE5FB0D008258C8 /* Preview Content */,
 			);
 			path = AssetMgmt;
@@ -229,6 +239,7 @@
 		C2B6525F2AF42B3600E45890 /* TestFile */ = {
 			isa = PBXGroup;
 			children = (
+				C2B652872AF4575400E45890 /* NC-MICS-265.jpg */,
 				ABBB0F812AF2E4B300CD812B /* Sample.pdf */,
 			);
 			path = TestFile;
@@ -248,6 +259,7 @@
 			children = (
 				C2B6526B2AF43D2D00E45890 /* GetFileType.swift */,
 				C2B6526D2AF43FBB00E45890 /* ZipUtility.swift */,
+				C2B6528D2AF46C3E00E45890 /* RemoveFile.swift */,
 			);
 			path = File;
 			sourceTree = "<group>";
@@ -352,6 +364,7 @@
 				C2C797572AF1C1F0005D41DE /* Download.swift */,
 				C2C797592AF1C3CA005D41DE /* Upload.swift */,
 				C2B652612AF433BA00E45890 /* CustomUrlDelegate.swift */,
+				C2B6528B2AF45B2800E45890 /* PostRequest.swift */,
 			);
 			path = DataOperation;
 			sourceTree = "<group>";
@@ -363,6 +376,7 @@
 				C2B6526A2AF43D1D00E45890 /* File */,
 				C2B652692AF43D0C00E45890 /* Url */,
 				C2FB20C12AEEDCE7002B3FCF /* DataOperation */,
+				C2B652892AF459C300E45890 /* CopyResourcesToLocal.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -436,6 +450,7 @@
 				C2FB20E52AEEE5BF002B3FCF /* Logging */,
 				C2C797492AF18160005D41DE /* FilePreviews */,
 				C2B652702AF4405D00E45890 /* Zip */,
+				C2B652852AF453DB00E45890 /* Alamofire */,
 			);
 			productName = AssetMgmt;
 			productReference = C28A0B982AE5FB0C008258C8 /* AssetMgmt.app */;
@@ -513,6 +528,7 @@
 				C2FB20E42AEEE5BF002B3FCF /* XCRemoteSwiftPackageReference "swift-log" */,
 				C2C797482AF18160005D41DE /* XCRemoteSwiftPackageReference "FilePreviews" */,
 				C2B6526F2AF4405D00E45890 /* XCRemoteSwiftPackageReference "Zip" */,
+				C2B652842AF453DB00E45890 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = C28A0B992AE5FB0C008258C8 /* Products */;
 			projectDirPath = "";
@@ -532,6 +548,7 @@
 			files = (
 				C28A0BA32AE5FB0D008258C8 /* Preview Assets.xcassets in Resources */,
 				ABBB0F822AF2E4B300CD812B /* Sample.pdf in Resources */,
+				C2B652882AF4575400E45890 /* NC-MICS-265.jpg in Resources */,
 				C28A0BA02AE5FB0D008258C8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -558,6 +575,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2B652772AF44F6D00E45890 /* DirectoryBrowser.swift in Sources */,
+				C2B6528E2AF46C3E00E45890 /* RemoveFile.swift in Sources */,
+				C2B6528C2AF45B2800E45890 /* PostRequest.swift in Sources */,
+				C2B6528A2AF459C300E45890 /* CopyResourcesToLocal.swift in Sources */,
 				C2B652782AF44F6D00E45890 /* DocumentRow.swift in Sources */,
 				C2B652792AF44F6D00E45890 /* URL+Identifiable.swift in Sources */,
 				C2B6527B2AF44F6D00E45890 /* Strings.swift in Sources */,
@@ -966,6 +986,14 @@
 				minimumVersion = 2.1.2;
 			};
 		};
+		C2B652842AF453DB00E45890 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.8.1;
+			};
+		};
 		C2C797482AF18160005D41DE /* XCRemoteSwiftPackageReference "FilePreviews" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ntsh/FilePreviews";
@@ -989,6 +1017,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C2B6526F2AF4405D00E45890 /* XCRemoteSwiftPackageReference "Zip" */;
 			productName = Zip;
+		};
+		C2B652852AF453DB00E45890 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C2B652842AF453DB00E45890 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 		C2C797492AF18160005D41DE /* FilePreviews */ = {
 			isa = XCSwiftPackageProductDependency;

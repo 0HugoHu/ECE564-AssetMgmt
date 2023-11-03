@@ -61,4 +61,25 @@ final class APITest: XCTestCase {
         wait(for: [expectation], timeout: 3)
     }
     
+    func testUploadFiles() throws {
+        let expectation = XCTestExpectation(description: "uploadFiles completion called")
+        let uploadPath = "/"
+        let picturesDirectoryURL = URL.picturesDirectory
+        
+        do {
+            let fileURLs = try FileManager.default.contentsOfDirectory(at: picturesDirectoryURL, includingPropertiesForKeys: nil, options: [])
+            
+            uploadFiles(filePaths: fileURLs, dest: uploadPath) { success in
+                XCTAssertTrue(success)
+                expectation.fulfill()
+            }
+        } catch {
+            XCTFail("Error enumerating .picturesDirectory: \(error)")
+        }
+        
+        // Actual time 6 s
+        wait(for: [expectation], timeout: 10)
+    }
+
+    
 }
