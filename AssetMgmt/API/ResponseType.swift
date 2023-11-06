@@ -44,24 +44,21 @@ struct AssetInfoResponse: Codable {
     let id: Int
     let name: String
     let path: String
+    let directoryId: Int
     let height: Int
     let width: Int
     let bytes: Int
     let lastModified: Int
     let mimeType: String
     let previews: Previews
-    let publishedRenditions: PublishedRenditions
+    let replaceDate: Int
+    let versionNumber: Int
 
     struct Previews: Codable {
         let thumbnail: String
         let viewex: String
+        let high: String
         let downloadUrl: String
-    }
-
-    struct PublishedRenditions: Codable {
-        let webPNG: String
-        let webJpeg: String
-        let webGif: String
     }
 }
 

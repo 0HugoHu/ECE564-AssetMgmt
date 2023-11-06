@@ -50,14 +50,14 @@ final class APITest: XCTestCase {
     func testDownloadFiles() throws {
         let expectation = XCTestExpectation(description: "downloadFiles completion called")
         let savePath = URL.documentsDirectory
-        let testID = ["205596017"]
+        let testID = ["205596017", "205602533"]
         
         downloadFiles(to: savePath, ids: testID) { success in
             XCTAssertTrue(success)
             expectation.fulfill()
         }
         
-        // Actual time 1.48 s
+        // Actual time 1.85 s
         wait(for: [expectation], timeout: 3)
     }
     
@@ -79,6 +79,20 @@ final class APITest: XCTestCase {
         
         // Actual time 6 s
         wait(for: [expectation], timeout: 10)
+    }
+    
+    func testAssetInfo() throws {
+        let expectation = XCTestExpectation(description: "assetInfo completion called")
+        let testIDs = ["205596017", "205602533"]
+        
+        getAssetDetails(ids: testIDs) { assetInfo in
+            XCTAssertNotNil(assetInfo)
+            logger.info("Asset: \(assetInfo![0].name), \(assetInfo![0].path), \(assetInfo![0].bytes)")
+            expectation.fulfill()
+        }
+        
+        // Actual time 0.42 s
+        wait(for: [expectation], timeout: 1)
     }
 
     
