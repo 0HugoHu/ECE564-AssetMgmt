@@ -16,7 +16,7 @@ func getUserInfo(completion: @escaping (UserInfoAPIResponse?) -> Void) {
     fetchData(from: getUserInfoURL(), responseType: UserInfoAPIResponse.self) { result in
         switch result {
         case .success(let userInfo):
-            logger.info("Username: \(userInfo.username)")
+//            logger.info("Username: \(userInfo.username)")
             completion(userInfo)
         case .failure(let error):
             logger.error("Error getting user info: \(error)")
@@ -45,7 +45,7 @@ func downloadFiles(to: URL, ids: [String], keepDirectoryStructure: Bool = false,
     
     var existingQueryItems = urlComponents.queryItems ?? []
     
-    existingQueryItems.append(URLQueryItem(name: "ids", value: ids.joined(separator: ",")))
+    existingQueryItems.append(URLQueryItem(name: "ids", value: "[" + ids.joined(separator: ",") + "]"))
     
     if keepDirectoryStructure {
         existingQueryItems.append(URLQueryItem(name: "keepDirectoryStructure", value: "true"))
@@ -191,7 +191,7 @@ func simpleSearch(search: String, directory: String = "/", pageSize: Int = 100, 
     fetchData(from: finalURL, responseType: [SimpleIDResponse].self) { result in
         switch result {
         case .success(let assetsInfo):
-            logger.info("Asset Count: \(assetsInfo.count)")
+//            logger.info("Asset Count: \(assetsInfo.count)")
             completion(assetsInfo)
         case .failure(let error):
             logger.error("Error simple search: \(error)")
@@ -254,11 +254,45 @@ func getPreview(id: String) -> String? { return nil }
 
 
 /*
- Get Details
+ Get Asset Details
  
  - Parameters:
- - id: File id
+ - ids: File ids
  
- - Returns: AssetInfoResponse
+ - Returns: [AssetInfoResponse]?
  */
-func getDetails(id: String) -> AssetInfoResponse? { return nil }
+func getAssetDetails(ids: [String], completion: @escaping ([AssetInfoResponse]?) -> Void) {
+    guard var urlComponents = URLComponents(url: getAssetInfoURL(), resolvingAgainstBaseURL: false) else {
+        logger.error("Error constructing the asset info URL")
+        return completion(nil)
+    }
+    
+    var existingQueryItems = urlComponents.queryItems ?? []
+    
+    let additionalQueryItems: [URLQueryItem] = [
+        URLQueryItem(name: "ids", value: "[" + ids.joined(separator: ",") + "]"),
+        URLQueryItem(name: "verbose", value: String(true))
+    ]
+    
+    existingQueryItems.append(contentsOf: additionalQueryItems)
+    
+    urlComponents.queryItems = existingQueryItems
+    
+    guard let finalURL = urlComponents.url else {
+        logger.error("Error constructing the final asset info URL")
+        return completion(nil)
+    }
+    
+    logger.info("Asset info URL: \(finalURL)")
+    
+    fetchData(from: finalURL, responseType: [AssetInfoResponse].self) { result in
+        switch result {
+        case .success(let assetInfo):
+            logger.info("Asset: \(assetInfo[0].name), \(assetInfo[0].path), \(assetInfo[0].bytes)")
+            completion(assetInfo)
+        case .failure(let error):
+            logger.error("Error getting asset info: \(error)")
+            completion(nil)
+        }
+    }
+}

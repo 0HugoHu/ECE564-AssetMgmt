@@ -37,6 +37,10 @@ func getSimpleSearchURL() -> URL {
     return appendAuth(url: URL(string: REST_API + "quickSearch")!)
 }
 
+func getAssetInfoURL() -> URL {
+    return appendAuth(url: URL(string: REST_API + "assets")!)
+}
+
 
 func appendAuth(url: URL) -> URL {
     if let authToken = UserDefaults.standard.string(forKey: "AuthToken") {
