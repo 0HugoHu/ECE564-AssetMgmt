@@ -12,4 +12,3 @@ enum APIError: Error {
     case requestFailed(Error)
     case invalidResponse
 }
-

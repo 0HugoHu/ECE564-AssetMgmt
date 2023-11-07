@@ -21,7 +21,7 @@ public struct DirectoryBrowser: View {
                 }
                 
                 NavigationLink(destination: SearchView()) {
-                    Text("Search")
+                    Text("Main Page")
                 }
                 NavigationLink(destination: PDFSwiftUIView(fileName: "Sample"), label: {
                     Text("PDF viewer")
