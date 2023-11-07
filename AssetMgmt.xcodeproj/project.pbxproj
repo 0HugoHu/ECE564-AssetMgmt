@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2D48EF912AF9939C00968F67 /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D48EF902AF9939C00968F67 /* SearchBarView.swift */; };
+		2D48EF932AF9D0E200968F67 /* AssetThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D48EF922AF9D0E200968F67 /* AssetThumbnailView.swift */; };
 		2D72D0E02AF414ED00C9208E /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D72D0DF2AF414ED00C9208E /* SearchView.swift */; };
 		ABBB0F802AF2E3A400CD812B /* PDFSwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABBB0F7F2AF2E3A400CD812B /* PDFSwiftUIView.swift */; };
 		ABBB0F822AF2E4B300CD812B /* Sample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = ABBB0F812AF2E4B300CD812B /* Sample.pdf */; };
@@ -81,6 +82,7 @@
 
 /* Begin PBXFileReference section */
 		2D48EF902AF9939C00968F67 /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
+		2D48EF922AF9D0E200968F67 /* AssetThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetThumbnailView.swift; sourceTree = "<group>"; };
 		2D72D0DF2AF414ED00C9208E /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		ABBB0F7D2AF2E2C400CD812B /* PDFViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFViewer.swift; sourceTree = "<group>"; };
 		ABBB0F7F2AF2E3A400CD812B /* PDFSwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFSwiftUIView.swift; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 				C2B652652AF435E600E45890 /* DownloadView.swift */,
 				C2B652672AF435EF00E45890 /* UploadView.swift */,
 				2D72D0DF2AF414ED00C9208E /* SearchView.swift */,
+				2D48EF922AF9D0E200968F67 /* AssetThumbnailView.swift */,
 				2D48EF902AF9939C00968F67 /* SearchBarView.swift */,
 				C2FB20D42AEEE15B002B3FCF /* Initialization.swift */,
 				C2FB20EE2AEEF0FE002B3FCF /* FileBrowser */,
@@ -577,6 +580,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D48EF932AF9D0E200968F67 /* AssetThumbnailView.swift in Sources */,
 				C2B652772AF44F6D00E45890 /* DirectoryBrowser.swift in Sources */,
 				C2B6528E2AF46C3E00E45890 /* RemoveFile.swift in Sources */,
 				C2B6528C2AF45B2800E45890 /* PostRequest.swift in Sources */,

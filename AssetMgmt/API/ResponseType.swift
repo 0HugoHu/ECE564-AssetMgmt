@@ -40,7 +40,7 @@ struct SimpleIDResponse: Codable, Identifiable {
 }
 
 
-struct AssetInfoResponse: Codable {
+struct AssetInfoResponse: Codable, Identifiable {
     let id: Int
     let name: String
     let path: String

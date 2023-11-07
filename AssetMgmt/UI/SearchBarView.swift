@@ -103,7 +103,6 @@ struct SearchBarView: View {
                         self.showCancelButton = true
                     }, onCommit: onCommit).foregroundColor(.primary)
                 }
-
                 
                 // Clear button
                 Button(action: {
@@ -136,7 +135,7 @@ struct SearchBarView: View {
             
         }
         .padding(.horizontal)
-        .navigationBarHidden(showCancelButton)
+//        .navigationBarHidden(showCancelButton)
         
         // Advanced search fields
         if showAdvancedSearch {
