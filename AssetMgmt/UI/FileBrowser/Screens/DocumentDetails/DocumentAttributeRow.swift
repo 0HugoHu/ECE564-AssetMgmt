@@ -9,6 +9,7 @@ struct DocumentAttributeRow: View {
             Spacer()
             Text(value)
                 .multilineTextAlignment(.trailing)
+                .foregroundColor(.secondary)
         }
     }
 }

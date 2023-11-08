@@ -7,8 +7,6 @@
 // Sample Search Bar
 
 import Foundation
-//
-
 import SwiftUI
 
 struct SearchBarContentView: View {
