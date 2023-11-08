@@ -41,7 +41,6 @@ func getAssetInfoURL() -> URL {
     return appendAuth(url: URL(string: REST_API + "assets")!)
 }
 
-
 func appendAuth(url: URL) -> URL {
     if let authToken = UserDefaults.standard.string(forKey: "AuthToken") {
         return URL(string: url.absoluteString + "?apikey=" + authToken)!
@@ -49,6 +48,18 @@ func appendAuth(url: URL) -> URL {
     return url
 }
 
+func getThumbnailURL(originalURLString: String) -> String {
+    let baseOld = "https://152.3.100.163:443/"
+    let baseNew = MEDIABEACON_HOST
+    
+    if originalURLString.hasPrefix(baseOld) {
+        var newURLString = originalURLString.replacingOccurrences(of: baseOld, with: baseNew)
+        newURLString += "&apikey=\(UserDefaults.standard.string(forKey: "AuthToken")!)"
+        return newURLString
+    } else {
+        return originalURLString // Return the original if it doesn't match the expected format
+    }
+}
 
 // TODO: Append other URLs here
 // https://mb-buildstorage.s3.amazonaws.com/23.07/Current/API/Rest-v2/symbols/Assets.html
