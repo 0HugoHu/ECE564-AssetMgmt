@@ -37,9 +37,16 @@ func getSimpleSearchURL() -> URL {
     return appendAuth(url: URL(string: REST_API + "quickSearch")!)
 }
 
+
 func getAssetInfoURL() -> URL {
     return appendAuth(url: URL(string: REST_API + "assets")!)
 }
+
+
+func getDirectoryURL() -> URL {
+    return appendAuth(url: URL(string: REST_API + "directories")!)
+}
+
 
 func appendAuth(url: URL) -> URL {
     if let authToken = UserDefaults.standard.string(forKey: "AuthToken") {
@@ -47,6 +54,7 @@ func appendAuth(url: URL) -> URL {
     }
     return url
 }
+
 
 func getThumbnailURL(originalURLString: String) -> String {
     let baseOld = "https://152.3.100.163:443/"

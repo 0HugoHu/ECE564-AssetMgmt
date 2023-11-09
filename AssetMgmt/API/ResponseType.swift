@@ -62,4 +62,13 @@ struct AssetInfoResponse: Codable, Identifiable {
     }
 }
 
+struct DirectoryResponse: Codable, Identifiable {
+    let id: Int
+    let name: String
+    let path: String
+    let resolver: String
+    let hasChildren: Bool?
+    let parentId: Int
+}
+
 

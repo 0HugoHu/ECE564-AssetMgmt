@@ -23,6 +23,9 @@ public struct DirectoryBrowser: View {
                 NavigationLink(destination: SearchView()) {
                     Text("Main Page")
                 }
+                NavigationLink("Index") {
+                    FolderView(documentsStore: DocumentsStore(root: "/", mode: .remote), title: "Index")
+                }
                 NavigationLink(destination: PDFSwiftUIView(fileName: "Sample"), label: {
                     Text("PDF viewer")
                 })

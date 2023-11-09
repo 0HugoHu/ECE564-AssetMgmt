@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 enum DocumentsStoreError: Error, LocalizedError {
     case fileExists
@@ -14,20 +15,22 @@ protocol DocumentImporter {
 public class DocumentsStore: ObservableObject, DocumentImporter {
     @Published var documents: [Document] = []
     @Published var sorting: SortOption = .date(ascending: false) //TODO: Get it from userdefaults
-
+    
     var docDirectory: URL
+    var remoteUrl : String
+    var mode: FileBrowserMode
     private var relativePath: String
     private var documentManager: DocumentManager
     private let attrKeys: [URLResourceKey] = [.nameKey, .fileSizeKey, .contentModificationDateKey, .creationDateKey, .isDirectoryKey]
-
+    
     private var workingDirectory: URL {
         guard relativePath.count > 0 else {
             return docDirectory
         }
-
+        
         return docDirectory.appendingPathComponent(relativePath)
     }
-
+    
     public init(
         root: URL,
         relativePath: String = "",
@@ -35,11 +38,27 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
         documentsSource: DocumentManager = FileManager.default
     ) {
         docDirectory = root
+        self.mode = .local
         self.relativePath = relativePath
         self.sorting = sorting
         self.documentManager = documentsSource
+        self.remoteUrl = ""
     }
-
+    
+    init(
+        root: String,
+        mode: FileBrowserMode,
+        relativePath: String = "",
+        sorting: SortOption = .date(ascending: true)
+    ) {
+        docDirectory = URL(string: root)!
+        self.remoteUrl = root
+        self.mode = mode
+        self.relativePath = relativePath
+        self.sorting = sorting
+        self.documentManager = FileManager.default
+    }
+    
     fileprivate func document(from url: URL) -> Document? {
         var document: Document? = nil
         do {
@@ -49,39 +68,74 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
             let modified = attrVals.contentModificationDate
             let size = NSNumber(value: attrVals.fileSize ?? 0)
             let isDirectory = attrVals.isDirectory ?? false
-
+            
             document = Document(name: fileName, url: url, size: size, created: created, modified: modified, isDirectory: isDirectory)
         } catch let error as NSError {
             NSLog("Error reading file attr: \(error)")
         }
         return document
     }
-
+    
     func loadDocuments() {
-        do {
-            let allFiles = try documentManager.contentsOfDirectory(at: workingDirectory)
-            documents = allFiles.map { document(from: $0) }.compactMap{ $0 }
-        } catch let error as NSError {
-            NSLog("Error traversing files directory: \(error)")
+        if self.mode == .local {
+            do {
+                let allFiles = try documentManager.contentsOfDirectory(at: workingDirectory)
+                documents = allFiles.map { document(from: $0) }.compactMap{ $0 }
+            } catch let error as NSError {
+                NSLog("Error traversing files directory: \(error)")
+            }
+        } else if self.mode == .remote{
+            documents.removeAll()
+            // Load all directories
+            let finalPath = self.relativePath == "" ? self.remoteUrl : self.relativePath
+            showDirectory(path: finalPath, depth: 1) { directories in
+                if directories == nil {
+                    logger.warning("No folder exists at \(self.remoteUrl)")
+                    return
+                }
+                for folder in directories! {
+                    // TODO: Add more info here
+                    // Pass url as thumbnail
+                    let doc = Document(name: folder.name, url: URL(string: folder.path)!, size: 0, isDirectory: true)
+                    self.appendDocument(doc)
+                }
+            }
         }
-
+        
         sort()
     }
-
+    
     func reload() {
         loadDocuments()
     }
-
+    
+    
+    /*
+     * This method ensures that the document is appended to the documents array on the main thread.
+     * Genderated by ChatGPT
+     */
+    var cancellables: Set<AnyCancellable> = []
+    func appendDocument(_ doc: Document) {
+        // Use the receive(on:) operator to ensure this runs on the main thread
+        Just(doc)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] document in
+                self?.documents.append(document)
+            }
+            .store(in: &cancellables)
+    }
+    
+    
     fileprivate func sort() {
         documents.sort(by: sorting.sortingComparator())
     }
-
+    
     func setSorting(_ sorting: SortOption) {
         self.sorting = sorting
-
+        
         sort()
     }
-
+    
     func delete(_ document: Document) {
         do {
             try documentManager.removeItem(at: document.url)
@@ -93,7 +147,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
             NSLog("Error deleting file: \(error)")
         }
     }
-
+    
     @discardableResult
     func createNewFolder() throws -> Document {
         var folderName = "New Folder"
@@ -105,7 +159,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
             folderName = "New Folder (\(folderNumber))"
             folderUrl = workingDirectory.appendingPathComponent(folderName, isDirectory: true)
         }
-
+        
         // Create the new folder
         do {
             return try createFolder(folderName)
@@ -114,7 +168,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
             throw DocumentsStoreError.unknown
         }
     }
-
+    
     @discardableResult
     func createFolder(_ name: String) throws -> Document {
         let target = workingDirectory.appendingPathComponent(name, isDirectory: true)
@@ -123,7 +177,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
         } catch CocoaError.fileWriteFileExists {
             throw DocumentsStoreError.fileExists
         }
-
+        
         if let folder = document(from: target) {
             documents.insert(folder, at: 0)
             sort()
@@ -132,60 +186,64 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
             throw DocumentsStoreError.unknown
         }
     }
-
+    
     func importFile(from url: URL) {
-        var suitableUrl = workingDirectory.appendingPathComponent(url.lastPathComponent)
-
-        var retry = true
-        var retryCount = 1
-        while retry {
-            retry = false
-
-            do {
-                try documentManager.copyItem(at: url, to: suitableUrl)
-
-                if let document = document(from: suitableUrl) {
-                    documents.insert(document, at: self.documents.endIndex)
-                    sort()
+        if self.mode == .local {
+            var suitableUrl = workingDirectory.appendingPathComponent(url.lastPathComponent)
+            
+            var retry = true
+            var retryCount = 1
+            while retry {
+                retry = false
+                
+                do {
+                    try documentManager.copyItem(at: url, to: suitableUrl)
+                    
+                    if let document = document(from: suitableUrl) {
+                        documents.insert(document, at: self.documents.endIndex)
+                        sort()
+                    }
+                } catch CocoaError.fileWriteFileExists {
+                    retry = true
+                    
+                    // append (1) to file name
+                    let fileExtension = url.pathExtension
+                    let fileNameWithoutExtension = url.deletingPathExtension().lastPathComponent
+                    let fileNameWithCountSuffix = fileNameWithoutExtension.appending(" (\(retryCount))")
+                    suitableUrl = workingDirectory.appendingPathComponent(fileNameWithCountSuffix).appendingPathExtension(fileExtension)
+                    
+                    retryCount += 1
+                    
+                    NSLog("Retry *** suitableName = \(suitableUrl.lastPathComponent)")
+                } catch let error as NSError {
+                    NSLog("Error importing file: \(error)")
                 }
-            } catch CocoaError.fileWriteFileExists {
-                retry = true
-
-                // append (1) to file name
-                let fileExtension = url.pathExtension
-                let fileNameWithoutExtension = url.deletingPathExtension().lastPathComponent
-                let fileNameWithCountSuffix = fileNameWithoutExtension.appending(" (\(retryCount))")
-                suitableUrl = workingDirectory.appendingPathComponent(fileNameWithCountSuffix).appendingPathExtension(fileExtension)
-
-                retryCount += 1
-
-                NSLog("Retry *** suitableName = \(suitableUrl.lastPathComponent)")
-            } catch let error as NSError {
-                NSLog("Error importing file: \(error)")
             }
+        } else if self.mode == .remote {
+            
         }
     }
-
+    
     func relativePath(for document: Document) -> String {
         let url = URL(fileURLWithPath: document.name, isDirectory: document.isDirectory, relativeTo: URL(fileURLWithPath: "/\(relativePath)", isDirectory: true)).path
         return url
     }
-
+    
     @discardableResult
     func rename(document: Document, newName: String) throws -> Document {
         let newUrl = workingDirectory.appendingPathComponent(newName, isDirectory: document.isDirectory)
         do {
             try documentManager.moveItem(at: document.url, to: newUrl)
-
+            
             // Find current document in documents array and update the values
             if let indexToUpdate = documents.firstIndex(where: { $0.url == document.url }) {
                 var documentToUpdate = documents[indexToUpdate]
                 documents.remove(at: indexToUpdate)
-
+                
                 documentToUpdate.url = newUrl
                 documentToUpdate.name = newName
                 documents.insert(documentToUpdate, at: 0)
-
+                
                 sort()
                 return documentToUpdate
             } else {

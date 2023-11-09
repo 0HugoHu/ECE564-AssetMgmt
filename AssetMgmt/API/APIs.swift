@@ -220,15 +220,51 @@ func simpleSearch(search: String, directory: String = "/", pageSize: Int = 100, 
 
 
 /*
- Show Directories
+ Show Directory
  
  - Parameters:
+ - path: Path to show
  - depth: Depth of directories to show
- - paths: Path to show
  
  - Returns: Array of AssetInfoResponse
  */
-func showDirectories(depth: Int = 0, paths: String = "/") -> [AssetInfoResponse]? { return nil }
+func showDirectory(path: String = "/", depth: Int = 0, completion: @escaping ([DirectoryResponse]?) -> Void) {
+    guard var urlComponents = URLComponents(url: getDirectoryURL(), resolvingAgainstBaseURL: false) else {
+        logger.error("Error constructing the directory URL")
+        return completion(nil)
+    }
+    
+    var existingQueryItems = urlComponents.queryItems ?? []
+    
+    let additionalQueryItems: [URLQueryItem] = [
+        URLQueryItem(name: "paths", value: path),
+        URLQueryItem(name: "depth", value: String(depth)),
+        URLQueryItem(name: "verbose", value: String(true)),
+        URLQueryItem(name: "hierarchy", value: String(false)),
+        URLQueryItem(name: "justChildren", value: String(true))
+    ]
+    
+    existingQueryItems.append(contentsOf: additionalQueryItems)
+    
+    urlComponents.queryItems = existingQueryItems
+    
+    guard let finalURL = urlComponents.url else {
+        logger.error("Error constructing the final directory URL")
+        return completion(nil)
+    }
+    
+    logger.info("Directory URL: \(finalURL)")
+    
+    fetchData(from: finalURL, responseType: [DirectoryResponse].self) { result in
+        switch result {
+        case .success(let directories):
+            completion(directories)
+        case .failure(let error):
+            logger.error("Error show directories: \(error)")
+            completion(nil)
+        }
+    }
+}
 
 
 /*

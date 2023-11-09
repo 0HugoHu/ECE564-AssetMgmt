@@ -134,15 +134,27 @@ public struct FolderView: View {
     @ViewBuilder
     private func navigationDestination(for document: Document) -> some View {
         if document.isDirectory {
-            let relativePath = documentsStore.relativePath(for: document)
-            FolderView(
-                documentsStore: DocumentsStore(
-                    root: documentsStore.docDirectory,
-                    relativePath: relativePath,
-                    sorting: documentsStore.sorting
-                ),
-                title: document.name
-            )
+            if documentsStore.mode == .local {
+                let relativePath = documentsStore.relativePath(for: document)
+                FolderView(
+                    documentsStore: DocumentsStore(
+                        root: documentsStore.docDirectory,
+                        relativePath: relativePath,
+                        sorting: documentsStore.sorting
+                    ),
+                    title: document.name
+                )
+            } else if documentsStore.mode == .remote {
+                let relativePath = "/" + document.name
+                FolderView(
+                    documentsStore: DocumentsStore(
+                        root: documentsStore.remoteUrl,
+                        mode: .remote,
+                        relativePath: relativePath
+                    ),
+                    title: document.name
+                )
+            }
         } else {
             DocumentDetails(document: document)
         }

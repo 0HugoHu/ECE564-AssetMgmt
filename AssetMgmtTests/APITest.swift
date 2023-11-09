@@ -94,6 +94,24 @@ final class APITest: XCTestCase {
         // Actual time 0.42 s
         wait(for: [expectation], timeout: 1)
     }
+    
+    
+    func testShowDirectory() throws {
+        let expectation = XCTestExpectation(description: "showDirectory completion called")
+        let testPath = "/"
+        let depth = 1
+        
+        showDirectory(path: testPath, depth: depth) { directories in
+            XCTAssertNotNil(directories)
+            for folder in directories! {
+                logger.info("Asset: \(folder.name), \(folder.path), \(folder.id), \(String(describing: folder.hasChildren))")
+            }
+            expectation.fulfill()
+        }
+        
+        // Actual time 0.41 s
+        wait(for: [expectation], timeout: 1)
+    }
 
     
 }
