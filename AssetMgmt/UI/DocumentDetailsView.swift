@@ -10,6 +10,8 @@ import SwiftUI
 
 struct DocumentDetailsView: View {
     
+    @State private var previewURL: URL?
+    
     var assetInfo: AssetInfoResponse
 //    @State private var urlToPreview: URL?
     @State private var showPDF = false
@@ -21,7 +23,7 @@ struct DocumentDetailsView: View {
    
         VStack(alignment: .center, spacing: 12) {
             List {
-//                ThumbnailView(url: thumbnailUrl)
+//                ThumbnailView(url: getFilePathById(String(assetInfo.id))!)
                 AsyncImage(url: thumbnailUrl) { phase in
                     switch phase {
                     case .empty:
@@ -42,16 +44,19 @@ struct DocumentDetailsView: View {
                 }
                 .onTapGesture {
                     self.showPDF = true
+                    previewURL = getFilePathById(String(assetInfo.id))
+                    print(assetInfo.id)
                 }
-                .background(
-                    NavigationLink(
-                        destination: PDFViewer(url: URL(string: getThumbnailURL(originalURLString: assetInfo.previews.downloadUrl))!),
-                        isActive: $showPDF
-                    ) {
-                        EmptyView()
-                    }
-                    .hidden()
-                )
+//                .background(
+//                    NavigationLink(
+//                        destination: PDFViewer(url: getFilePathById(String(assetInfo.id))!),
+//                        //destination: PDFViewer(url: URL(string: getThumbnailURL(originalURLString: assetInfo.previews.downloadUrl))!),
+//                        isActive: $showPDF
+//                    ) {
+//                        EmptyView()
+//                    }
+//                    .hidden()
+//                )
 
                 HStack {
                     Spacer()
@@ -73,10 +78,10 @@ struct DocumentDetailsView: View {
 //                    DocumentAttributeRow(key: "Modified", value: modified.formatted())
 //                }
             }
+            
             .listStyle(InsetGroupedListStyle())
         }
-        
-//        .quickLookPreview($urlToPreview)
+        .quickLookPreview($previewURL)
 //        .navigationBarItems(trailing: HStack {
 //            Button(action: showPreview) {
 //                Image(systemName: "play.fill")

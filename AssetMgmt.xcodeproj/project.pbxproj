@@ -15,6 +15,7 @@
 		ABBB0F802AF2E3A400CD812B /* PDFSwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABBB0F7F2AF2E3A400CD812B /* PDFSwiftUIView.swift */; };
 		ABBB0F822AF2E4B300CD812B /* Sample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = ABBB0F812AF2E4B300CD812B /* Sample.pdf */; };
 		ABBB0F852AF3254A00CD812B /* UserDefaultAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABBB0F842AF3254A00CD812B /* UserDefaultAccess.swift */; };
+		ABBB0F872AFC79C600CD812B /* FileAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABBB0F862AFC79C600CD812B /* FileAccess.swift */; };
 		C28A0B9C2AE5FB0C008258C8 /* AssetMgmtApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28A0B9B2AE5FB0C008258C8 /* AssetMgmtApp.swift */; };
 		C28A0BA02AE5FB0D008258C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C28A0B9F2AE5FB0D008258C8 /* Assets.xcassets */; };
 		C28A0BA32AE5FB0D008258C8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C28A0BA22AE5FB0D008258C8 /* Preview Assets.xcassets */; };
@@ -93,6 +94,7 @@
 		ABBB0F7F2AF2E3A400CD812B /* PDFSwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFSwiftUIView.swift; sourceTree = "<group>"; };
 		ABBB0F812AF2E4B300CD812B /* Sample.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Sample.pdf; sourceTree = "<group>"; };
 		ABBB0F842AF3254A00CD812B /* UserDefaultAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultAccess.swift; sourceTree = "<group>"; };
+		ABBB0F862AFC79C600CD812B /* FileAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAccess.swift; sourceTree = "<group>"; };
 		C28A0B982AE5FB0C008258C8 /* AssetMgmt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AssetMgmt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C28A0B9B2AE5FB0C008258C8 /* AssetMgmtApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetMgmtApp.swift; sourceTree = "<group>"; };
 		C28A0B9D2AE5FB0C008258C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				ABBB0F842AF3254A00CD812B /* UserDefaultAccess.swift */,
+				ABBB0F862AFC79C600CD812B /* FileAccess.swift */,
 			);
 			path = DataAccessFunc;
 			sourceTree = "<group>";
@@ -618,14 +621,7 @@
 				C2B6526C2AF43D2D00E45890 /* GetFileType.swift in Sources */,
 				C2B652642AF4341F00E45890 /* GenerateUniqueUrl.swift in Sources */,
 				C2B652682AF435EF00E45890 /* UploadView.swift in Sources */,
-				C2FB20DC2AEEE266002B3FCF /* Colors.swift in Sources */,
-				ABBB0F7E2AF2E2C400CD812B /* PDFViewer.swift in Sources */,
-				C2FB20DE2AEEE283002B3FCF /* Urls.swift in Sources */,
 				ABBB0F852AF3254A00CD812B /* UserDefaultAccess.swift in Sources */,
-				C2C797472AF18133005D41DE /* DirectoryBrowser.swift in Sources */,
-				C2FB20DA2AEEE25E002B3FCF /* Strings.swift in Sources */,
-				C2C797402AF18117005D41DE /* URL+Identifiable.swift in Sources */,
-				C28A0B9E2AE5FB0C008258C8 /* ContentView.swift in Sources */,
 				C2FB20C92AEEDECA002B3FCF /* APIs.swift in Sources */,
 				C2C7973D2AF18117005D41DE /* FolderView.swift in Sources */,
 				C2C7973B2AF18117005D41DE /* SortOption.swift in Sources */,
@@ -641,6 +637,7 @@
 				2D48EF9D2AFC107B00968F67 /* DocumentDetailsView.swift in Sources */,
 				C2C797582AF1C1F0005D41DE /* Download.swift in Sources */,
 				C2C797412AF18117005D41DE /* Formatters.swift in Sources */,
+				ABBB0F872AFC79C600CD812B /* FileAccess.swift in Sources */,
 				C28A0B9C2AE5FB0C008258C8 /* AssetMgmtApp.swift in Sources */,
 				ABBB0F802AF2E3A400CD812B /* PDFSwiftUIView.swift in Sources */,
 				C2C7974E2AF1A143005D41DE /* FetchData.swift in Sources */,

@@ -44,15 +44,12 @@ func download(from url: URL, to destinationURL: URL, completion: @escaping (Bool
 //                    }
 //                }
                 
-                // Check if a file with the same name already exists
-                if FileManager.default.fileExists(atPath: destinationURL.path) {
-                    let destinationWithUniqueName = generateUniqueDestinationURL(destinationURL)
-                    try FileManager.default.moveItem(at: tempURL, to: destinationWithUniqueName)
-                    try ZipUtility.unzipFile(from: destinationWithUniqueName, to: destinationWithUniqueName.deletingLastPathComponent())
-                } else {
-                    try FileManager.default.moveItem(at: tempURL, to: destinationURL)
-                    try ZipUtility.unzipFile(from: destinationURL, to: destinationURL.deletingLastPathComponent())
-                }
+                // Give the file a unique name
+                let destinationWithUniqueName = generateUniqueDestinationURL(destinationURL)
+                try FileManager.default.moveItem(at: tempURL, to: destinationWithUniqueName)
+                try ZipUtility.unzipFile(from: destinationWithUniqueName, to: destinationWithUniqueName.deletingLastPathComponent())
+                try FileManager.default.removeItem(at: destinationWithUniqueName)
+                print("dest: \(destinationWithUniqueName)")
                 
                 completion(true)
             } catch {
