@@ -12,10 +12,14 @@ struct ContentView: View {
     
     var body: some View {
 //        TODO: Dismiss this view after successful login
-//        Initialization()
-        
-//        TODO: Comment this for now
-        DirectoryBrowser()
+        TabView {
+            Initialization()
+                .tabItem { Image(systemName: "person") }
+            
+            //        TODO: Comment this for now
+            DirectoryBrowser()
+                .tabItem { Image(systemName: "list.dash") }
+        }
     }
 }
 

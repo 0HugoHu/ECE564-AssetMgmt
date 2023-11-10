@@ -18,44 +18,42 @@ struct SearchView: View {
     ]
     
     var body: some View {
-        NavigationView {
-            VStack {
+        
+        VStack {
             
-                SearchBarView(searchText: $searchText, onCommit: search)
+            SearchBarView(searchText: $searchText, onCommit: search)
+            
+            HStack {
                 
-                HStack {
-                    
-                    Spacer()
-                    
-                    Text("\(searchResults.count) matched found")
-                        .font(.subheadline)
-                        .padding(.top)
-                        .padding(.trailing)
-                    
-                }
-                .navigationBarTitle(Text("MediaBeacon"))
-                .resignKeyboardOnDragGesture()
+                Spacer()
                 
-                if isLoading {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle())
-                } else {
-                    LazyVGrid(columns: columns, spacing: 20) {
-                        ForEach(searchResults, id: \.id) { item in
-                            NavigationLink(destination: DocumentDetailsView(assetInfo: item)) {
-                                AssetThumbnailViewGrid(assetInfo: item)
-                            }
+                Text("\(searchResults.count) matched found")
+                    .font(.subheadline)
+                    .padding(.top)
+                    .padding(.trailing)
+            }
+            .navigationBarTitle(Text("MediaBeacon"))
+            .resignKeyboardOnDragGesture()
+            
+            if isLoading {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+            } else {
+                LazyVGrid(columns: columns, spacing: 20) {
+                    ForEach(searchResults, id: \.id) { item in
+                        NavigationLink(destination: DocumentDetailsView(assetInfo: item)) {
+                            AssetThumbnailViewGrid(assetInfo: item)
                         }
                     }
-                    .padding()
                 }
-                Spacer() //
+                .padding()
             }
-            .navigationBarTitle("Search")
-            .onAppear {
-                // Perform initial search here
-                search()
-            }
+            Spacer() //
+        }
+        .navigationBarTitle("Search")
+        .onAppear {
+            // Perform initial search here
+            search()
         }
     }
     
@@ -70,7 +68,7 @@ struct SearchView: View {
                 }
                 return
             }
-
+            
             // Then, fetch the details for each ID
             getAssetDetails(ids: ids) { assetDetails in
                 DispatchQueue.main.async {
@@ -80,7 +78,7 @@ struct SearchView: View {
             }
         }
     }
-
+    
 }
 
 #Preview {
