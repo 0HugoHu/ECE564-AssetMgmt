@@ -191,7 +191,6 @@ func simpleSearch(search: String, directory: String = "/", pageSize: Int = 100, 
     fetchData(from: finalURL, responseType: [SimpleIDResponse].self) { result in
         switch result {
         case .success(let assetsInfo):
-//            logger.info("Asset Count: \(assetsInfo.count)")
             completion(assetsInfo)
         case .failure(let error):
             logger.error("Error simple search: \(error)")
@@ -201,22 +200,108 @@ func simpleSearch(search: String, directory: String = "/", pageSize: Int = 100, 
 }
 
 
+/*
+Simple Search with Details Response
+Used for file browser only
+
+- Parameters:
+- directory: Directory to search
+- pageSize: Number of results per page
+- pageIndex: Page index
+- verbose: Show details, can only be true
+
+- Returns: Array of Ids
+*/
+func simpleSearch(directory: String, verbose: Bool, pageSize: Int = 100, pageIndex: Int = 0, completion: @escaping ([AssetInfoResponse]?) -> Void) {
+   guard var urlComponents = URLComponents(url: getSimpleSearchURL(), resolvingAgainstBaseURL: false) else {
+       logger.error("Error constructing the search URL")
+       return completion(nil)
+   }
+   
+   var existingQueryItems = urlComponents.queryItems ?? []
+   
+   let additionalQueryItems: [URLQueryItem] = [
+       URLQueryItem(name: "search", value: ""),
+       URLQueryItem(name: "directory", value: directory),
+       URLQueryItem(name: "pageSize", value: String(pageSize)),
+       URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+       URLQueryItem(name: "verbose", value: String(verbose)),
+   ]
+   
+   existingQueryItems.append(contentsOf: additionalQueryItems)
+   
+   urlComponents.queryItems = existingQueryItems
+   
+   guard let finalURL = urlComponents.url else {
+       logger.error("Error constructing the final search URL")
+       return completion(nil)
+   }
+   
+   logger.info("Query URL: \(finalURL)")
+   
+   fetchData(from: finalURL, responseType: [AssetInfoResponse].self) { result in
+       switch result {
+       case .success(let assetsInfo):
+           completion(assetsInfo)
+       case .failure(let error):
+           logger.error("Error simple search: \(error)")
+           completion(nil)
+       }
+   }
+}
+
+
 
 
 /*
  Advanced Search
+ Used for file browser only
  
  - Parameters:
- - searchObj: SearchObject
+ - search: JSON format of filters
  - directory: Directory to search
  - pageSize: Number of results per page
  - pageIndex: Page index
- - sortField: Field to sort by
- - sortDirection: Direction to sort
  
  - Returns: Array of AssetInfoResponse
  */
-//func advancedSearch(searchObj: SearchModel, directory: String, pageSize: Int = 100, pageIndex: Int = 0, sortField: String?, sortDirection: String?, FILTERS: FilterModel?) -> [AssetInfoResponse]? { return nil }
+func advancedSearch(search: String, directory: String, verbose: Bool, pageSize: Int = 100, pageIndex: Int = 0, completion: @escaping ([AssetInfoResponse]?) -> Void) {
+   guard var urlComponents = URLComponents(url: getAdvancedSearchURL(), resolvingAgainstBaseURL: false) else {
+       logger.error("Error constructing the adv search URL")
+       return completion(nil)
+   }
+   
+   var existingQueryItems = urlComponents.queryItems ?? []
+   
+   let additionalQueryItems: [URLQueryItem] = [
+       URLQueryItem(name: "search", value: search),
+       URLQueryItem(name: "directory", value: directory),
+       URLQueryItem(name: "pageSize", value: String(pageSize)),
+       URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+       URLQueryItem(name: "verbose", value: String(verbose)),
+   ]
+   
+   existingQueryItems.append(contentsOf: additionalQueryItems)
+   
+   urlComponents.queryItems = existingQueryItems
+   
+   guard let finalURL = urlComponents.url else {
+       logger.error("Error constructing the final adv search URL")
+       return completion(nil)
+   }
+   
+   logger.info("Query URL: \(finalURL)")
+   
+   fetchData(from: finalURL, responseType: [AssetInfoResponse].self) { result in
+       switch result {
+       case .success(let assetsInfo):
+           completion(assetsInfo)
+       case .failure(let error):
+           logger.error("Error adv search: \(error)")
+           completion(nil)
+       }
+   }
+}
 
 
 /*
@@ -225,10 +310,11 @@ func simpleSearch(search: String, directory: String = "/", pageSize: Int = 100, 
  - Parameters:
  - path: Path to show
  - depth: Depth of directories to show
+ - justChildren: Show just children folders
  
  - Returns: Array of AssetInfoResponse
  */
-func showDirectory(path: String = "/", depth: Int = 0, completion: @escaping ([DirectoryResponse]?) -> Void) {
+func showDirectory(path: String = "/", depth: Int = 0, justChildren: Bool = true, completion: @escaping ([DirectoryResponse]?) -> Void) {
     guard var urlComponents = URLComponents(url: getDirectoryURL(), resolvingAgainstBaseURL: false) else {
         logger.error("Error constructing the directory URL")
         return completion(nil)
@@ -241,7 +327,7 @@ func showDirectory(path: String = "/", depth: Int = 0, completion: @escaping ([D
         URLQueryItem(name: "depth", value: String(depth)),
         URLQueryItem(name: "verbose", value: String(true)),
         URLQueryItem(name: "hierarchy", value: String(false)),
-        URLQueryItem(name: "justChildren", value: String(true))
+        URLQueryItem(name: "justChildren", value: String(justChildren))
     ]
     
     existingQueryItems.append(contentsOf: additionalQueryItems)

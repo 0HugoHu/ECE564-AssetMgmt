@@ -47,6 +47,21 @@ final class APITest: XCTestCase {
     }
     
     
+    func testAdvancedSearch() throws {
+        let expectation = XCTestExpectation(description: "advancedSearch completion called")
+        let searchText = SearchFilter.createSearchCriteria(conjunction: .and, fieldId: "directory_id", condition: SearchFilter.OtherField.equals, value: "204788")
+        
+        advancedSearch(search: searchText, directory: "/", verbose: true) { assetsInfo in
+            XCTAssertNotNil(assetsInfo)
+            logger.info("First result name: \(assetsInfo![0].id)")
+            expectation.fulfill()
+        }
+        
+        // Actual time 0.53 s
+        wait(for: [expectation], timeout: 1)
+    }
+    
+    
     func testDownloadFiles() throws {
         let expectation = XCTestExpectation(description: "downloadFiles completion called")
         let savePath = URL.documentsDirectory

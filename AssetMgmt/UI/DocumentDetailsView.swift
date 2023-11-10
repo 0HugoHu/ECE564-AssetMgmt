@@ -61,7 +61,8 @@ struct DocumentDetailsView: View {
                     Spacer()
                 }
 
-                DocumentAttributeRow(key: "Type", value: fileExtensionForContentType(assetInfo.mimeType)!)
+                // TODO: Changed by Hugo, did not test corner cases
+                DocumentAttributeRow(key: "Type", value: fileExtensionForContentType(assetInfo.mimeType ?? "unknown")!)
                 DocumentAttributeRow(key: "Size", value: formatBytes(assetInfo.bytes))
                 
 

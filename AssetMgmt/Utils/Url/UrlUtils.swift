@@ -37,6 +37,10 @@ func getSimpleSearchURL() -> URL {
     return appendAuth(url: URL(string: REST_API + "quickSearch")!)
 }
 
+func getAdvancedSearchURL() -> URL {
+    return appendAuth(url: URL(string: REST_API + "search")!)
+}
+
 
 func getAssetInfoURL() -> URL {
     return appendAuth(url: URL(string: REST_API + "assets")!)

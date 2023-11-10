@@ -12,10 +12,17 @@ struct DocumentRow: View {
 
     var body: some View {
         HStack (alignment: .center, spacing: 16) {
-            ThumbnailView(url: document.url)
-                .frame(width: 60, height: 60, alignment: .center)
-                .clipped()
-                .cornerRadius(8)
+            if documentsStore.mode == .local {
+                ThumbnailView(url: document.url)
+                    .frame(width: 60, height: 60, alignment: .center)
+                    .clipped()
+                    .cornerRadius(8)
+            } else if documentsStore.mode == .remote {
+                AssetThumbnailViewRow(url: document.url.absoluteString)
+                    .frame(width: 60, height: 60, alignment: .center)
+                    .clipped()
+                    .cornerRadius(8)
+            }
 
             if isEditing {
                 editDocumentView

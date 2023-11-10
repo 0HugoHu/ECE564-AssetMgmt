@@ -21,6 +21,7 @@ func fileExtensionForContentType(_ contentType: String) -> String? {
         "application/zip": "zip",
         "text/plain": "txt",
         "application/json": "json",
+        "unknown": "unknown"
         // Add more mappings as needed
     ]
 

@@ -49,7 +49,7 @@ struct AssetInfoResponse: Codable, Identifiable {
     let width: Int
     let bytes: Int
     let lastModified: Int
-    let mimeType: String
+    let mimeType: String?
     let previews: Previews
     let replaceDate: Int
     let versionNumber: Int
@@ -62,13 +62,14 @@ struct AssetInfoResponse: Codable, Identifiable {
     }
 }
 
+
 struct DirectoryResponse: Codable, Identifiable {
     let id: Int
     let name: String
     let path: String
     let resolver: String
     let hasChildren: Bool?
-    let parentId: Int
+    let parentId: Int?
 }
 
 

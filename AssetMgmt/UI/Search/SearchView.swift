@@ -43,7 +43,7 @@ struct SearchView: View {
                     LazyVGrid(columns: columns, spacing: 20) {
                         ForEach(searchResults, id: \.id) { item in
                             NavigationLink(destination: DocumentDetailsView(assetInfo: item)) {
-                                AssetThumbnailView(assetInfo: item)
+                                AssetThumbnailViewGrid(assetInfo: item)
                             }
                         }
                     }

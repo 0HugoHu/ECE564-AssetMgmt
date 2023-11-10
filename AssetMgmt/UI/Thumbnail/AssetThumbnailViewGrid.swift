@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AssetThumbnailView: View {
+struct AssetThumbnailViewGrid: View {
     let assetInfo: AssetInfoResponse
     
     var body: some View {
@@ -36,7 +36,8 @@ struct AssetThumbnailView: View {
                     Text(assetInfo.name)
                         .font(.caption)
 //                        .lineLimit(1)  Ensure the text does not take up more than one line
-                    Text(fileExtensionForContentType(assetInfo.mimeType)!)
+                    // TODO: Changed by Hugo, did not test corner cases
+                    Text(fileExtensionForContentType(assetInfo.mimeType ?? "unknown")!)
                         .font(.footnote)
                         .foregroundColor(.secondary) // For ma
                     

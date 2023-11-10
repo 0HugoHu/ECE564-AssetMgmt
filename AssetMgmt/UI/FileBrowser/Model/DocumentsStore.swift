@@ -88,16 +88,33 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
             documents.removeAll()
             // Load all directories
             let finalPath = self.relativePath == "" ? self.remoteUrl : self.relativePath
-            showDirectory(path: finalPath, depth: 1) { directories in
+            showDirectory(path: finalPath, depth: 1, justChildren: false) { directories in
                 if directories == nil {
-                    logger.warning("No folder exists at \(self.remoteUrl)")
-                    return
-                }
-                for folder in directories! {
-                    // TODO: Add more info here
-                    // Pass url as thumbnail
-                    let doc = Document(name: folder.name, url: URL(string: folder.path)!, size: 0, isDirectory: true)
-                    self.appendDocument(doc)
+                    logger.info("No folder exists at \(self.remoteUrl)")
+                } else {
+                    var parentFolderId = 0
+                    for folder in directories! {
+                        let components = finalPath.split(separator: "/")
+                        let lastComponent = components.count == 0 ? "/" : components[components.count - 1] + "/"
+                        if folder.path ==  lastComponent{
+                            parentFolderId = folder.id
+                        } else {
+                            let doc = Document(name: folder.name, url: URL(string: folder.path)!, size: 0, isDirectory: true)
+                            self.appendDocument(doc)
+                        }
+                    }
+                    // Then load all files
+                    let searchText = SearchFilter.createSearchCriteria(conjunction: .and, fieldId: "directory_id", condition: SearchFilter.OtherField.equals, value: String(parentFolderId))
+                    advancedSearch(search: searchText, directory: finalPath, verbose: true) { files in
+                        if files == nil {
+                            logger.info("No file exists at \(self.remoteUrl)")
+                            return
+                        }
+                        for file in files! {
+                            let doc = Document(name: file.name, url: URL(string: getThumbnailURL(originalURLString: file.previews.thumbnail))!, size: file.bytes as NSNumber, modified: Date(timeIntervalSince1970: TimeInterval(file.lastModified)), isDirectory: false)
+                            self.appendDocument(doc)
+                        }
+                    }
                 }
             }
         }
