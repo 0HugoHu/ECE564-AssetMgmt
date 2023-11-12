@@ -32,6 +32,20 @@ final class APITest: XCTestCase {
     }
     
     
+    func testDeleteFiles() throws {
+        let expectation = XCTestExpectation(description: "deleteFiles completion called")
+        let testID = ["205603421", "205603420"]
+        
+        deleteFiles(ids: testID) { success in
+            XCTAssertTrue(success)
+            expectation.fulfill()
+        }
+        
+        // Actual time 0.81 s
+        wait(for: [expectation], timeout: 1)
+    }
+    
+    
     func testSimpleSearch() throws {
         let expectation = XCTestExpectation(description: "simpleSearch completion called")
         let searchText = "pdf"

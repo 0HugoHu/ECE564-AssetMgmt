@@ -3,6 +3,7 @@ import Foundation
 struct Document: Identifiable {
     var id = UUID()
 
+    var mediaBeaconID: Int = 0
     var name: String
     var url: URL
     var size: NSNumber
