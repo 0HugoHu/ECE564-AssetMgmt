@@ -172,7 +172,17 @@ public struct FolderView: View {
                 }
             }
         } catch {
-            // TODO: Show alert?
+            switch error {
+            case DocumentsStoreError.remoteCreationSuccedded:
+                logger.error("\(documentsStore.documents.last?.name ?? "unknown") created remotely")
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
+                    withAnimation {
+                        listProxy?.scrollTo(documentsStore.documents.last?.id, anchor: .bottom)
+                    }
+                }
+            default:
+                break
+            }
         }
     }
 

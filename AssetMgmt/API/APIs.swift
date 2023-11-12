@@ -405,11 +405,50 @@ func showDirectory(path: String = "/", depth: Int = 0, justChildren: Bool = true
  Create Directory
  
  - Parameters:
- - path: Path to create
+ - paths: Paths to create
  
  - Returns: Bool indicating success or failure
  */
-func createDirectory(path: String) -> Bool { return true }
+func createDirectory(paths: [String], completion: @escaping ([DirectoryResponse]?) -> Void) {
+    guard var urlComponents = URLComponents(url: getCreateURL(), resolvingAgainstBaseURL: false) else {
+        logger.error("Error constructing the creation URL")
+        return completion(nil)
+    }
+    
+    var existingQueryItems = urlComponents.queryItems ?? []
+    
+    if let jsonData = try? JSONSerialization.data(withJSONObject: paths, options: .prettyPrinted) {
+        if let jsonString = String(data: jsonData, encoding: .utf8) {
+            let additionalQueryItems: [URLQueryItem] = [
+                URLQueryItem(name: "paths", value: jsonString),
+                URLQueryItem(name: "verbose", value: String(true)),
+            ]
+            
+            existingQueryItems.append(contentsOf: additionalQueryItems)
+            
+            urlComponents.queryItems = existingQueryItems
+            
+            guard let finalURL = urlComponents.url else {
+                logger.error("Error constructing the final creation URL")
+                return completion(nil)
+            }
+            
+            logger.info("Creation URL: \(finalURL)")
+            
+            fetchData(from: finalURL, responseType: [DirectoryResponse].self) { result in
+                switch result {
+                case .success(let directories):
+                    completion(directories)
+                case .failure(let error):
+                    logger.error("Error creating directories: \(error)")
+                    completion(nil)
+                }
+            }
+        }
+    } else {
+        print("Error converting array to JSON")
+    }
+}
 
 
 /*

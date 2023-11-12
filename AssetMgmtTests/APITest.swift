@@ -141,6 +141,20 @@ final class APITest: XCTestCase {
         // Actual time 0.41 s
         wait(for: [expectation], timeout: 1)
     }
+    
+    
+    func testCreateDirectory() throws {
+        let expectation = XCTestExpectation(description: "createDirectory completion called")
+        let testFolderName = "TestFolder899/"
+        
+        createDirectory(paths: [testFolderName]) { success in
+            XCTAssertNotNil(success)
+            expectation.fulfill()
+        }
+        
+        // Actual time 0.41 s
+        wait(for: [expectation], timeout: 1)
+    }
 
     
 }
