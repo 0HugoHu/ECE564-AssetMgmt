@@ -5,26 +5,26 @@ public struct FolderView: View {
     @State var isPresentedPhotoPicker = false
     @State var listProxy: ScrollViewProxy? = nil
     @State var lastCreatedNewFolder: Document?
-
+    
     @ObservedObject var documentsStore: DocumentsStore
     var title: String
-
+    
     @ViewBuilder
     var listSectionHeader: some View {
         Text("All")
             .background(Color.clear)
     }
-
+    
     fileprivate func sortByDateButton() -> some View {
         let sortImage: String = documentsStore.sorting.dateButtonIcon()
         return Label("Sort by date", systemImage: sortImage)
     }
-
+    
     fileprivate func sortByNameButton() -> some View {
         let sortImage: String =  documentsStore.sorting.nameButtonIcon()
         return Label("Sort by name", systemImage: sortImage)
     }
-
+    
     var actionButtons: some View {
         HStack {
             Menu {
@@ -67,7 +67,7 @@ public struct FolderView: View {
             }
         }
     }
-
+    
     var emptyFolderView: some View {
         VStack {
             Text("Folder is empty")
@@ -75,12 +75,12 @@ public struct FolderView: View {
                 .padding()
         }
     }
-
+    
     public init(documentsStore: DocumentsStore, title: String) {
         self.documentsStore = documentsStore
         self.title = title
     }
-
+    
     public var body: some View {
         ZStack {
             ScrollViewReader { scrollViewProxy in
@@ -121,7 +121,7 @@ public struct FolderView: View {
                     NSLog("Imagepicker callback")
                 }
             }
-
+            
             if (documentsStore.documents.isEmpty) {
                 emptyFolderView
             }
@@ -130,7 +130,7 @@ public struct FolderView: View {
             documentsStore.loadDocuments()
         }
     }
-
+    
     @ViewBuilder
     private func navigationDestination(for document: Document) -> some View {
         if document.isDirectory {
@@ -159,7 +159,7 @@ public struct FolderView: View {
             DocumentDetails(document: document)
         }
     }
-
+    
     func didClickCreateFolder() {
         NSLog("Did click create folder")
         do {
@@ -172,16 +172,26 @@ public struct FolderView: View {
                 }
             }
         } catch {
-            // TODO: Show alert?
+            switch error {
+            case DocumentsStoreError.remoteCreationSuccedded:
+                logger.error("\(documentsStore.documents.last?.name ?? "unknown") created remotely")
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
+                    withAnimation {
+                        listProxy?.scrollTo(documentsStore.documents.last?.id, anchor: .bottom)
+                    }
+                }
+            default:
+                break
+            }
         }
     }
-
+    
     private func deleteItems(offsets: IndexSet) {
         offsets
             .map { documentsStore.documents[$0] }
             .forEach { deleteDocument($0) }
     }
-
+    
     private func deleteDocument(_ document: Document) {
         withAnimation {
             documentsStore.delete(document)

@@ -32,6 +32,49 @@ final class APITest: XCTestCase {
     }
     
     
+    func testDeleteFiles() throws {
+        let expectation = XCTestExpectation(description: "deleteFiles completion called")
+        let testID = ["205603421", "205603420"]
+        
+        deleteFiles(ids: testID) { success in
+            XCTAssertTrue(success)
+            expectation.fulfill()
+        }
+        
+        // Actual time 0.81 s
+        wait(for: [expectation], timeout: 1)
+    }
+    
+    
+    func testRenameFiles() throws {
+        let expectation = XCTestExpectation(description: "renameFiles completion called")
+        let testID = [205603432]
+        let newName = ["new_name"]
+        
+        renameFiles(ids: testID, newNames: newName) { success in
+            XCTAssertTrue(success)
+            expectation.fulfill()
+        }
+        
+        // Actual time 0.93 s
+        wait(for: [expectation], timeout: 1)
+    }
+    
+    func testRenameFilesByPath() throws {
+        let expectation = XCTestExpectation(description: "renameFiles completion called")
+        let testID = ["/NewDirName"]
+        let newName = ["new_name"]
+        
+        renameFiles(paths: testID, newNames: newName) { success in
+            XCTAssertTrue(success)
+            expectation.fulfill()
+        }
+        
+        // Actual time 0.52 s
+        wait(for: [expectation], timeout: 1)
+    }
+    
+    
     func testSimpleSearch() throws {
         let expectation = XCTestExpectation(description: "simpleSearch completion called")
         let searchText = "pdf"
@@ -127,6 +170,20 @@ final class APITest: XCTestCase {
         // Actual time 0.41 s
         wait(for: [expectation], timeout: 1)
     }
-
+    
+    
+    func testCreateDirectory() throws {
+        let expectation = XCTestExpectation(description: "createDirectory completion called")
+        let testFolderName = "TestFolder899/"
+        
+        createDirectory(paths: [testFolderName]) { success in
+            XCTAssertNotNil(success)
+            expectation.fulfill()
+        }
+        
+        // Actual time 0.41 s
+        wait(for: [expectation], timeout: 1)
+    }
+    
     
 }

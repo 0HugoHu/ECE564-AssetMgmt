@@ -32,6 +32,14 @@ func getRenameURL() -> URL {
     return appendAuth(url: URL(string: REST_API + "rename")!)
 }
 
+func getDeleteURL() -> URL {
+    return appendAuth(url: URL(string: REST_API + "delete")!)
+}
+
+func getCreateURL() -> URL {
+    return appendAuth(url: URL(string: REST_API + "create")!)
+}
+
 
 func getSimpleSearchURL() -> URL {
     return appendAuth(url: URL(string: REST_API + "quickSearch")!)
