@@ -203,6 +203,15 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
                     logger.info("Successfully deleted file")
                 case false:
                     logger.info("Failed to delete file")
+                    deleteFiles(paths: [(self.relativePath == "" ? self.remoteUrl : self.relativePath) + document.name]) { response in
+                        switch response {
+                        case true:
+                            self.removeDocument(document.mediaBeaconID)
+                            logger.info("Successfully deleted file")
+                        case false:
+                            logger.info("Failed to delete file")
+                        }
+                    }
                 }
             }
         }

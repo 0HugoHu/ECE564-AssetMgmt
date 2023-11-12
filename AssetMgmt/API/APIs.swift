@@ -141,7 +141,7 @@ func renameFile(data: AssetInfoResponse, newName: String, completion: @escaping 
 
 
 /*
- Delete Files
+ Delete Files by Ids
  
  - Parameters:
  - ids: Array of assets to delete
@@ -182,6 +182,65 @@ func deleteFiles(ids: [String], completion: @escaping (Bool) -> Void) {
                 switch result {
                 case .success(let response):
                     if response.count == ids.count {
+                        completion(true)
+                    } else {
+                        logger.error("Error deleting files: \(response)")
+                        completion(false)
+                    }
+                case .failure(let error):
+                    logger.error("Error deleting files: \(error)")
+                    completion(false)
+                }
+            }
+        }
+    } catch {
+        print("Error in deleting files, cannot convert data to JSON: \(error)")
+    }
+}
+
+
+/*
+ Delete Files by paths
+ 
+ - Parameters:
+ - paths: Array of assets to delete
+ 
+ - Returns: Bool indicating success or failure
+ */
+func deleteFiles(paths: [String], completion: @escaping (Bool) -> Void) {
+    guard var urlComponents = URLComponents(url: getDeleteURL(), resolvingAgainstBaseURL: false) else {
+        logger.error("Error constructing the delete URL")
+        return completion(false)
+    }
+    
+    var existingQueryItems = urlComponents.queryItems ?? []
+    
+    let idDictionaries = paths.map { ["path": $0] }
+    
+    do {
+        let jsonData = try JSONSerialization.data(withJSONObject: idDictionaries, options: .prettyPrinted)
+        
+        if let jsonString = String(data: jsonData, encoding: .utf8) {
+            let additionalQueryItems: [URLQueryItem] = [
+                URLQueryItem(name: "data", value: jsonString),
+                URLQueryItem(name: "verbose", value: String(true))
+            ]
+            
+            existingQueryItems.append(contentsOf: additionalQueryItems)
+            
+            urlComponents.queryItems = existingQueryItems
+            
+            guard let finalURL = urlComponents.url else {
+                logger.error("Error constructing the final delete URL")
+                return completion(false)
+            }
+            
+            logger.info("Delete URL: \(finalURL)")
+            
+            fetchData(from: finalURL, responseType: [AssetInfoResponse].self) { result in
+                switch result {
+                case .success(let response):
+                    if response.count == paths.count {
                         completion(true)
                     } else {
                         logger.error("Error deleting files: \(response)")
