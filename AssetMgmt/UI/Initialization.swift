@@ -20,9 +20,9 @@ struct Initialization: View {
     var body: some View {
         NavigationView {
             List {
-                NavigationLink(destination: WebView(url: initialURL, currentURL: $currentURL)) {
-                    Text("Log In")
-                }
+//                NavigationLink(destination: WebView(url: initialURL, currentURL: $currentURL)) {
+//                    Text("Log In")
+//                }
                 NavigationLink(destination: UserInfoView()) {
                     Text("Get User Info")
                 }
@@ -43,6 +43,7 @@ struct Initialization: View {
 struct WebView: UIViewRepresentable {
     let url: URL
     @Binding var currentURL: URL?
+    @Binding var isLoggedIn: Bool
     @Environment(\.presentationMode) var presentationMode
     
     func makeUIView(context: Context) -> WKWebView {
@@ -92,6 +93,7 @@ struct WebView: UIViewRepresentable {
                     // TODO: Save key to local
                     UserDefaults.standard.setValue(key, forKey: "AuthToken")
                     print(key)
+                    isLoggedIn = true
                     self.presentationMode.wrappedValue.dismiss()
                 }
             }
