@@ -118,28 +118,56 @@ public struct FolderView: View {
     public var body: some View {
         ZStack {
             ScrollViewReader { scrollViewProxy in
-                List {
-                    Section(header: listSectionHeader) {
-                        ForEach($documentsStore.documents) { document in
-                            NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
-                                DocumentRow(
-                                    document: document,
-                                    shouldEdit: (document.id == lastCreatedNewFolder?.id),
-                                    documentsStore: documentsStore
-                                )
-                                .padding(.vertical)
-                                .id(document.id)
+                if documentsStore.viewMode == .list {
+                    List {
+                        Section(header: listSectionHeader) {
+                            ForEach($documentsStore.documents) { document in
+                                NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
+                                    DocumentRow(
+                                        document: document,
+                                        shouldEdit: (document.id == lastCreatedNewFolder?.id),
+                                        documentsStore: documentsStore
+                                    )
+                                    .padding(.vertical, 4)
+                                    .id(document.id)
+                                }
+                            }
+                            .onDelete(perform: deleteItems)
+                        }
+                    }
+                    .listStyle(InsetListStyle())
+                    .onAppear {
+                        listProxy = scrollViewProxy
+                    }
+                    .refreshable {
+                        documentsStore.reload()
+                    }
+                } else if documentsStore.viewMode == .grid {
+                    let columns: [GridItem] = [
+                        GridItem(.adaptive(minimum: 100), spacing: 0, alignment: .top)
+                    ]
+                    ScrollView {
+                        LazyVGrid(columns: columns) {
+                            ForEach($documentsStore.documents) { document in
+                                NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
+                                    DocumentGrid(
+                                        document: document,
+                                        shouldEdit: (document.id == lastCreatedNewFolder?.id),
+                                        documentsStore: documentsStore
+                                    )
+                                    .padding(.vertical, 4)
+                                    .id(document.id)
+                                }
                             }
                         }
-                        .onDelete(perform: deleteItems)
+                        .padding(.horizontal, 16)
+                        .onAppear {
+                            listProxy = scrollViewProxy
+                        }
+                        .refreshable {
+                            documentsStore.reload()
+                        }
                     }
-                }
-                .listStyle(InsetListStyle())
-                .onAppear {
-                    listProxy = scrollViewProxy
-                }
-                .refreshable {
-                    documentsStore.reload()
                 }
             }
             .background(Color.clear)
