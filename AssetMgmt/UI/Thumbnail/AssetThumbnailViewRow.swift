@@ -25,7 +25,7 @@ struct AssetThumbnailViewRow: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 60, height: 60)
                 case .failure:
-                    Image(systemName: "folder")
+                    Image("icon_directory")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 60, height: 60)
