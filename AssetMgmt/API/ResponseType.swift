@@ -48,7 +48,7 @@ struct AssetInfoResponse: Codable, Identifiable {
     let height: Int
     let width: Int
     let bytes: Int
-    let lastModified: Int
+    let lastModified: Double
     let mimeType: String?
     let previews: Previews
     let replaceDate: Int
