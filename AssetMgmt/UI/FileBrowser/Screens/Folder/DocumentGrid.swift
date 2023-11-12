@@ -1,7 +1,14 @@
+//
+//  DocumentGrid.swift
+//  AssetMgmt
+//
+//  Created by Hugooooo on 11/12/23.
+//
+
 import FilePreviews
 import SwiftUI
 
-struct DocumentRow: View {
+struct DocumentGrid: View {
     @Binding var document: Document
     var shouldEdit: Bool = false
     @ObservedObject var documentsStore: DocumentsStore
@@ -21,15 +28,15 @@ struct DocumentRow: View {
     }
     
     var body: some View {
-        HStack (alignment: .center, spacing: 16) {
+        VStack (alignment: .center, spacing: 4) {
             if documentsStore.mode == .local {
                 ThumbnailView(url: document.url)
-                    .frame(width: 60, height: 60, alignment: .center)
+                    .frame(width: 80, height: 80, alignment: .center)
                     .clipped()
                     .cornerRadius(8)
             } else if documentsStore.mode == .remote {
-                AssetThumbnailViewRow(url: document.url.absoluteString)
-                    .frame(width: 60, height: 60, alignment: .center)
+                AssetThumbnailViewGridNew(url: document.url.absoluteString)
+                    .frame(width: 80, height: 80, alignment: .center)
                     .clipped()
                     .cornerRadius(8)
             }
@@ -40,6 +47,7 @@ struct DocumentRow: View {
                 documentSummaryView
             }
         }
+        .padding(8)
         .contextMenu {
             Button(action: deleteDocument) {
                 Label("Delete", systemImage: "trash")
@@ -71,6 +79,7 @@ struct DocumentRow: View {
                     .focused($nameEditIsFocused)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .onSubmit(renameDocument)
+                    .font(Font.system(size: 14))
                 
                 if let errMsg = documentNameErrorMessage {
                     HStack(spacing: 4) {
@@ -83,27 +92,19 @@ struct DocumentRow: View {
             }
             Image(systemName: "checkmark.circle.fill")
                 .resizable()
-                .frame(width: 32, height: 32)
+                .frame(width: 16, height: 16)
                 .foregroundColor(.accentColor)
-                .padding()
                 .onTapGesture(perform: renameDocument)
         }
     }
     
     private var documentSummaryView: some View {
-        VStack(alignment: .leading, spacing: 12 ) {
+        VStack(alignment: .leading) {
             Text(document.name)
-                .font(.headline)
+                .font(Font.system(size: 14))
                 .lineLimit(2)
                 .allowsTightening(true)
-            
-            if let modified = document.modified {
-                Text(modified.formatted())
-                    .font(.subheadline)
-                    .lineLimit(1)
-                    .allowsTightening(true)
-                    .minimumScaleFactor(0.5)
-            }
+                .foregroundColor(.black)
         }
     }
     
@@ -133,7 +134,7 @@ struct DocumentRow: View {
     }
 }
 
-struct DocumentRow_Previews: PreviewProvider {
+struct DocumentGrid_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             DocumentRow(
