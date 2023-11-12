@@ -5,11 +5,21 @@ struct DocumentRow: View {
     @Binding var document: Document
     var shouldEdit: Bool = false
     @ObservedObject var documentsStore: DocumentsStore
-
+    
     @State private var isEditing = false
     @FocusState private var nameEditIsFocused: Bool
     @State private var documentNameErrorMessage: String?
-
+    // Store the original document
+    @State private var originalDocument: Document
+    
+    // Initialize the view with the original document
+    init(document: Binding<Document>, shouldEdit: Bool = false, documentsStore: DocumentsStore) {
+        self._document = document
+        self.shouldEdit = shouldEdit
+        self.documentsStore = documentsStore
+        self._originalDocument = State(initialValue: document.wrappedValue)
+    }
+    
     var body: some View {
         HStack (alignment: .center, spacing: 16) {
             if documentsStore.mode == .local {
@@ -23,7 +33,7 @@ struct DocumentRow: View {
                     .clipped()
                     .cornerRadius(8)
             }
-
+            
             if isEditing {
                 editDocumentView
             } else {
@@ -53,7 +63,7 @@ struct DocumentRow: View {
             isEditing = shouldEdit
         }
     }
-
+    
     private var editDocumentView: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -79,14 +89,14 @@ struct DocumentRow: View {
                 .onTapGesture(perform: renameDocument)
         }
     }
-
+    
     private var documentSummaryView: some View {
         VStack(alignment: .leading, spacing: 12 ) {
             Text(document.name)
                 .font(.headline)
                 .lineLimit(2)
                 .allowsTightening(true)
-
+            
             if let modified = document.modified {
                 Text(modified.formatted())
                     .font(.subheadline)
@@ -96,24 +106,26 @@ struct DocumentRow: View {
             }
         }
     }
-
+    
     private func renameDocument() {
         withAnimation {
             documentNameErrorMessage = nil
             do {
-                try documentsStore.rename(document: document, newName: document.name)
+                try documentsStore.rename(document: originalDocument, newName: document.name)
                 isEditing = false
             } catch DocumentsStoreError.fileExists {
                 withAnimation {
                     documentNameErrorMessage = "Document already exists"
                 }
+            } catch DocumentsStoreError.remoteRenameSuccedded {
+                isEditing = false
             } catch {
                 print("Unexpected error during rename: \(error)")
                 documentNameErrorMessage = "Unexpected error"
             }
         }
     }
-
+    
     private func deleteDocument() {
         withAnimation {
             documentsStore.delete(document)

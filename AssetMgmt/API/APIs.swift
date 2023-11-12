@@ -16,7 +16,7 @@ func getUserInfo(completion: @escaping (UserInfoAPIResponse?) -> Void) {
     fetchData(from: getUserInfoURL(), responseType: UserInfoAPIResponse.self) { result in
         switch result {
         case .success(let userInfo):
-//            logger.info("Username: \(userInfo.username)")
+            //            logger.info("Username: \(userInfo.username)")
             completion(userInfo)
         case .failure(let error):
             logger.error("Error getting user info: \(error)")
@@ -113,29 +113,121 @@ func uploadFiles(filePaths: [URL], dest: String, completion: @escaping (Bool) ->
 
 
 /*
- Rename File
+ Rename Files by Id
  
  - Parameters:
- - data: AssetInfoResponse to rename
- - newName: New name for file
+ - ids: File ids
+ - newNames: New names for file
  
  - Returns: Bool indicating success or failure
  */
-func renameFile(data: AssetInfoResponse, newName: String, completion: @escaping (Bool) -> Void) {
-    var urlComponents = URLComponents(url: getRenameURL(), resolvingAgainstBaseURL: false)
-    
-    urlComponents?.queryItems = [
-        URLQueryItem(name: "data", value: "[{\"id\":\(data.id),\"name\":\"\(newName)\"}]")
-    ]
-    
-    guard let finalURL = urlComponents?.url else {
+func renameFiles(ids: [Int], newNames: [String], completion: @escaping (Bool) -> Void) {
+    guard var urlComponents = URLComponents(url: getRenameURL(), resolvingAgainstBaseURL: false) else {
         logger.error("Error constructing the rename URL")
-        completion(false)
-        return
+        return completion(false)
     }
     
-    postRequest(to: finalURL) { success in
-        completion(success)
+    var existingQueryItems = urlComponents.queryItems ?? []
+    
+    let idDictionaries = zip(ids, newNames).map { ["id": $0, "name": $1] }
+    
+    do {
+        let jsonData = try JSONSerialization.data(withJSONObject: idDictionaries, options: .prettyPrinted)
+        
+        if let jsonString = String(data: jsonData, encoding: .utf8) {
+            let additionalQueryItems: [URLQueryItem] = [
+                URLQueryItem(name: "data", value: jsonString),
+                URLQueryItem(name: "verbose", value: String(true))
+            ]
+            
+            existingQueryItems.append(contentsOf: additionalQueryItems)
+            
+            urlComponents.queryItems = existingQueryItems
+            
+            guard let finalURL = urlComponents.url else {
+                logger.error("Error constructing the final rename URL")
+                return completion(false)
+            }
+            
+            logger.info("Rename URL: \(finalURL)")
+            
+            fetchData(from: finalURL, responseType: [AssetInfoResponse].self) { result in
+                switch result {
+                case .success(let response):
+                    if response.count == ids.count {
+                        completion(true)
+                    } else {
+                        logger.error("Error renaming files: \(response)")
+                        completion(false)
+                    }
+                case .failure(let error):
+                    logger.error("Error renaming files: \(error)")
+                    completion(false)
+                }
+            }
+        }
+    } catch {
+        print("Error in renaming files, cannot convert data to JSON: \(error)")
+    }
+}
+
+
+/*
+ Rename Files by path
+ 
+ - Parameters:
+ - paths: File paths
+ - newNames: New names for folder
+ 
+ - Returns: Bool indicating success or failure
+ */
+func renameFiles(paths: [String], newNames: [String], completion: @escaping (Bool) -> Void) {
+    guard var urlComponents = URLComponents(url: getRenameURL(), resolvingAgainstBaseURL: false) else {
+        logger.error("Error constructing the rename URL")
+        return completion(false)
+    }
+    
+    var existingQueryItems = urlComponents.queryItems ?? []
+    
+    let idDictionaries = zip(paths, newNames).map { ["directory": $0, "name": $1] }
+    
+    do {
+        let jsonData = try JSONSerialization.data(withJSONObject: idDictionaries, options: .prettyPrinted)
+        
+        if let jsonString = String(data: jsonData, encoding: .utf8) {
+            let additionalQueryItems: [URLQueryItem] = [
+                URLQueryItem(name: "data", value: jsonString),
+                URLQueryItem(name: "verbose", value: String(true))
+            ]
+            
+            existingQueryItems.append(contentsOf: additionalQueryItems)
+            
+            urlComponents.queryItems = existingQueryItems
+            
+            guard let finalURL = urlComponents.url else {
+                logger.error("Error constructing the final rename URL")
+                return completion(false)
+            }
+            
+            logger.info("Rename URL: \(finalURL)")
+            
+            fetchData(from: finalURL, responseType: [DirectoryResponse].self) { result in
+                switch result {
+                case .success(let response):
+                    if response.count == paths.count {
+                        completion(true)
+                    } else {
+                        logger.error("Error renaming files: \(response)")
+                        completion(false)
+                    }
+                case .failure(let error):
+                    logger.error("Error renaming files: \(error)")
+                    completion(false)
+                }
+            }
+        }
+    } catch {
+        print("Error in renaming files, cannot convert data to JSON: \(error)")
     }
 }
 
@@ -237,7 +329,7 @@ func deleteFiles(paths: [String], completion: @escaping (Bool) -> Void) {
             
             logger.info("Delete URL: \(finalURL)")
             
-            fetchData(from: finalURL, responseType: [AssetInfoResponse].self) { result in
+            fetchData(from: finalURL, responseType: [DirectoryResponse].self) { result in
                 switch result {
                 case .success(let response):
                     if response.count == paths.count {
@@ -308,53 +400,53 @@ func simpleSearch(search: String, directory: String = "/", pageSize: Int = 100, 
 
 
 /*
-Simple Search with Details Response
-Used for file browser only
-
-- Parameters:
-- directory: Directory to search
-- pageSize: Number of results per page
-- pageIndex: Page index
-- verbose: Show details, can only be true
-
-- Returns: Array of Ids
-*/
+ Simple Search with Details Response
+ Used for file browser only
+ 
+ - Parameters:
+ - directory: Directory to search
+ - pageSize: Number of results per page
+ - pageIndex: Page index
+ - verbose: Show details, can only be true
+ 
+ - Returns: Array of Ids
+ */
 func simpleSearch(directory: String, verbose: Bool, pageSize: Int = 100, pageIndex: Int = 0, completion: @escaping ([AssetInfoResponse]?) -> Void) {
-   guard var urlComponents = URLComponents(url: getSimpleSearchURL(), resolvingAgainstBaseURL: false) else {
-       logger.error("Error constructing the search URL")
-       return completion(nil)
-   }
-   
-   var existingQueryItems = urlComponents.queryItems ?? []
-   
-   let additionalQueryItems: [URLQueryItem] = [
-       URLQueryItem(name: "search", value: ""),
-       URLQueryItem(name: "directory", value: directory),
-       URLQueryItem(name: "pageSize", value: String(pageSize)),
-       URLQueryItem(name: "pageIndex", value: String(pageIndex)),
-       URLQueryItem(name: "verbose", value: String(verbose)),
-   ]
-   
-   existingQueryItems.append(contentsOf: additionalQueryItems)
-   
-   urlComponents.queryItems = existingQueryItems
-   
-   guard let finalURL = urlComponents.url else {
-       logger.error("Error constructing the final search URL")
-       return completion(nil)
-   }
-   
-   logger.info("Query URL: \(finalURL)")
-   
-   fetchData(from: finalURL, responseType: [AssetInfoResponse].self) { result in
-       switch result {
-       case .success(let assetsInfo):
-           completion(assetsInfo)
-       case .failure(let error):
-           logger.error("Error simple search: \(error)")
-           completion(nil)
-       }
-   }
+    guard var urlComponents = URLComponents(url: getSimpleSearchURL(), resolvingAgainstBaseURL: false) else {
+        logger.error("Error constructing the search URL")
+        return completion(nil)
+    }
+    
+    var existingQueryItems = urlComponents.queryItems ?? []
+    
+    let additionalQueryItems: [URLQueryItem] = [
+        URLQueryItem(name: "search", value: ""),
+        URLQueryItem(name: "directory", value: directory),
+        URLQueryItem(name: "pageSize", value: String(pageSize)),
+        URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+        URLQueryItem(name: "verbose", value: String(verbose)),
+    ]
+    
+    existingQueryItems.append(contentsOf: additionalQueryItems)
+    
+    urlComponents.queryItems = existingQueryItems
+    
+    guard let finalURL = urlComponents.url else {
+        logger.error("Error constructing the final search URL")
+        return completion(nil)
+    }
+    
+    logger.info("Query URL: \(finalURL)")
+    
+    fetchData(from: finalURL, responseType: [AssetInfoResponse].self) { result in
+        switch result {
+        case .success(let assetsInfo):
+            completion(assetsInfo)
+        case .failure(let error):
+            logger.error("Error simple search: \(error)")
+            completion(nil)
+        }
+    }
 }
 
 
@@ -373,41 +465,41 @@ func simpleSearch(directory: String, verbose: Bool, pageSize: Int = 100, pageInd
  - Returns: Array of AssetInfoResponse
  */
 func advancedSearch(search: String, directory: String, verbose: Bool, pageSize: Int = 100, pageIndex: Int = 0, completion: @escaping ([AssetInfoResponse]?) -> Void) {
-   guard var urlComponents = URLComponents(url: getAdvancedSearchURL(), resolvingAgainstBaseURL: false) else {
-       logger.error("Error constructing the adv search URL")
-       return completion(nil)
-   }
-   
-   var existingQueryItems = urlComponents.queryItems ?? []
-   
-   let additionalQueryItems: [URLQueryItem] = [
-       URLQueryItem(name: "search", value: search),
-       URLQueryItem(name: "directory", value: directory),
-       URLQueryItem(name: "pageSize", value: String(pageSize)),
-       URLQueryItem(name: "pageIndex", value: String(pageIndex)),
-       URLQueryItem(name: "verbose", value: String(verbose)),
-   ]
-   
-   existingQueryItems.append(contentsOf: additionalQueryItems)
-   
-   urlComponents.queryItems = existingQueryItems
-   
-   guard let finalURL = urlComponents.url else {
-       logger.error("Error constructing the final adv search URL")
-       return completion(nil)
-   }
-   
-   logger.info("Query URL: \(finalURL)")
-   
-   fetchData(from: finalURL, responseType: [AssetInfoResponse].self) { result in
-       switch result {
-       case .success(let assetsInfo):
-           completion(assetsInfo)
-       case .failure(let error):
-           logger.error("Error adv search: \(error)")
-           completion(nil)
-       }
-   }
+    guard var urlComponents = URLComponents(url: getAdvancedSearchURL(), resolvingAgainstBaseURL: false) else {
+        logger.error("Error constructing the adv search URL")
+        return completion(nil)
+    }
+    
+    var existingQueryItems = urlComponents.queryItems ?? []
+    
+    let additionalQueryItems: [URLQueryItem] = [
+        URLQueryItem(name: "search", value: search),
+        URLQueryItem(name: "directory", value: directory),
+        URLQueryItem(name: "pageSize", value: String(pageSize)),
+        URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+        URLQueryItem(name: "verbose", value: String(verbose)),
+    ]
+    
+    existingQueryItems.append(contentsOf: additionalQueryItems)
+    
+    urlComponents.queryItems = existingQueryItems
+    
+    guard let finalURL = urlComponents.url else {
+        logger.error("Error constructing the final adv search URL")
+        return completion(nil)
+    }
+    
+    logger.info("Query URL: \(finalURL)")
+    
+    fetchData(from: finalURL, responseType: [AssetInfoResponse].self) { result in
+        switch result {
+        case .success(let assetsInfo):
+            completion(assetsInfo)
+        case .failure(let error):
+            logger.error("Error adv search: \(error)")
+            completion(nil)
+        }
+    }
 }
 
 
@@ -556,7 +648,6 @@ func getAssetDetails(ids: [String], completion: @escaping ([AssetInfoResponse]?)
     fetchData(from: finalURL, responseType: [AssetInfoResponse].self) { result in
         switch result {
         case .success(let assetInfo):
-            logger.info("Asset: \(assetInfo[0].name), \(assetInfo[0].path), \(assetInfo[0].bytes)")
             completion(assetInfo)
         case .failure(let error):
             logger.error("Error getting asset info: \(error)")

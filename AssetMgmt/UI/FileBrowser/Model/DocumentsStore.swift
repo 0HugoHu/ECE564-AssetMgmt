@@ -5,6 +5,7 @@ enum DocumentsStoreError: Error, LocalizedError {
     case fileExists
     case fileWasDeleted
     case remoteCreationSuccedded
+    case remoteRenameSuccedded
     case unknown
 }
 
@@ -196,21 +197,24 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
             }
         } else if self.mode == .remote {
             let ids = [String(document.mediaBeaconID)]
-            deleteFiles(ids: ids) { response in
-                switch response {
-                case true:
-                    self.removeDocument(document.mediaBeaconID)
-                    logger.info("Successfully deleted file")
-                case false:
-                    logger.info("Failed to delete file")
-                    deleteFiles(paths: [(self.relativePath == "" ? self.remoteUrl : self.relativePath) + document.name]) { response in
-                        switch response {
-                        case true:
-                            self.removeDocument(document.mediaBeaconID)
-                            logger.info("Successfully deleted file")
-                        case false:
-                            logger.info("Failed to delete file")
-                        }
+            if document.isDirectory {
+                deleteFiles(paths: [(self.relativePath == "" ? self.remoteUrl : self.relativePath) + document.name]) { response in
+                    switch response {
+                    case true:
+                        self.removeDocument(document.mediaBeaconID)
+                        logger.info("Successfully deleted folder")
+                    case false:
+                        logger.info("Failed to delete folder")
+                    }
+                }
+            } else {
+                deleteFiles(ids: ids) { response in
+                    switch response {
+                    case true:
+                        self.removeDocument(document.mediaBeaconID)
+                        logger.info("Successfully deleted file")
+                    case false:
+                        logger.info("Failed to delete file")
                     }
                 }
             }
@@ -328,26 +332,64 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
     
     @discardableResult
     func rename(document: Document, newName: String) throws -> Document {
-        let newUrl = workingDirectory.appendingPathComponent(newName, isDirectory: document.isDirectory)
-        do {
-            try documentManager.moveItem(at: document.url, to: newUrl)
-            
-            // Find current document in documents array and update the values
-            if let indexToUpdate = documents.firstIndex(where: { $0.url == document.url }) {
-                var documentToUpdate = documents[indexToUpdate]
-                documents.remove(at: indexToUpdate)
+        if self.mode == .local {
+            let newUrl = workingDirectory.appendingPathComponent(newName, isDirectory: document.isDirectory)
+            do {
+                try documentManager.moveItem(at: document.url, to: newUrl)
                 
-                documentToUpdate.url = newUrl
-                documentToUpdate.name = newName
-                documents.insert(documentToUpdate, at: 0)
+                // Find current document in documents array and update the values
+                if let indexToUpdate = documents.firstIndex(where: { $0.url == document.url }) {
+                    var documentToUpdate = documents[indexToUpdate]
+                    documents.remove(at: indexToUpdate)
+                    
+                    documentToUpdate.url = newUrl
+                    documentToUpdate.name = newName
+                    documents.insert(documentToUpdate, at: 0)
+                    
+                    sort()
+                    return documentToUpdate
+                } else {
+                    throw DocumentsStoreError.fileWasDeleted
+                }
+            } catch CocoaError.fileWriteFileExists {
+                throw DocumentsStoreError.fileExists
+            }
+        } else if self.mode == .remote {
+            if let renameIndex = documents.firstIndex(where: { $0.mediaBeaconID == document.mediaBeaconID }) {
+                var documentToUpdate = documents[renameIndex]
                 
-                sort()
-                return documentToUpdate
+                if document.isDirectory {
+                    renameFiles(paths: [(self.relativePath == "" ? self.remoteUrl : self.relativePath) + document.name], newNames: [newName]) { response in
+                        switch response {
+                        case true:
+                            self.removeDocument(document.mediaBeaconID)
+                            documentToUpdate.name = newName
+                            self.insertDocument(documentToUpdate)
+                            logger.info("Successfully renamed folder")
+                        case false:
+                            logger.info("Failed to rename folder")
+                        }
+                    }
+                } else {
+                    renameFiles(ids: [document.mediaBeaconID], newNames: [newName]) { response in
+                        switch response {
+                        case true:
+                            self.removeDocument(document.mediaBeaconID)
+                            documentToUpdate.name = newName
+                            self.insertDocument(documentToUpdate)
+                            logger.info("Successfully renamed file")
+                        case false:
+                            logger.info("Failed to rename file")
+                        }
+                    }
+                }
             } else {
                 throw DocumentsStoreError.fileWasDeleted
             }
-        } catch CocoaError.fileWriteFileExists {
-            throw DocumentsStoreError.fileExists
+            
+            throw DocumentsStoreError.remoteRenameSuccedded
+        } else {
+            throw DocumentsStoreError.unknown
         }
     }
 }
