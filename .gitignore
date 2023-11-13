@@ -7,6 +7,7 @@
 AssetMgmt.xcodeproj/project.xcworkspace/xcuserdata/minghuizhu.xcuserdatad/
 AssetMgmt.xcodeproj/project.xcworkspace/xcshareddata/
 AssetMgmt.xcodeproj/xcuserdata/
+AssetMgmt.xcodeproj/project.xcworkspace/xcuserdata/**
 *.moved-aside
 *.xcuserstate
 *.xcscmblueprint
