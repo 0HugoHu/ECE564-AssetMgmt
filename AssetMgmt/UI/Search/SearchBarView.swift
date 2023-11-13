@@ -170,7 +170,7 @@ struct SearchBarView: View {
         
         // Advanced search fields
         if showAdvancedSearch {
-            Form {
+            List {
                 Picker(selection: $selectedCriteriaConjunction, label: Text("Criteria Conjunction")) {
                     ForEach(criteriaConjunction, id: \.self) { item in
                         Text(item).foregroundColor(.black)
@@ -203,14 +203,16 @@ struct SearchBarView: View {
                         performAdvancedSearch()
                     }
                     .foregroundColor(Color(.systemBlue))
-          
                 }
                 
             }
+            .listRowInsets(EdgeInsets())
+            
         }
         
-        
     }
+    
+    
         // You can add more fields here...
 //        .transition(.move(edge: .top)) // This
 //        .foregroundColor(.secondary)
