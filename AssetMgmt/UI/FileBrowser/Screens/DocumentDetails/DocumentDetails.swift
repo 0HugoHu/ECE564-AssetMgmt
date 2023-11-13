@@ -5,6 +5,7 @@ struct DocumentDetails: View {
     var document: Document
 
     @State private var urlToPreview: URL?
+    @State private var progress: Int64 = 0
 
     public init(document: Document) {
         self.document = document
@@ -24,7 +25,13 @@ struct DocumentDetails: View {
                         .font(.headline)
                     Spacer()
                 }
-
+                if progress != 0 {
+                    if progress == -1 {
+                        DocumentAttributeRow(key: "Downloaded", value: document.formattedSize)
+                    } else {
+                        DocumentAttributeRow(key: "Downloaded", value: Int64(truncating: progress as NSNumber).formatted(ByteCountFormatStyle()))
+                    }
+                }
                 DocumentAttributeRow(key: "Size", value: document.formattedSize)
 
                 if let created = document.created {
@@ -44,10 +51,17 @@ struct DocumentDetails: View {
                     .font(.largeTitle)
             }.foregroundColor(.blue)
         })
+        .onAppear() {
+            if let data = UserDefaults.standard.value(forKey: "download@\(document.mediaBeaconID)") {
+                if let value = data as? Int64 {
+                    progress = value
+                }
+            }
+        }
     }
 
     func showPreview() {
-        urlToPreview = document.url
+        urlToPreview = getFilePathById(String(document.mediaBeaconID), progress: $progress)
     }
 }
 

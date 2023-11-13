@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 /*
  Get User Info
@@ -37,7 +38,7 @@ func getUserInfo(completion: @escaping (UserInfoAPIResponse?) -> Void) {
  
  - Returns: Bool indicating success or failure
  */
-func downloadFiles(to: URL, ids: [String], keepDirectoryStructure: Bool = false, completion: @escaping (Bool) -> Void) {
+func downloadFiles(to: URL, ids: [String], keepDirectoryStructure: Bool = false, progress: Binding<Int64>? = nil, completion: @escaping (Bool) -> Void) {
     guard var urlComponents = URLComponents(url: getDownloadURL(), resolvingAgainstBaseURL: false) else {
         logger.error("Error constructing the downloadFiles URL")
         return completion(false)
@@ -65,9 +66,7 @@ func downloadFiles(to: URL, ids: [String], keepDirectoryStructure: Bool = false,
     
     logger.info("Downloading files from \(finalURL.absoluteString)")
     
-    download(from: finalURL, to: to.appending(path: "/\(ids[0]).zip")) { success in
-        completion(success)
-    }
+    download(from: finalURL, to: to.appending(path: "/\(ids[0]).zip"), progress: progress, fileId: ids[0])
 }
 
 
