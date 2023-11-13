@@ -77,10 +77,10 @@ struct SearchBarView: View {
     @State private var selectedCriteriaConjunction: String = "AND"
     let criteriaConjunction = ["AND", "OR", "NOT"]
     
-    @State private var selectedField: String = ""
+    @State private var selectedField: String = "AND"
     let fieldOptions: [String]
 
-    @State private var selectedCondition: String = ""
+    @State private var selectedCondition: String = "file_name"
     
     var conditionOptions: [String] {
         guard let fieldType = sampleSearchFiltersDict[selectedField]?.fieldType else { return SearchFilter.FieldTypes.Other.getAllCases() }
@@ -103,7 +103,7 @@ struct SearchBarView: View {
         // Construct the search criteria
         let searchText = SearchFilter.createSearchCriteria(
             conjunction: SearchFilter.Conjunction(rawValue: selectedCriteriaConjunction) ?? .and,
-            fieldId: selectedField,
+            fieldId: sampleSearchFiltersDict[selectedField]?.fieldId ?? "",
             condition: SearchFilter.OtherField(rawValue: selectedCondition) ?? .equals,
             value: keyward
         )

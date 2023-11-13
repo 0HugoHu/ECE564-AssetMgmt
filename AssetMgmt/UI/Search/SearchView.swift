@@ -23,34 +23,38 @@ struct SearchView: View {
             
             SearchBarView(searchText: $searchText, onCommit: search)
             
-            HStack {
+            ScrollView {
                 
-                Spacer()
+                HStack {
+                    
+                    Spacer()
+                    
+                    Text("\(searchResults.count) matched found")
+                        .font(.subheadline)
+                        .padding(.top)
+                        .padding(.trailing)
+                }
+                .navigationBarTitle(Text("MediaBeacon"))
+                .resignKeyboardOnDragGesture()
                 
-                Text("\(searchResults.count) matched found")
-                    .font(.subheadline)
-                    .padding(.top)
-                    .padding(.trailing)
-            }
-            .navigationBarTitle(Text("MediaBeacon"))
-            .resignKeyboardOnDragGesture()
-            
-            if isLoading {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle())
-            } else {
-                LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(searchResults, id: \.id) { item in
-                        NavigationLink(destination: DocumentDetailsView(assetInfo: item)) {
-                            AssetThumbnailViewGrid(assetInfo: item)
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                } else {
+                    LazyVGrid(columns: columns, spacing: 20) {
+                        ForEach(searchResults, id: \.id) { item in
+                            NavigationLink(destination: DocumentDetailsView(assetInfo: item)) {
+                                AssetThumbnailViewGrid(assetInfo: item)
+                            }
                         }
                     }
+                    .padding()
                 }
-                .padding()
+                Spacer() //
             }
-            Spacer() //
         }
         .navigationBarTitle("Search")
+//        .navigationBarItems(leading: SearchBarView(searchText: $searchText, onCommit: search))
         .onAppear {
             // Perform initial search here
             search()
