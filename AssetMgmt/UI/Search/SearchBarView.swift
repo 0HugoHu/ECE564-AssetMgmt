@@ -12,15 +12,19 @@ import SwiftUI
 struct SearchBarContentView: View {
     let array = ["Peter", "Paul", "Mary", "Anna-Lena", "George", "John", "Greg", "Thomas", "Robert", "Bernie", "Mike", "Benno", "Hugo", "Miles", "Michael", "Mikel", "Tim", "Tom", "Lottie", "Lorrie", "Barbara"]
     
+    private func search() {
+        // Your search logic here
+        print("Search for \(searchText)")
+    }
+    
     @State private var searchText = ""
     
     var body: some View {
-        
         NavigationView {
             VStack {
                 
                 // Search view
-                SearchBarView(searchText: $searchText)
+                SearchBarView(searchText: $searchText, onCommit: search)
                 
                 List {
                     // Filtered list of names
@@ -35,18 +39,8 @@ struct SearchBarContentView: View {
     }
 }
 
-
-
-struct SearchBarContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            SearchBarContentView()
-                .environment(\.colorScheme, .light)
-            
-            SearchBarContentView()
-                .environment(\.colorScheme, .dark)
-        }
-    }
+#Preview {
+    SearchBarContentView()
 }
 
 extension UIApplication {
@@ -73,19 +67,58 @@ extension View {
     }
 }
 
-
 struct SearchBarView: View {
+    
     
     @Binding var searchText: String
     @State private var showCancelButton: Bool = false
     @State private var showAdvancedSearch: Bool = false
     
-    // States for advanced search fields
-    @State private var advancedSearchField1: String = ""
-    @State private var advancedSearchField2: String = ""
+    @State private var selectedCriteriaConjunction: String = "AND"
+    let criteriaConjunction = ["AND", "OR", "NOT"]
     
+    @State private var selectedField: String = ""
+    let fieldOptions: [String]
+
+    @State private var selectedCondition: String = ""
+    
+    var conditionOptions: [String] {
+        guard let fieldType = sampleSearchFiltersDict[selectedField]?.fieldType else { return SearchFilter.FieldTypes.Other.getAllCases() }
+        return fieldType.getAllCases()
+    }
+    
+
+    
+    @State private var keyward: String = ""
     
     var onCommit: () ->Void = {print("onCommit")}
+    
+    init(searchText: Binding<String>, onCommit: @escaping () -> Void) {
+        self._searchText = searchText
+        self.onCommit = onCommit
+        self.fieldOptions = Array(sampleSearchFiltersDict.keys)
+    }
+    
+    private func performAdvancedSearch() {
+        // Construct the search criteria
+        let searchText = SearchFilter.createSearchCriteria(
+            conjunction: SearchFilter.Conjunction(rawValue: selectedCriteriaConjunction) ?? .and,
+            fieldId: selectedField,
+            condition: SearchFilter.OtherField(rawValue: selectedCondition) ?? .equals,
+            value: keyward
+        )
+
+        // Perform the search
+        advancedSearch(search: searchText, directory: "/", verbose: true) { assetsInfo in
+            // Handle the search results
+            if let firstResult = assetsInfo?.first {
+                logger.info("First result name: \(firstResult.id)")
+            } else {
+                logger.info("No results found")
+            }
+        }
+    }
+
     
     var body: some View {
         HStack {
@@ -110,8 +143,8 @@ struct SearchBarView: View {
                 }
                 // AdvancedSearch button
                 Button(action: {
-//                    self.searchText = ""
-                    self.showAdvancedSearch = true
+                    //                    self.searchText = ""
+                    self.showAdvancedSearch.toggle()
                 }) {
                     Image(systemName: "ellipsis.circle")
                 }
@@ -133,34 +166,55 @@ struct SearchBarView: View {
             
         }
         .padding(.horizontal)
-//        .navigationBarHidden(showCancelButton)
+        //        .navigationBarHidden(showCancelButton)
         
         // Advanced search fields
         if showAdvancedSearch {
-            
- 
-                VStack {
-                    HStack {
-                        TextField("sortField", text: $advancedSearchField1)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.horizontal)
-                        
-                        TextField("SortDirection", text: $advancedSearchField2)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding([.horizontal])
+            Form {
+                Picker(selection: $selectedCriteriaConjunction, label: Text("Criteria Conjunction")) {
+                    ForEach(criteriaConjunction, id: \.self) { item in
+                        Text(item).foregroundColor(.black)
                     }
-                    .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-                    .foregroundColor(.secondary) // For magnifying glass and placeholder test
-                    .background(Color(.tertiarySystemFill))
-
                 }
-
-                // You can add more fields here...
-
-            .transition(.move(edge: .top)) // This
+                .pickerStyle(MenuPickerStyle())
+                
+                Picker(selection: $selectedField, label: Text("Select Field")) {
+                    ForEach(fieldOptions, id: \.self) { item in
+                        Text(item).foregroundColor(.black)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
+                
+                Picker(selection: $selectedCondition, label: Text("Select Condition")) {
+                    ForEach(conditionOptions, id: \.self) { item in
+                        Text(item).foregroundColor(.black)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
+                
+                
+                TextField("Keyward", text: $keyward)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                
+                HStack {
+                    Spacer()
+                    
+                    Button("Advanced Search") {
+                        performAdvancedSearch()
+                    }
+                    .foregroundColor(Color(.systemBlue))
+          
+                }
+                
+            }
         }
+        
+        
     }
+        // You can add more fields here...
+//        .transition(.move(edge: .top)) // This
+//        .foregroundColor(.secondary)
+//        .background(Color(.tertiarySystemFill))
+//        .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
     
 }
-
-

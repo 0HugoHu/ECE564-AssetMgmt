@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D04E2262B01584000E5583A /* SearchFilters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D04E2252B01584000E5583A /* SearchFilters.swift */; };
 		2D48EF912AF9939C00968F67 /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D48EF902AF9939C00968F67 /* SearchBarView.swift */; };
 		2D48EF932AF9D0E200968F67 /* AssetThumbnailViewGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D48EF922AF9D0E200968F67 /* AssetThumbnailViewGrid.swift */; };
 		2D48EF9D2AFC107B00968F67 /* DocumentDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D48EF9C2AFC107B00968F67 /* DocumentDetailsView.swift */; };
@@ -15,11 +16,11 @@
 		ABBB0F802AF2E3A400CD812B /* PDFSwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABBB0F7F2AF2E3A400CD812B /* PDFSwiftUIView.swift */; };
 		ABBB0F822AF2E4B300CD812B /* Sample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = ABBB0F812AF2E4B300CD812B /* Sample.pdf */; };
 		ABBB0F852AF3254A00CD812B /* UserDefaultAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABBB0F842AF3254A00CD812B /* UserDefaultAccess.swift */; };
+		ABBB0F872AFC79C600CD812B /* FileAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABBB0F862AFC79C600CD812B /* FileAccess.swift */; };
 		C28274912AFC9B8200C6A9DD /* FileBrowserMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28274902AFC9B8200C6A9DD /* FileBrowserMode.swift */; };
 		C28274932AFD4A2E00C6A9DD /* FormatUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28274922AFD4A2E00C6A9DD /* FormatUtils.swift */; };
 		C28274952AFD530D00C6A9DD /* SearchFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28274942AFD530D00C6A9DD /* SearchFilter.swift */; };
 		C28274972AFDD34F00C6A9DD /* AssetThumbnailViewRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28274962AFDD34F00C6A9DD /* AssetThumbnailViewRow.swift */; };
-		ABBB0F872AFC79C600CD812B /* FileAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABBB0F862AFC79C600CD812B /* FileAccess.swift */; };
 		C28A0B9C2AE5FB0C008258C8 /* AssetMgmtApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28A0B9B2AE5FB0C008258C8 /* AssetMgmtApp.swift */; };
 		C28A0BA02AE5FB0D008258C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C28A0B9F2AE5FB0D008258C8 /* Assets.xcassets */; };
 		C28A0BA32AE5FB0D008258C8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C28A0BA22AE5FB0D008258C8 /* Preview Assets.xcassets */; };
@@ -89,6 +90,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2D04E2252B01584000E5583A /* SearchFilters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFilters.swift; sourceTree = "<group>"; };
 		2D48EF902AF9939C00968F67 /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
 		2D48EF922AF9D0E200968F67 /* AssetThumbnailViewGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetThumbnailViewGrid.swift; sourceTree = "<group>"; };
 		2D48EF9C2AFC107B00968F67 /* DocumentDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentDetailsView.swift; sourceTree = "<group>"; };
@@ -98,11 +100,11 @@
 		ABBB0F7F2AF2E3A400CD812B /* PDFSwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFSwiftUIView.swift; sourceTree = "<group>"; };
 		ABBB0F812AF2E4B300CD812B /* Sample.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Sample.pdf; sourceTree = "<group>"; };
 		ABBB0F842AF3254A00CD812B /* UserDefaultAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultAccess.swift; sourceTree = "<group>"; };
+		ABBB0F862AFC79C600CD812B /* FileAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAccess.swift; sourceTree = "<group>"; };
 		C28274902AFC9B8200C6A9DD /* FileBrowserMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileBrowserMode.swift; sourceTree = "<group>"; };
 		C28274922AFD4A2E00C6A9DD /* FormatUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatUtils.swift; sourceTree = "<group>"; };
 		C28274942AFD530D00C6A9DD /* SearchFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFilter.swift; sourceTree = "<group>"; };
 		C28274962AFDD34F00C6A9DD /* AssetThumbnailViewRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetThumbnailViewRow.swift; sourceTree = "<group>"; };
-		ABBB0F862AFC79C600CD812B /* FileAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAccess.swift; sourceTree = "<group>"; };
 		C28A0B982AE5FB0C008258C8 /* AssetMgmt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AssetMgmt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C28A0B9B2AE5FB0C008258C8 /* AssetMgmtApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetMgmtApp.swift; sourceTree = "<group>"; };
 		C28A0B9D2AE5FB0C008258C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -459,6 +461,7 @@
 				C2FB20D92AEEE25E002B3FCF /* Strings.swift */,
 				C2FB20DB2AEEE266002B3FCF /* Colors.swift */,
 				C2FB20DD2AEEE283002B3FCF /* Urls.swift */,
+				2D04E2252B01584000E5583A /* SearchFilters.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -630,6 +633,7 @@
 				C2B6527B2AF44F6D00E45890 /* Strings.swift in Sources */,
 				2D48EF9F2AFC21CE00968F67 /* FormatBytes.swift in Sources */,
 				C2B6527C2AF44F6D00E45890 /* Colors.swift in Sources */,
+				2D04E2262B01584000E5583A /* SearchFilters.swift in Sources */,
 				C2B6527D2AF44F6D00E45890 /* Urls.swift in Sources */,
 				C2B652762AF44F4C00E45890 /* UrlUtils.swift in Sources */,
 				C2B652752AF44F4000E45890 /* ContentView.swift in Sources */,
