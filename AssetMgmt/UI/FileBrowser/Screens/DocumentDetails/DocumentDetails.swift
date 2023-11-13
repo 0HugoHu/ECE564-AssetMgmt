@@ -6,6 +6,7 @@ struct DocumentDetails: View {
 
     @State private var urlToPreview: URL?
     @State private var progress: Int64 = 0
+    @State private var waitToShow: Bool = false
 
     public init(document: Document) {
         self.document = document
@@ -58,10 +59,16 @@ struct DocumentDetails: View {
                 }
             }
         }
+        .onChange(of: progress) { newValue in
+            if newValue == -1 && waitToShow {
+                showPreview()
+            }
+        }
     }
 
     func showPreview() {
         urlToPreview = getFilePathById(String(document.mediaBeaconID), progress: $progress)
+        waitToShow = true
     }
 }
 
