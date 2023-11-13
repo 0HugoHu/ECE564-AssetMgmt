@@ -92,6 +92,7 @@ struct WebView: UIViewRepresentable {
                 if let key = key {
                     // TODO: Save key to local
                     UserDefaults.standard.setValue(key, forKey: "AuthToken")
+                    UserDefaults.standard.setValue(Date(), forKey: "timestamp")
                     print(key)
                     isLoggedIn = true
                     self.presentationMode.wrappedValue.dismiss()
