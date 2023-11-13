@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import SwiftUI
 
 /*
  Download a file from a URL to a destination URL
@@ -16,51 +16,9 @@ import Foundation
  - destinationURL: The URL to download to
  - completion: A closure that is called when the download is complete
  */
-func download(from url: URL, to destinationURL: URL, completion: @escaping (Bool) -> Void) {
-    let sessionConfiguration = URLSessionConfiguration.default
-    let customDelegate = CustomURLDelegate()
-    let session = URLSession(configuration: sessionConfiguration, delegate: customDelegate, delegateQueue: nil)
-    
-    let downloadTask = session.downloadTask(with: url) { tempURL, response, error in
-        if let error = error {
-            logger.error("Error downloading files: \(error)")
-            completion(false)
-            return
-        }
-        guard let tempURL = tempURL, let response = response as? HTTPURLResponse else {
-            logger.error("Invalid response or temporary URL")
-            completion(false)
-            return
-        }
-        
-        if response.statusCode == 200 {
-            do {
-//                var updatedDestinationURL = destinationURL
-                
-                // Append file type
-//                if let contentType = response.allHeaderFields["Content-Type"] as? String {
-//                    if let fileExtension = fileExtensionForContentType(contentType) {
-//                        updatedDestinationURL.appendPathExtension(fileExtension)
-//                    }
-//                }
-                
-                // Give the file a unique name
-                let destinationWithUniqueName = generateUniqueDestinationURL(destinationURL)
-                try FileManager.default.moveItem(at: tempURL, to: destinationWithUniqueName)
-                try ZipUtility.unzipFile(from: destinationWithUniqueName, to: destinationWithUniqueName.deletingLastPathComponent())
-                try FileManager.default.removeItem(at: destinationWithUniqueName)
-                print("dest: \(destinationWithUniqueName)")
-                
-                completion(true)
-            } catch {
-                logger.error("Error saving the downloaded file: \(error)")
-                completion(false)
-            }
-        } else {
-            logger.error("Download request returned status code: \(response.statusCode)")
-            completion(false)
-        }
-    }
-    
+func download(from url: URL, to destinationURL: URL, progress: Binding<Int64>?, fileId: String) {
+    let customDelegate = CustomURLDelegate(progress: progress, destinationURL: destinationURL, fileId: fileId)
+    let session = URLSession(configuration: .default, delegate: customDelegate, delegateQueue: OperationQueue())
+    let downloadTask = session.downloadTask(with: url) 
     downloadTask.resume()
 }

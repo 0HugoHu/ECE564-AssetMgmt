@@ -48,7 +48,24 @@ struct LoginPage: View {
         }
         .onAppear() {
             currentURL = initialURL
+            isLoggedIn = loggedIn()
         }
+    }
+    
+    private func loggedIn() -> Bool {
+        if UserDefaults.standard.value(forKey: "AuthToken") == nil {
+            return false
+        }
+        if let timestamp = UserDefaults.standard.object(forKey: "timestamp") as? Date {
+            let currentTime = Date()
+            let expiration: TimeInterval = 60 * 60 * 24
+            print(timestamp)
+            print(currentTime)
+            if currentTime.timeIntervalSince(timestamp) < expiration {
+                return true
+            }
+        }
+        return false
     }
 }
 

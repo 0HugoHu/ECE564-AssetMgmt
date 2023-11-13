@@ -6,10 +6,16 @@
 //
 
 import Foundation
+import SwiftUI
 
 let cacheURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appending(path: "edu.duke.AssetMgmt/DownloadFiles")
 
-func getFilePathById(_ id: String) -> URL? {
+func getFilePathById(_ id: String, progress: Binding<Int64>? = nil) -> URL? {
+    if let progress = UserDefaults.standard.value(forKey: "download@\(id)") as? Int64 {
+        if progress != -1 {
+            return nil
+        }
+    }
     let folderPath = cacheURL.appending(path: id)
     if !FileManager.default.fileExists(atPath: folderPath.absoluteString) {
         do {
@@ -27,19 +33,6 @@ func getFilePathById(_ id: String) -> URL? {
         logger.error("Read cache error: \(error)")
         return nil
     }
-    var done = false
-    downloadFiles(to: folderPath, ids: [id]) {result in
-        done = true
-    }
-    while !done {}
-    do {
-        if let file = try FileManager.default.contentsOfDirectory(at: folderPath).first {
-            return file
-        } else {
-            logger.error("Download error")
-        }
-    } catch {
-        logger.error("Read cache error: \(error)")
-    }
+    downloadFiles(to: folderPath, ids: [id], progress: progress) {result in}
     return nil
 }
