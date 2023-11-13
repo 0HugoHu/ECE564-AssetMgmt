@@ -3,21 +3,61 @@ import SwiftUI
 
 struct DocumentDetails: View {
     var document: Document
+    var mode: FileBrowserMode
 
     @State private var urlToPreview: URL?
     @State private var progress: Int64 = 0
     @State private var waitToShow: Bool = false
 
-    public init(document: Document) {
+    public init(document: Document, mode: FileBrowserMode) {
         self.document = document
+        self.mode = mode
     }
 
     var body: some View {
         VStack(alignment: .center, spacing: 12) {
             List {
-                ThumbnailView(url: document.url)
-                    .padding(.vertical)
-                    .onTapGesture(perform: showPreview)
+                if mode == .local {
+                    ThumbnailView(url: document.url)
+                        .padding(.vertical)
+                        .onTapGesture(perform: showPreview)
+                } else if mode == .remote {
+                    if let thumbnailUrl = getHighQualityPreviewURL(originalURLString: document.highQualityPreviewUrl ?? "") {
+                        VStack (alignment: .center) {
+                            AsyncImage(url: URL(string: thumbnailUrl)) { phase in
+                                switch phase {
+                                case .empty:
+                                    ProgressView()
+                                case .success(let image):
+                                    image.resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 260)
+                                case .failure:
+                                    Image("icon_directory")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 160, height: 160)
+                                @unknown default:
+                                    EmptyView()
+                                }
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .onTapGesture {
+                            showPreview()
+                        }
+                    } else {
+                        VStack (alignment: .center) {
+                            Image("doc.questionmark.fill")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 160, height: 160)
+                            
+                            Text("Unsupported File Type")
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                }
 
                 HStack {
                     Spacer()
@@ -48,8 +88,7 @@ struct DocumentDetails: View {
         .quickLookPreview($urlToPreview)
         .navigationBarItems(trailing: HStack {
             Button(action: showPreview) {
-                Image(systemName: "play.fill")
-                    .font(.largeTitle)
+                Label("Preview", systemImage: "play.fill")
             }.foregroundColor(.blue)
         })
         .onAppear() {
@@ -74,7 +113,7 @@ struct DocumentDetails: View {
 
 struct DocumentDetails_Previews: PreviewProvider {
     static var previews: some View {
-        DocumentDetails(document: DocumentsStore_Preview(root: URL.temporaryDirectory, relativePath: "/", sorting: .date(ascending: true)).documents[1])
+        DocumentDetails(document: DocumentsStore_Preview(root: URL.temporaryDirectory, relativePath: "/", sorting: .date(ascending: true)).documents[1], mode: .remote)
             .preferredColorScheme(.dark)
             .environment(\.sizeCategory, .large)
     }

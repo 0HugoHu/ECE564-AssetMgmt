@@ -133,7 +133,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
                             return
                         }
                         for file in files! {
-                            let doc = Document(mediaBeaconID: file.id, name: file.name, url: URL(string: getThumbnailURL(originalURLString: file.previews.thumbnail))!, size: file.bytes as NSNumber, modified: Date(timeIntervalSince1970: file.lastModified / 1000.0), isDirectory: false)
+                            let doc = Document(mediaBeaconID: file.id, name: file.name, url: URL(string: getThumbnailURL(originalURLString: file.previews.thumbnail))!, size: file.bytes as NSNumber, modified: Date(timeIntervalSince1970: file.lastModified / 1000.0), highQualityPreviewUrl: file.previews.high, isDirectory: false)
                             self.appendDocument(doc)
                         }
                         self.sortDocument(0)

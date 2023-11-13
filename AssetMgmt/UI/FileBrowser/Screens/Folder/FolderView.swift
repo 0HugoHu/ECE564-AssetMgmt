@@ -218,7 +218,7 @@ public struct FolderView: View {
                 )
             }
         } else {
-            DocumentDetails(document: document)
+            DocumentDetails(document: document, mode: documentsStore.mode)
         }
     }
     

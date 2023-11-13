@@ -9,6 +9,7 @@ struct Document: Identifiable {
     var size: NSNumber
     var created: Date?
     var modified: Date?
+    var highQualityPreviewUrl: String?
     
     var isDirectory: Bool = false
 }

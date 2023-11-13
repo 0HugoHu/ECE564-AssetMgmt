@@ -104,7 +104,7 @@ struct DocumentGrid: View {
                 .font(Font.system(size: 14))
                 .lineLimit(2)
                 .allowsTightening(true)
-                .foregroundColor(.black)
+                .foregroundColor(Color.primary)
         }
     }
     

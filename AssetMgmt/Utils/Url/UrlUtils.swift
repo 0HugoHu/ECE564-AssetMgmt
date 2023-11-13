@@ -69,7 +69,7 @@ func appendAuth(url: URL) -> URL {
 
 
 func getThumbnailURL(originalURLString: String) -> String {
-    let baseOld = "https://152.3.100.163:443/"
+    let baseOld = PREVIEW_HOST
     let baseNew = MEDIABEACON_HOST
     
     if originalURLString.hasPrefix(baseOld) {
@@ -78,6 +78,20 @@ func getThumbnailURL(originalURLString: String) -> String {
         return newURLString
     } else {
         return originalURLString // Return the original if it doesn't match the expected format
+    }
+}
+
+
+func getHighQualityPreviewURL(originalURLString: String) -> String? {
+    let baseOld = PREVIEW_HOST
+    let baseNew = MEDIABEACON_HOST
+    
+    if originalURLString.hasPrefix(baseOld) {
+        var newURLString = originalURLString.replacingOccurrences(of: baseOld, with: baseNew)
+        newURLString += "&apikey=\(UserDefaults.standard.string(forKey: "AuthToken")!)"
+        return newURLString
+    } else {
+        return nil
     }
 }
 
