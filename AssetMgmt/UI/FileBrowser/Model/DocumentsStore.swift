@@ -9,6 +9,11 @@ enum DocumentsStoreError: Error, LocalizedError {
     case unknown
 }
 
+enum ViewMode: String, Codable, CaseIterable {
+    case list
+    case grid
+}
+
 protocol DocumentImporter {
     func importFile(from url: URL) async
 }
@@ -16,7 +21,12 @@ protocol DocumentImporter {
 @MainActor
 public class DocumentsStore: ObservableObject, DocumentImporter {
     @Published var documents: [Document] = []
-    @Published var sorting: SortOption = .date(ascending: false) //TODO: Get it from userdefaults
+    @Published var sorting: SortOption = .date(ascending: false)
+    @Published var viewMode: ViewMode = .list {
+        didSet {
+            saveViewModeToUserDefaults()
+        }
+    }
     
     var docDirectory: URL
     var remoteUrl : String
@@ -36,29 +46,39 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
     public init(
         root: URL,
         relativePath: String = "",
-        sorting: SortOption = .date(ascending: true),
+        sorting: SortOption = .date(ascending: false),
         documentsSource: DocumentManager = FileManager.default
     ) {
         docDirectory = root
         self.mode = .local
         self.relativePath = relativePath
-        self.sorting = sorting
+        if let loadedSortOption = SortOption.loadFromUserDefaults() {
+            self.sorting = loadedSortOption
+        } else {
+            self.sorting = sorting
+        }
         self.documentManager = documentsSource
         self.remoteUrl = ""
+        loadViewModeFromUserDefaults()
     }
     
     init(
         root: String,
         mode: FileBrowserMode,
         relativePath: String = "",
-        sorting: SortOption = .date(ascending: true)
+        sorting: SortOption = .date(ascending: false)
     ) {
         docDirectory = URL(string: root)!
         self.remoteUrl = root
         self.mode = mode
         self.relativePath = relativePath
-        self.sorting = sorting
+        if let loadedSortOption = SortOption.loadFromUserDefaults() {
+            self.sorting = loadedSortOption
+        } else {
+            self.sorting = sorting
+        }
         self.documentManager = FileManager.default
+        loadViewModeFromUserDefaults()
     }
     
     fileprivate func document(from url: URL) -> Document? {
@@ -116,6 +136,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
                             let doc = Document(mediaBeaconID: file.id, name: file.name, url: URL(string: getThumbnailURL(originalURLString: file.previews.thumbnail))!, size: file.bytes as NSNumber, modified: Date(timeIntervalSince1970: file.lastModified / 1000.0), isDirectory: false)
                             self.appendDocument(doc)
                         }
+                        self.sortDocument(0)
                     }
                 }
             }
@@ -169,6 +190,16 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
                 if let index = self?.documents.firstIndex(where: { $0.mediaBeaconID == docId }) {
                     self?.documents.remove(at: index)
                 }
+            }
+            .store(in: &cancellables)
+    }
+    
+    
+    func sortDocument(_ docId: Int) {
+        Just(docId)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] document in
+                self?.sort()
             }
             .store(in: &cancellables)
     }
@@ -390,6 +421,19 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
             throw DocumentsStoreError.remoteRenameSuccedded
         } else {
             throw DocumentsStoreError.unknown
+        }
+    }
+    
+    private func saveViewModeToUserDefaults() {
+        let defaults = UserDefaults.standard
+        defaults.set(viewMode.rawValue, forKey: "ViewMode")
+    }
+    
+    private func loadViewModeFromUserDefaults() {
+        let defaults = UserDefaults.standard
+        if let rawValue = defaults.string(forKey: "ViewMode"),
+           let loadedViewMode = ViewMode(rawValue: rawValue) {
+            viewMode = loadedViewMode
         }
     }
 }

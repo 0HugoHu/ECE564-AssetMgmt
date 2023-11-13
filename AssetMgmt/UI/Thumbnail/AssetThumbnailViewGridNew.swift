@@ -1,14 +1,14 @@
 //
-//  AssetThumbnailViewRow.swift
+//  AssetThumbnailViewGridNew.swift
 //  AssetMgmt
 //
-//  Created by Hugooooo on 11/9/23.
+//  Created by Hugooooo on 11/12/23.
 //
 
 import Foundation
 import SwiftUI
 
-struct AssetThumbnailViewRow: View {
+struct AssetThumbnailViewGridNew: View {
     let url: String
     
     var body: some View {
@@ -22,12 +22,12 @@ struct AssetThumbnailViewRow: View {
                 case .success(let image):
                     image.resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 60, height: 60)
+                        .frame(width: 80, height: 80)
                 case .failure:
                     Image("icon_directory")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 60, height: 60)
+                        .frame(width: 80, height: 80)
                 @unknown default:
                     EmptyView()
                 }

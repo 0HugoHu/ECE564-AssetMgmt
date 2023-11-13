@@ -17,24 +17,70 @@ public struct FolderView: View {
     
     fileprivate func sortByDateButton() -> some View {
         let sortImage: String = documentsStore.sorting.dateButtonIcon()
-        return Label("Sort by date", systemImage: sortImage)
+        return Label("     Sort by date", systemImage: sortImage)
     }
     
     fileprivate func sortByNameButton() -> some View {
         let sortImage: String =  documentsStore.sorting.nameButtonIcon()
-        return Label("Sort by name", systemImage: sortImage)
+        return Label("     Sort by name", systemImage: sortImage)
+    }
+    
+    fileprivate func getGridModeLabel() -> some View {
+        switch documentsStore.viewMode {
+        case .grid:
+            return Label("✓  Icons", systemImage: "square.grid.2x2")
+        case .list:
+            return Label("     Icons", systemImage: "square.grid.2x2")
+        }
+    }
+    
+    fileprivate func getListModeLabel() -> some View {
+        switch documentsStore.viewMode {
+        case .grid:
+            return Label("     List", systemImage: "list.bullet")
+        case .list:
+            return Label("✓  List", systemImage: "list.bullet")
+        }
     }
     
     var actionButtons: some View {
         HStack {
             Menu {
-                Button(action: {
+                Button(action: { }) {
+                    Label("     Select", systemImage: "checkmark.circle")
+                }
+                Button(action: didClickCreateFolder) {
+                    Label("     New Folder", systemImage: "folder.badge.plus")
+                }
+                Button(action: { isPresentedPicker = true }) {
+                    Label("     Import Files", systemImage: "doc.badge.arrow.up")
+                }
+                Button(action: { isPresentedPhotoPicker = true }) {
+                    Label("     Import Photos", systemImage: "photo.on.rectangle")
+                }
+                Button(action: { }) {
+                    Label("     Scan Documents", systemImage: "doc.text.viewfinder")
+                }
+                
+                Divider()
+                
+                Button(action: { 
                     withAnimation {
-                        documentsStore.setSorting(documentsStore.sorting.toggleToDateSortOption())
+                        documentsStore.viewMode = .grid
                     }
                 }) {
-                    sortByDateButton()
+                    getGridModeLabel()
                 }
+                Button(action: { 
+                    withAnimation {
+                        documentsStore.viewMode = .list
+                    }
+                }) {
+                    getListModeLabel()
+                }
+                
+                Divider()
+                
                 Button(action: {
                     withAnimation {
                         documentsStore.setSorting(documentsStore.sorting.toggleToNameSortOption())
@@ -42,28 +88,16 @@ public struct FolderView: View {
                 }) {
                     sortByNameButton()
                 }
+                Button(action: {
+                    withAnimation {
+                        documentsStore.setSorting(documentsStore.sorting.toggleToDateSortOption())
+                    }
+                }) {
+                    sortByDateButton()
+                }
+                
             } label: {
-                Image(systemName: "arrow.up.arrow.down")
-                    .font(.title2)
-                    .foregroundColor(.blue)
-            }
-            Menu {
-                Button(action: { isPresentedPicker = true }) {
-                    Label("Import from Files", systemImage: "arrow.up.doc.fill")
-                }
-                Button(action: { }) {
-                    Label("Scan", systemImage: "doc.text.fill.viewfinder")
-                }
-                Button(action: { isPresentedPhotoPicker = true }) {
-                    Label("Import Photo", systemImage: "photo.fill.on.rectangle.fill")
-                }
-                Button(action: didClickCreateFolder) {
-                    Label("Create folder", systemImage: "plus.rectangle.fill.on.folder.fill")
-                }
-            } label: {
-                Image(systemName: "doc.fill.badge.plus")
-                    .font(.title2)
-                    .help(Text("Add documents"))
+                Image(systemName: "ellipsis.circle")
             }
         }
     }
@@ -84,28 +118,56 @@ public struct FolderView: View {
     public var body: some View {
         ZStack {
             ScrollViewReader { scrollViewProxy in
-                List {
-                    Section(header: listSectionHeader) {
-                        ForEach($documentsStore.documents) { document in
-                            NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
-                                DocumentRow(
-                                    document: document,
-                                    shouldEdit: (document.id == lastCreatedNewFolder?.id),
-                                    documentsStore: documentsStore
-                                )
-                                .padding(.vertical)
-                                .id(document.id)
+                if documentsStore.viewMode == .list {
+                    List {
+                        Section(header: listSectionHeader) {
+                            ForEach($documentsStore.documents) { document in
+                                NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
+                                    DocumentRow(
+                                        document: document,
+                                        shouldEdit: (document.id == lastCreatedNewFolder?.id),
+                                        documentsStore: documentsStore
+                                    )
+                                    .padding(.vertical, 4)
+                                    .id(document.id)
+                                }
+                            }
+                            .onDelete(perform: deleteItems)
+                        }
+                    }
+                    .listStyle(InsetListStyle())
+                    .onAppear {
+                        listProxy = scrollViewProxy
+                    }
+                    .refreshable {
+                        documentsStore.reload()
+                    }
+                } else if documentsStore.viewMode == .grid {
+                    let columns: [GridItem] = [
+                        GridItem(.adaptive(minimum: 100), spacing: 0, alignment: .top)
+                    ]
+                    ScrollView {
+                        LazyVGrid(columns: columns) {
+                            ForEach($documentsStore.documents) { document in
+                                NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
+                                    DocumentGrid(
+                                        document: document,
+                                        shouldEdit: (document.id == lastCreatedNewFolder?.id),
+                                        documentsStore: documentsStore
+                                    )
+                                    .padding(.vertical, 4)
+                                    .id(document.id)
+                                }
                             }
                         }
-                        .onDelete(perform: deleteItems)
+                        .padding(.horizontal, 16)
+                        .onAppear {
+                            listProxy = scrollViewProxy
+                        }
+                        .refreshable {
+                            documentsStore.reload()
+                        }
                     }
-                }
-                .listStyle(InsetListStyle())
-                .onAppear {
-                    listProxy = scrollViewProxy
-                }
-                .refreshable {
-                    documentsStore.reload()
                 }
             }
             .background(Color.clear)
