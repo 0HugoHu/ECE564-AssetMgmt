@@ -10,6 +10,7 @@ struct Document: Identifiable {
     var created: Date?
     var modified: Date?
     var highQualityPreviewUrl: String?
+    var type: String = "unknown"
     
     var isDirectory: Bool = false
 }

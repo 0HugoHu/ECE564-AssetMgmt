@@ -37,7 +37,7 @@ struct AssetThumbnailViewGrid: View {
                         .font(.caption)
 //                        .lineLimit(1)  Ensure the text does not take up more than one line
                     // TODO: Changed by Hugo, did not test corner cases
-                    Text(fileExtensionForContentType(assetInfo.mimeType ?? "unknown")!)
+                    Text(fileExtensionForContentType(assetInfo.mimeType ?? "unknown"))
                         .font(.footnote)
                         .foregroundColor(.secondary) // For ma
                     

@@ -17,12 +17,17 @@ public struct FolderView: View {
     
     fileprivate func sortByDateButton() -> some View {
         let sortImage: String = documentsStore.sorting.dateButtonIcon()
-        return Label("     Sort by date", systemImage: sortImage)
+        return Label("     Date", systemImage: sortImage)
     }
     
     fileprivate func sortByNameButton() -> some View {
         let sortImage: String =  documentsStore.sorting.nameButtonIcon()
-        return Label("     Sort by name", systemImage: sortImage)
+        return Label("     Name", systemImage: sortImage)
+    }
+    
+    fileprivate func sortByTypeButton() -> some View {
+        let sortImage: String =  documentsStore.sorting.typeButtonIcon()
+        return Label("     Type", systemImage: sortImage)
     }
     
     fileprivate func getGridModeLabel() -> some View {
@@ -95,7 +100,13 @@ public struct FolderView: View {
                 }) {
                     sortByDateButton()
                 }
-                
+                Button(action: {
+                    withAnimation {
+                        documentsStore.setSorting(documentsStore.sorting.toggleToTypeSortOption())
+                    }
+                }) {
+                    sortByTypeButton()
+                }
             } label: {
                 Image(systemName: "ellipsis.circle")
             }

@@ -121,7 +121,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
                         if folder.path ==  lastComponent{
                             parentFolderId = folder.id
                         } else {
-                            let doc = Document(mediaBeaconID: folder.id, name: folder.name, url: URL(string: folder.path)!, size: 0, isDirectory: true)
+                            let doc = Document(mediaBeaconID: folder.id, name: folder.name, url: URL(string: folder.path)!, size: 0, type: "folder", isDirectory: true)
                             self.appendDocument(doc)
                         }
                     }
@@ -133,7 +133,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
                             return
                         }
                         for file in files! {
-                            let doc = Document(mediaBeaconID: file.id, name: file.name, url: URL(string: getThumbnailURL(originalURLString: file.previews.thumbnail))!, size: file.bytes as NSNumber, modified: Date(timeIntervalSince1970: file.lastModified / 1000.0), highQualityPreviewUrl: file.previews.high, isDirectory: false)
+                            let doc = Document(mediaBeaconID: file.id, name: file.name, url: URL(string: getThumbnailURL(originalURLString: file.previews.thumbnail))!, size: file.bytes as NSNumber, modified: Date(timeIntervalSince1970: file.lastModified / 1000.0), highQualityPreviewUrl: file.previews.high, type: file.mimeType ?? "unkown", isDirectory: false)
                             self.appendDocument(doc)
                         }
                         self.sortDocument(0)

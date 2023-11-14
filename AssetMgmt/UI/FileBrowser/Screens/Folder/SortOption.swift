@@ -3,6 +3,7 @@ import Foundation
 public enum SortOption: Equatable {
     case date(ascending: Bool)
     case name(ascending: Bool)
+    case type(ascending: Bool)
     
     // Function to save the sort option to UserDefaults
     func saveToUserDefaults() {
@@ -34,6 +35,10 @@ extension SortOption : RawRepresentable {
             self = .name(ascending: true)
         case 3:
             self = .name(ascending: false)
+        case 4:
+            self = .type(ascending: true)
+        case 5:
+            self = .type(ascending: false)
         default:
             return nil
         }
@@ -49,6 +54,10 @@ extension SortOption : RawRepresentable {
             return 2
         case .name(ascending: false):
             return 3
+        case .type(ascending: true):
+            return 4
+        case .type(ascending: false):
+            return 5
         }
     }
     
@@ -58,6 +67,10 @@ extension SortOption : RawRepresentable {
     
     func nameButtonIcon() -> String {
         sortConfigs().nameButtonIcon
+    }
+    
+    func typeButtonIcon() -> String {
+        sortConfigs().typeButtonIcon
     }
     
     func toggleToDateSortOption() -> SortOption {
@@ -72,6 +85,13 @@ extension SortOption : RawRepresentable {
         return sortOption
     }
     
+    func toggleToTypeSortOption() -> SortOption {
+        let sortOption = sortConfigs().toggleToTypeSortOption
+        sortOption.saveToUserDefaults()
+        return sortOption
+    }
+    
+    
     func sortingComparator() -> (Document, Document) -> Bool {
         return sortConfigs().comparator
     }
@@ -84,6 +104,8 @@ extension SortOption : RawRepresentable {
             sortConfig = ascending ? SortConfigs.dateAscendingSortConfigs : SortConfigs.dateDescendingSortConfigs
         case .name(ascending: let ascending):
             sortConfig = ascending ? SortConfigs.nameAscendingSortConfigs : SortConfigs.nameDescendingSortConfigs
+        case .type(ascending: let ascending):
+            sortConfig = ascending ? SortConfigs.typeAscendingSortConfigs : SortConfigs.typeDescendingSortConfigs
         }
         
         return sortConfig
@@ -92,8 +114,11 @@ extension SortOption : RawRepresentable {
     private struct SortConfigs {
         var dateButtonIcon: String = ""
         var nameButtonIcon: String = ""
+        var typeButtonIcon: String = ""
         var toggleToDateSortOption: SortOption
         var toggleToNameSortOption: SortOption
+        var toggleToTypeSortOption: SortOption
+        
         var comparator: (Document, Document) -> Bool
         
         private static let dateSorterAscending = { (doc1: Document, doc2: Document) -> Bool in
@@ -118,24 +143,48 @@ extension SortOption : RawRepresentable {
             return (doc1.name.caseInsensitiveCompare(doc2.name) == .orderedAscending) == false
         }
         
+        private static let typeSorterAscending = { (doc1: Document, doc2: Document) -> Bool in
+            return (fileExtensionForContentType(doc1.type).caseInsensitiveCompare(fileExtensionForContentType(doc2.type)) == .orderedAscending) == true
+        }
+        
+        private static let typeSorterDescending = { (doc1: Document, doc2: Document) -> Bool in
+            return (fileExtensionForContentType(doc1.type).caseInsensitiveCompare(fileExtensionForContentType(doc2.type)) == .orderedAscending) == false
+        }
+        
         static let dateDescendingSortConfigs = SortConfigs(dateButtonIcon: "arrow.down",
                                                            toggleToDateSortOption: .date(ascending: true),
                                                            toggleToNameSortOption: .name(ascending: false),
+                                                           toggleToTypeSortOption: .type(ascending: false),
                                                            comparator: dateSorterDescending)
         
         static let dateAscendingSortConfigs = SortConfigs(dateButtonIcon: "arrow.up",
                                                           toggleToDateSortOption: .date(ascending: false),
                                                           toggleToNameSortOption: .name(ascending: false),
+                                                          toggleToTypeSortOption: .type(ascending: false),
                                                           comparator: dateSorterAscending)
         
         static let nameDescendingSortConfigs = SortConfigs(nameButtonIcon: "arrow.down",
                                                            toggleToDateSortOption: .date(ascending: false),
                                                            toggleToNameSortOption: .name(ascending: true),
+                                                           toggleToTypeSortOption: .type(ascending: false),
                                                            comparator: nameSorterDescending)
         
         static let nameAscendingSortConfigs = SortConfigs(nameButtonIcon: "arrow.up",
                                                           toggleToDateSortOption: .date(ascending: false),
                                                           toggleToNameSortOption: .name(ascending: false),
+                                                          toggleToTypeSortOption: .type(ascending: false),
                                                           comparator: nameSorterAscending)
+        
+        static let typeDescendingSortConfigs = SortConfigs(typeButtonIcon: "arrow.down",
+                                                           toggleToDateSortOption: .date(ascending: false),
+                                                           toggleToNameSortOption: .name(ascending: false),
+                                                           toggleToTypeSortOption: .type(ascending: true),
+                                                           comparator: typeSorterDescending)
+        
+        static let typeAscendingSortConfigs = SortConfigs(typeButtonIcon: "arrow.up",
+                                                          toggleToDateSortOption: .date(ascending: false),
+                                                          toggleToNameSortOption: .name(ascending: false),
+                                                          toggleToTypeSortOption: .type(ascending: false),
+                                                          comparator: typeSorterAscending)
     }
 }

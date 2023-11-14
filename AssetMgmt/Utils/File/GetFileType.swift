@@ -7,7 +7,7 @@
 
 import Foundation
 
-func fileExtensionForContentType(_ contentType: String) -> String? {
+func fileExtensionForContentType(_ contentType: String) -> String {
     let contentTypeToExtension = [
         "application/pdf": "pdf",
         "image/jpeg": "jpg",
@@ -21,9 +21,10 @@ func fileExtensionForContentType(_ contentType: String) -> String? {
         "application/zip": "zip",
         "text/plain": "txt",
         "application/json": "json",
+        "folder": "0folder",
         "unknown": "unknown"
         // Add more mappings as needed
     ]
 
-    return contentTypeToExtension[contentType]
+    return contentTypeToExtension[contentType] ?? "unknown"
 }
