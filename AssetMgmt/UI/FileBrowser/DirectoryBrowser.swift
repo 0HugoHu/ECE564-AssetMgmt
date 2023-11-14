@@ -4,41 +4,34 @@ import FilePreviews
 public struct DirectoryBrowser: View {
     @StateObject var thumbnailer = Thumbnailer()
     private var urls: [URL]
-
+    
     public init(
-        urls: [URL] = [.documentsDirectory, .libraryDirectory, .picturesDirectory, .temporaryDirectory]
+        urls: [URL] = [.libraryDirectory, .picturesDirectory]
     ) {
         self.urls = urls
     }
-
+    
     public var body: some View {
-        NavigationView {
-            List {
-                ForEach(urls, id:\.self) { url in
-                    NavigationLink(url.lastPathComponent) {
-                        FolderView(documentsStore: DocumentsStore(root: url), title: url.lastPathComponent)
-                    }
-                }
-                
-                NavigationLink(destination: SearchView()) {
-                    Text("Main Page")
-                }
-                NavigationLink("Index") {
-                    FolderView(documentsStore: DocumentsStore(root: "/", mode: .remote), title: "Index")
-                }
-                NavigationLink(destination: PDFSwiftUIView(fileName: "Sample"), label: {
-                    Text("PDF viewer")
-                })
-                NavigationLink(destination: DownloadView()
-                ) {
-                    Text("Download Test")
-                }
-                NavigationLink(destination: UploadView()
-                ) {
-                    Text("Upload Test")
+        //        NavigationView {
+        List {
+            ForEach(urls, id:\.self) { url in
+                NavigationLink(url.lastPathComponent) {
+                    FolderView(documentsStore: DocumentsStore(root: url), title: url.lastPathComponent)
                 }
             }
+            
+            NavigationLink(destination: SearchView()) {
+                Text("Main Page")
+            }
+            NavigationLink(destination: FolderView(documentsStore: DocumentsStore(root: "/", mode: .remote), title: "Index")) {
+                Text("Index")
+            }
+            NavigationLink(destination: UploadView()
+            ) {
+                Text("Upload Test")
+            }
         }
+        //        }
         .environmentObject(thumbnailer)
     }
 }
@@ -48,7 +41,7 @@ struct DirectoryBrowser_Previews: PreviewProvider {
         Group {
             DirectoryBrowser()
                 .preferredColorScheme(.light)
-
+            
             DirectoryBrowser()
                 .preferredColorScheme(.dark)
         }
