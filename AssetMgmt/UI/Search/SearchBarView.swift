@@ -9,53 +9,21 @@
 import Foundation
 import SwiftUI
 
-struct SearchBarContentView: View {
-    let array = ["Peter", "Paul", "Mary", "Anna-Lena", "George", "John", "Greg", "Thomas", "Robert", "Bernie", "Mike", "Benno", "Hugo", "Miles", "Michael", "Mikel", "Tim", "Tom", "Lottie", "Lorrie", "Barbara"]
-    
-    @State private var searchText = ""
-    
-    var body: some View {
-        
-        NavigationView {
-            VStack {
-                
-                // Search view
-                SearchBarView(searchText: $searchText)
-                
-                List {
-                    // Filtered list of names
-                    ForEach(array.filter{$0.hasPrefix(searchText) || searchText == ""}, id:\.self) {
-                        searchText in Text(searchText)
-                    }
-                }
-                .navigationBarTitle(Text("Search"))
-                .resignKeyboardOnDragGesture()
-            }
-        }
-    }
-}
-
-
-
-struct SearchBarContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            SearchBarContentView()
-                .environment(\.colorScheme, .light)
-            
-            SearchBarContentView()
-                .environment(\.colorScheme, .dark)
-        }
-    }
-}
 
 extension UIApplication {
     func endEditing(_ force: Bool) {
-        if let keyWindow = connectedScenes
-            .compactMap({ $0 as? UIWindowScene })
-            .flatMap({ $0.windows })
-            .first(where: { $0.isKeyWindow }) {
-            keyWindow.endEditing(force)
+        if #available(iOS 15.0, *) {
+            // For iOS 15.0 and later
+            UIApplication.shared.connectedScenes
+                .filter { $0.activationState == .foregroundActive }
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }
+                .first { $0.isKeyWindow }?.endEditing(force)
+        } else {
+            // Fallback on earlier versions
+            UIApplication.shared.windows
+                .filter { $0.isKeyWindow }
+                .first?.endEditing(force)
         }
     }
 }
@@ -75,19 +43,48 @@ extension View {
     }
 }
 
-
 struct SearchBarView: View {
-    
     @Binding var searchText: String
     @State private var showCancelButton: Bool = false
-    @State private var showAdvancedSearch: Bool = false
     
-    // States for advanced search fields
-    @State private var advancedSearchField1: String = ""
-    @State private var advancedSearchField2: String = ""
+    @Binding var selectedCriteriaConjunction: String
+    @Binding var selectedField: String
+    @Binding var selectedCondition: String
     
+    @Binding var showAdvancedSearch: Bool
     
-    var onCommit: () ->Void = {print("onCommit")}
+    let criteriaConjunction = ["AND", "OR", "NOT"]
+    let fieldOptions: [String]
+    
+    var conditionOptions: [String] {
+        guard let fieldType = sampleSearchFiltersDict[selectedField]?.fieldType else { return SearchFilter.FieldTypes.Other.getAllCases() }
+        return fieldType.getAllCases()
+    }
+    
+    var onCommit: () -> Void
+    var onAdvancedSearch: () -> Void
+    
+    init(searchText: Binding<String>,
+         selectedCriteriaConjunction: Binding<String>,
+         selectedField: Binding<String>,
+         selectedCondition: Binding<String>,
+         showAdvancedSearch: Binding<Bool>,
+         onCommit: @escaping () -> Void,
+         onAdvancedSearch: @escaping () -> Void
+    ) {
+        self._searchText = searchText
+        self._selectedCriteriaConjunction = selectedCriteriaConjunction
+        self._selectedField = selectedField
+        self._selectedCondition = selectedCondition
+        
+        self._showAdvancedSearch = showAdvancedSearch
+        
+        self.onCommit = onCommit
+        self.onAdvancedSearch = onAdvancedSearch
+        
+        self.fieldOptions = Array(sampleSearchFiltersDict.keys)
+    }
+    
     
     var body: some View {
         HStack {
@@ -113,7 +110,7 @@ struct SearchBarView: View {
                 // AdvancedSearch button
                 Button(action: {
                     //                    self.searchText = ""
-                    self.showAdvancedSearch = true
+                    self.showAdvancedSearch.toggle()
                 }) {
                     Image(systemName: "ellipsis.circle")
                 }
@@ -139,30 +136,84 @@ struct SearchBarView: View {
         
         // Advanced search fields
         if showAdvancedSearch {
-            
-            
             VStack {
                 HStack {
-                    TextField("sortField", text: $advancedSearchField1)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding(.horizontal)
-                    
-                    TextField("SortDirection", text: $advancedSearchField2)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding([.horizontal])
+                    Text("Criteria Conjunction")
+//                        .font(.headline)
+                    Spacer()
+                    Picker("Criteria Conjunction", selection: $selectedCriteriaConjunction) {
+                        ForEach(criteriaConjunction, id: \.self) { Text($0) }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+//                    .frame(maxWidth: .infinity, alignment: .trailing) // Adjust to your needs
                 }
-                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-                .foregroundColor(.secondary) // For magnifying glass and placeholder test
-                .background(Color(.tertiarySystemFill))
+                .padding(.vertical, 0)
+                .padding(.horizontal)
                 
+                Divider()
+                
+                HStack {
+                    Text("Select Field")
+//                        .font(.headline)
+                    Spacer()
+                    Picker("Select Field", selection: $selectedField) {
+                        ForEach(fieldOptions, id: \.self) { Text($0) }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                    .frame(maxWidth: .infinity, alignment: .trailing) // Adjust to your needs
+
+                }
+                .padding(.vertical, 0)
+                .padding(.horizontal)
+
+                Divider() // Adds a line between the first and second picker
+
+                HStack {
+                    Text("Select Condition")
+//                        .font(.headline)
+                    Spacer()
+                    Picker("Select Condition", selection: $selectedCondition) {
+                        ForEach(conditionOptions, id: \.self) { Text($0) }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+//                    .frame(maxWidth: .infinity, alignment: .trailing) // Adjust to your needs
+         
+                }
+                .padding(.vertical, 0)
+                .padding(.horizontal)
+                
+                Divider()
+
+
             }
-            
-            // You can add more fields here...
-            
-            .transition(.move(edge: .top)) // This
+            .frame(maxWidth: .infinity)
+            .background(Color(.secondarySystemBackground))
+            .cornerRadius(10)
+
+
+//            List {
+//                Picker(selection: $selectedCriteriaConjunction, label: Text("Criteria Conjunction")) {
+//                    ForEach(criteriaConjunction, id: \.self) { item in
+//                        Text(item).foregroundColor(.black)
+//                    }
+//                }
+//                .pickerStyle(MenuPickerStyle())
+//                
+//                Picker(selection: $selectedField, label: Text("Select Field")) {
+//                    ForEach(fieldOptions, id: \.self) { item in
+//                        Text(item).foregroundColor(.black)
+//                    }
+//                }
+//                .pickerStyle(MenuPickerStyle())
+//                
+//                Picker(selection: $selectedCondition, label: Text("Select Condition")) {
+//                    ForEach(conditionOptions, id: \.self) { item in
+//                        Text(item).foregroundColor(.black)
+//                    }
+//                }
+//                .pickerStyle(MenuPickerStyle())
+//            }
+//            .listRowInsets(EdgeInsets())
         }
     }
-    
 }
-
-

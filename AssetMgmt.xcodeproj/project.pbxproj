@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D04E2262B01584000E5583A /* SearchFilters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D04E2252B01584000E5583A /* SearchFilters.swift */; };
 		2D48EF912AF9939C00968F67 /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D48EF902AF9939C00968F67 /* SearchBarView.swift */; };
 		2D48EF932AF9D0E200968F67 /* AssetThumbnailViewGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D48EF922AF9D0E200968F67 /* AssetThumbnailViewGrid.swift */; };
 		2D48EF9D2AFC107B00968F67 /* DocumentDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D48EF9C2AFC107B00968F67 /* DocumentDetailsView.swift */; };
@@ -91,6 +92,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2D04E2252B01584000E5583A /* SearchFilters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFilters.swift; sourceTree = "<group>"; };
 		2D48EF902AF9939C00968F67 /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
 		2D48EF922AF9D0E200968F67 /* AssetThumbnailViewGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetThumbnailViewGrid.swift; sourceTree = "<group>"; };
 		2D48EF9C2AFC107B00968F67 /* DocumentDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentDetailsView.swift; sourceTree = "<group>"; };
@@ -465,6 +467,7 @@
 				C2FB20D92AEEE25E002B3FCF /* Strings.swift */,
 				C2FB20DB2AEEE266002B3FCF /* Colors.swift */,
 				C2FB20DD2AEEE283002B3FCF /* Urls.swift */,
+				2D04E2252B01584000E5583A /* SearchFilters.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -637,6 +640,7 @@
 				C2B6527B2AF44F6D00E45890 /* Strings.swift in Sources */,
 				2D48EF9F2AFC21CE00968F67 /* FormatBytes.swift in Sources */,
 				C2B6527C2AF44F6D00E45890 /* Colors.swift in Sources */,
+				2D04E2262B01584000E5583A /* SearchFilters.swift in Sources */,
 				C2B6527D2AF44F6D00E45890 /* Urls.swift in Sources */,
 				C2B652762AF44F4C00E45890 /* UrlUtils.swift in Sources */,
 				C2B652752AF44F4000E45890 /* ContentView.swift in Sources */,
