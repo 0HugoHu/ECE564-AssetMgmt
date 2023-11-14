@@ -10,45 +10,50 @@ import SwiftUI
 
 struct SearchView: View {
     @State private var searchText = ""
+    @State private var selectedCriteriaConjunction: String = "AND"
+    @State private var selectedField: String = "file_name"
+    @State private var selectedCondition: String = "cont"
     @State private var searchResults: [AssetInfoResponse] = []
     @State private var isLoading = false
+    @State private var showAdvancedSearch: Bool = false
     
     let columns: [GridItem] = [
         GridItem(.adaptive(minimum: 100), spacing: 20)
     ]
     
     var body: some View {
-        
         VStack {
             
-            SearchBarView(searchText: $searchText, onCommit: search)
+            SearchBarView(searchText: $searchText, selectedCriteriaConjunction: $selectedCriteriaConjunction, selectedField: $selectedField, selectedCondition: $selectedCondition, showAdvancedSearch: $showAdvancedSearch,
+                onCommit: search, onAdvancedSearch: performAdvancedSearch)
             
-            HStack {
+            ScrollView {
                 
-                Spacer()
+                HStack {
+                    Spacer()
+                    Text("\(searchResults.count) matched found")
+                        .font(.subheadline)
+                        .padding(.top)
+                        .padding(.trailing)
+                }
+                .navigationBarTitle(Text("MediaBeacon"))
+                .resignKeyboardOnDragGesture()
                 
-                Text("\(searchResults.count) matched found")
-                    .font(.subheadline)
-                    .padding(.top)
-                    .padding(.trailing)
-            }
-            .navigationBarTitle(Text("MediaBeacon"))
-            .resignKeyboardOnDragGesture()
-            
-            if isLoading {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle())
-            } else {
-                LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(searchResults, id: \.id) { item in
-                        NavigationLink(destination: DocumentDetailsView(assetInfo: item)) {
-                            AssetThumbnailViewGrid(assetInfo: item)
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                } else {
+                    LazyVGrid(columns: columns, spacing: 20) {
+                        ForEach(searchResults, id: \.id) { item in
+                            NavigationLink(destination: DocumentDetailsView(assetInfo: item)) {
+                                AssetThumbnailViewGrid(assetInfo: item)
+                            }
                         }
                     }
+                    .padding()
                 }
-                .padding()
+                Spacer()
             }
-            Spacer() //
         }
         .navigationBarTitle("Search")
         .onAppear {
@@ -57,7 +62,16 @@ struct SearchView: View {
         }
     }
     
+    
     func search() {
+        if showAdvancedSearch {
+            performAdvancedSearch()
+        } else {
+            performSimpleSearch()
+        }
+    }
+    
+    func performSimpleSearch() {
         isLoading = true
         // First, perform a simple search to get the IDs
         simpleSearch(search: searchText) { simpleIDResponses in
@@ -75,6 +89,31 @@ struct SearchView: View {
                     isLoading = false
                     searchResults = assetDetails ?? []
                 }
+            }
+        }
+    }
+    
+    func performAdvancedSearch() {
+        // Construct the search criteria
+        isLoading = true
+        let searchTextAdv = SearchFilter.createSearchCriteria(
+            conjunction: SearchFilter.Conjunction(rawValue: selectedCriteriaConjunction) ?? .and,
+            fieldId: sampleSearchFiltersDict[selectedField]?.fieldId ?? "",
+            condition: SearchFilter.OtherField(rawValue: selectedCondition) ?? .equals,
+            value: searchText
+        )
+
+        // Perform the search
+        advancedSearch(search: searchTextAdv, directory: "/", verbose: true) { assetsInfo in
+            // Handle the search results
+            if let firstResult = assetsInfo?.first {
+                logger.info("First result name: \(firstResult.id)")
+                DispatchQueue.main.async {
+                    isLoading = false
+                    searchResults = assetsInfo ?? []
+                }
+            } else {
+                logger.info("No results found")
             }
         }
     }

@@ -42,7 +42,7 @@ class SearchFilter {
     
     
     // Container Fields
-    enum ContainerField : String {
+    enum ContainerField : String, CaseIterable {
         case cont = "cont"
         case notCont = "not_cont"
         case not = "not"
@@ -53,7 +53,7 @@ class SearchFilter {
     
     
     // Integer Fields
-    enum IntegerField : String {
+    enum IntegerField : String, CaseIterable {
         case not = "not"
         case isNull = "null"
         case equals = "eq"
@@ -68,7 +68,7 @@ class SearchFilter {
     
     
     // Hierarchy Fields
-    enum HierarchyField : String {
+    enum HierarchyField : String, CaseIterable {
         case not = "not"
         case isNull = "null"
         case equals = "eq"
@@ -79,7 +79,7 @@ class SearchFilter {
     
     
     // Date Fields
-    enum DateField : String {
+    enum DateField : String, CaseIterable {
         case not = "not"
         case isNull = "null"
         case equals = "eq"
@@ -95,7 +95,7 @@ class SearchFilter {
     
     
     // Other Fields
-    enum OtherField : String {
+    enum OtherField : String, CaseIterable {
         case not = "not"
         case isNull = "null"
         case equals = "eq"
@@ -112,5 +112,28 @@ class SearchFilter {
         case without = "wo"
         case anyValue = "anyval"
         case notChanged = "notchanged"
+    }
+    
+    enum FieldTypes: String, CaseIterable {
+        case Container = "Container"
+        case Integer = "Integer"
+        case Hierarchy = "Hierarchy"
+        case Date = "Date"
+        case Other = "Other"
+        
+        func getAllCases() -> [String] {
+            switch self {
+            case .Container:
+                return ContainerField.allCases.map { $0.rawValue }
+            case .Integer:
+                return IntegerField.allCases.map { $0.rawValue }
+            case .Hierarchy:
+                return HierarchyField.allCases.map { $0.rawValue }
+            case .Date:
+                return DateField.allCases.map { $0.rawValue }
+            case .Other:
+                return OtherField.allCases.map { $0.rawValue }
+            }
+        }
     }
 }
