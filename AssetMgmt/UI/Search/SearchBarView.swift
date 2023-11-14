@@ -51,10 +51,12 @@ struct SearchBarContentView_Previews: PreviewProvider {
 
 extension UIApplication {
     func endEditing(_ force: Bool) {
-        self.windows
-            .filter{$0.isKeyWindow}
-            .first?
-            .endEditing(force)
+        if let keyWindow = connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .flatMap({ $0.windows })
+            .first(where: { $0.isKeyWindow }) {
+            keyWindow.endEditing(force)
+        }
     }
 }
 
@@ -110,7 +112,7 @@ struct SearchBarView: View {
                 }
                 // AdvancedSearch button
                 Button(action: {
-//                    self.searchText = ""
+                    //                    self.searchText = ""
                     self.showAdvancedSearch = true
                 }) {
                     Image(systemName: "ellipsis.circle")
@@ -133,30 +135,30 @@ struct SearchBarView: View {
             
         }
         .padding(.horizontal)
-//        .navigationBarHidden(showCancelButton)
+        //        .navigationBarHidden(showCancelButton)
         
         // Advanced search fields
         if showAdvancedSearch {
             
- 
-                VStack {
-                    HStack {
-                        TextField("sortField", text: $advancedSearchField1)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.horizontal)
-                        
-                        TextField("SortDirection", text: $advancedSearchField2)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding([.horizontal])
-                    }
-                    .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-                    .foregroundColor(.secondary) // For magnifying glass and placeholder test
-                    .background(Color(.tertiarySystemFill))
-
+            
+            VStack {
+                HStack {
+                    TextField("sortField", text: $advancedSearchField1)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.horizontal)
+                    
+                    TextField("SortDirection", text: $advancedSearchField2)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding([.horizontal])
                 }
-
-                // You can add more fields here...
-
+                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                .foregroundColor(.secondary) // For magnifying glass and placeholder test
+                .background(Color(.tertiarySystemFill))
+                
+            }
+            
+            // You can add more fields here...
+            
             .transition(.move(edge: .top)) // This
         }
     }

@@ -9,11 +9,11 @@ public struct FolderView: View {
     @ObservedObject var documentsStore: DocumentsStore
     var title: String
     
-    @ViewBuilder
-    var listSectionHeader: some View {
-        Text("All")
-            .background(Color.clear)
-    }
+    //    @ViewBuilder
+    //    var listSectionHeader: some View {
+    //        Text("All")
+    //            .background(Color.clear)
+    //    }
     
     fileprivate func sortByDateButton() -> some View {
         let sortImage: String = documentsStore.sorting.dateButtonIcon()
@@ -63,20 +63,21 @@ public struct FolderView: View {
                 Button(action: { isPresentedPhotoPicker = true }) {
                     Label("     Import Photos", systemImage: "photo.on.rectangle")
                 }
+                // Invoke camera here
                 Button(action: { }) {
                     Label("     Scan Documents", systemImage: "doc.text.viewfinder")
                 }
                 
                 Divider()
                 
-                Button(action: { 
+                Button(action: {
                     withAnimation {
                         documentsStore.viewMode = .grid
                     }
                 }) {
                     getGridModeLabel()
                 }
-                Button(action: { 
+                Button(action: {
                     withAnimation {
                         documentsStore.viewMode = .list
                     }
@@ -131,20 +132,20 @@ public struct FolderView: View {
             ScrollViewReader { scrollViewProxy in
                 if documentsStore.viewMode == .list {
                     List {
-                        Section(header: listSectionHeader) {
-                            ForEach($documentsStore.documents) { document in
-                                NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
-                                    DocumentRow(
-                                        document: document,
-                                        shouldEdit: (document.id == lastCreatedNewFolder?.id),
-                                        documentsStore: documentsStore
-                                    )
-                                    .padding(.vertical, 4)
-                                    .id(document.id)
-                                }
+                        //                        Section(header: listSectionHeader) {
+                        ForEach($documentsStore.documents) { document in
+                            NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
+                                DocumentRow(
+                                    document: document,
+                                    shouldEdit: (document.id == lastCreatedNewFolder?.id),
+                                    documentsStore: documentsStore
+                                )
+                                .padding(.vertical, 4)
+                                .id(document.id)
                             }
-                            .onDelete(perform: deleteItems)
                         }
+                        .onDelete(perform: deleteItems)
+                        //                        }
                     }
                     .listStyle(InsetListStyle())
                     .onAppear {
@@ -276,9 +277,7 @@ import FilePreviews
 
 struct FolderView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            FolderView(documentsStore: DocumentsStore_Preview(root: URL.temporaryDirectory, relativePath: "/", sorting: .date(ascending: true)), title: "Docs")
-                .environmentObject(Thumbnailer())
-        }
+        FolderView(documentsStore: DocumentsStore_Preview(root: URL.temporaryDirectory, relativePath: "/", sorting: .date(ascending: true)), title: "Docs")
+            .environmentObject(Thumbnailer())
     }
 }

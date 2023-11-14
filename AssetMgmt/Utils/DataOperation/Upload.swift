@@ -36,7 +36,7 @@ func upload(baseURL: String, files: [URL], completion: @escaping (Bool) -> Void)
                 
                 switch response.result {
                 case .success:
-                    if let data = response.value {
+                    if response.value != nil {
                         // TODO: Write into log
                         completion(true)
                     } else {
