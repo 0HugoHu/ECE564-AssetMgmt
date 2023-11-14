@@ -3,7 +3,6 @@
 //  AssetMgmt
 //
 //  Created by Minghui ZHU on 11/12/23.
-//
 
 import Foundation
 
@@ -13,13 +12,7 @@ var sampleSearchFiltersDict: [String: (fieldId: String, fieldType:SearchFilter.F
     "date": (fieldId: "http://purl.org/dc/elements/1.1/ date", fieldType: .Date),
 ]
 
-
-
-
-//
-//
-//// Build the dictionary
-//var resultDict: [String: (fieldId: String, fieldType: String)] =
+//var allSearchFiltersDict: [String: (fieldId: String, fieldType: String)] =
 //    ["TransmissionReference": (fieldId: "http://ns.adobe.com/photoshop/1.0/ TransmissionReference", fieldType: "textarea"),
 //     "Source": (fieldId: "http://ns.adobe.com/photoshop/1.0/ Source", fieldType: "string"),
 //     "SubjectCode": (fieldId: "http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/ SubjectCode", fieldType: "string"), 
@@ -53,6 +46,3 @@ var sampleSearchFiltersDict: [String: (fieldId: String, fieldType:SearchFilter.F
 //     "file_name": (fieldId: "database file_name", fieldType: "string"),
 //     "CreatorContactInfo/Iptc4xmpCore:CiAdrRegion": (fieldId: "http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/ CreatorContactInfo/Iptc4xmpCore:CiAdrRegion", fieldType: "string")
 //    ]
-//
-//
-//

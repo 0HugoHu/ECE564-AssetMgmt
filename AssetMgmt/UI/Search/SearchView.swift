@@ -10,25 +10,27 @@ import SwiftUI
 
 struct SearchView: View {
     @State private var searchText = ""
+    @State private var selectedCriteriaConjunction: String = "AND"
+    @State private var selectedField: String = "file_name"
+    @State private var selectedCondition: String = "cont"
     @State private var searchResults: [AssetInfoResponse] = []
     @State private var isLoading = false
+    @State private var showAdvancedSearch: Bool = false
     
     let columns: [GridItem] = [
         GridItem(.adaptive(minimum: 100), spacing: 20)
     ]
     
     var body: some View {
-        
         VStack {
             
-            SearchBarView(searchText: $searchText, onCommit: search)
+            SearchBarView(searchText: $searchText, selectedCriteriaConjunction: $selectedCriteriaConjunction, selectedField: $selectedField, selectedCondition: $selectedCondition, showAdvancedSearch: $showAdvancedSearch,
+                onCommit: search, onAdvancedSearch: performAdvancedSearch)
             
             ScrollView {
                 
                 HStack {
-                    
                     Spacer()
-                    
                     Text("\(searchResults.count) matched found")
                         .font(.subheadline)
                         .padding(.top)
@@ -50,18 +52,26 @@ struct SearchView: View {
                     }
                     .padding()
                 }
-                Spacer() //
+                Spacer()
             }
         }
         .navigationBarTitle("Search")
-//        .navigationBarItems(leading: SearchBarView(searchText: $searchText, onCommit: search))
         .onAppear {
             // Perform initial search here
             search()
         }
     }
     
+    
     func search() {
+        if showAdvancedSearch {
+            performAdvancedSearch()
+        } else {
+            performSimpleSearch()
+        }
+    }
+    
+    func performSimpleSearch() {
         isLoading = true
         // First, perform a simple search to get the IDs
         simpleSearch(search: searchText) { simpleIDResponses in
@@ -79,6 +89,31 @@ struct SearchView: View {
                     isLoading = false
                     searchResults = assetDetails ?? []
                 }
+            }
+        }
+    }
+    
+    func performAdvancedSearch() {
+        // Construct the search criteria
+        isLoading = true
+        let searchTextAdv = SearchFilter.createSearchCriteria(
+            conjunction: SearchFilter.Conjunction(rawValue: selectedCriteriaConjunction) ?? .and,
+            fieldId: sampleSearchFiltersDict[selectedField]?.fieldId ?? "",
+            condition: SearchFilter.OtherField(rawValue: selectedCondition) ?? .equals,
+            value: searchText
+        )
+
+        // Perform the search
+        advancedSearch(search: searchTextAdv, directory: "/", verbose: true) { assetsInfo in
+            // Handle the search results
+            if let firstResult = assetsInfo?.first {
+                logger.info("First result name: \(firstResult.id)")
+                DispatchQueue.main.async {
+                    isLoading = false
+                    searchResults = assetsInfo ?? []
+                }
+            } else {
+                logger.info("No results found")
             }
         }
     }
