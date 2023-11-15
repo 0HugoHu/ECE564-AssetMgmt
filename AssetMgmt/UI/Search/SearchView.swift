@@ -45,7 +45,7 @@ struct SearchView: View {
                 } else {
                     LazyVGrid(columns: columns, spacing: 20) {
                         ForEach(searchResults, id: \.id) { item in
-                            NavigationLink(destination: DocumentDetailsView(assetInfo: item)) {
+                            NavigationLink(destination: DocumentDetails(document: convertToDocument(from: item), mode: .remote)) {
                                 AssetThumbnailViewGrid(assetInfo: item)
                             }
                         }
@@ -56,10 +56,10 @@ struct SearchView: View {
             }
         }
         .navigationBarTitle("Search")
-        .onAppear {
-            // Perform initial search here
-            search()
-        }
+//        .onAppear {
+//            // Perform initial search here
+//            search()
+//        }
     }
     
     
