@@ -52,6 +52,10 @@ struct SearchBarView: View {
     
     @Binding var showAdvancedSearch: Bool
     
+    @Binding var isSearching: Bool
+    
+    @Binding var searchResults: [AssetInfoResponse]
+    
     let criteriaConjunction = ["AND", "OR", "NOT"]
     let fieldOptions: [String]
     
@@ -68,6 +72,8 @@ struct SearchBarView: View {
          selectedField: Binding<String>,
          selectedCondition: Binding<String>,
          showAdvancedSearch: Binding<Bool>,
+         isSearching: Binding<Bool>, // Change this line
+         searchResults: Binding<[AssetInfoResponse]>,
          onCommit: @escaping () -> Void,
          onAdvancedSearch: @escaping () -> Void
     ) {
@@ -77,9 +83,12 @@ struct SearchBarView: View {
         self._selectedCondition = selectedCondition
         
         self._showAdvancedSearch = showAdvancedSearch
+        self._searchResults = searchResults
         
         self.onCommit = onCommit
         self.onAdvancedSearch = onAdvancedSearch
+        
+        self._isSearching = isSearching
         
         self.fieldOptions = Array(sampleSearchFiltersDict.keys)
     }
@@ -106,6 +115,9 @@ struct SearchBarView: View {
                         UIApplication.shared.endEditing(true) // this must be placed before the other commands here
                         self.searchText = ""
                         self.showCancelButton = false
+                        self.isSearching = false
+                        self.searchResults = []
+                        
                     }) {
                         Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
                     }
@@ -171,32 +183,6 @@ struct SearchBarView: View {
             .padding(.horizontal)
             .cornerRadius(10.0)
             
-
-
-
-//            List {
-//                Picker(selection: $selectedCriteriaConjunction, label: Text("Criteria Conjunction")) {
-//                    ForEach(criteriaConjunction, id: \.self) { item in
-//                        Text(item).foregroundColor(.black)
-//                    }
-//                }
-//                .pickerStyle(MenuPickerStyle())
-//                
-//                Picker(selection: $selectedField, label: Text("Select Field")) {
-//                    ForEach(fieldOptions, id: \.self) { item in
-//                        Text(item).foregroundColor(.black)
-//                    }
-//                }
-//                .pickerStyle(MenuPickerStyle())
-//                
-//                Picker(selection: $selectedCondition, label: Text("Select Condition")) {
-//                    ForEach(conditionOptions, id: \.self) { item in
-//                        Text(item).foregroundColor(.black)
-//                    }
-//                }
-//                .pickerStyle(MenuPickerStyle())
-//            }
-//            .listRowInsets(EdgeInsets())
         }
     }
 }

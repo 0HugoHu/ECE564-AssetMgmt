@@ -9,6 +9,12 @@ public struct FolderView: View {
     @ObservedObject var documentsStore: DocumentsStore
     var title: String
     
+    @ObservedObject var viewModel = SearchViewModel()
+    
+    let columns: [GridItem] = [
+        GridItem(.adaptive(minimum: 100), spacing: 20)
+    ]
+    
     //    @ViewBuilder
     //    var listSectionHeader: some View {
     //        Text("All")
@@ -131,48 +137,37 @@ public struct FolderView: View {
         
         VStack (spacing: 0) {
             
+            SearchBarView(searchText: $viewModel.searchText,
+                          selectedCriteriaConjunction: $viewModel.selectedCriteriaConjunction,
+                          selectedField: $viewModel.selectedField,
+                          selectedCondition: $viewModel.selectedCondition,
+                          showAdvancedSearch: $viewModel.showAdvancedSearch,
+                          isSearching: $viewModel.isSearching,
+                          searchResults: $viewModel.searchResults,
+                          onCommit: {viewModel.search()
+                                     viewModel.updateSearchStatus()
+                          },
+                          onAdvancedSearch: {
+                              viewModel.performAdvancedSearch()
+                              viewModel.updateSearchStatus()
+                          })
+                .onChange(of: viewModel.searchText) { _ in
+                    viewModel.updateSearchStatus()
+                }
             
-//            
-//            SearchView()
-//            
-//            Spacer()
-//            
+            Spacer()
+            
+            
             ZStack {
+                ZStack {
 
-                ScrollViewReader { scrollViewProxy in
-                    if documentsStore.viewMode == .list {
-                        List {
-                            //                        Section(header: listSectionHeader) {
-                            ForEach($documentsStore.documents) { document in
-                                NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
-                                    DocumentRow(
-                                        document: document,
-                                        shouldEdit: (document.id == lastCreatedNewFolder?.id),
-                                        documentsStore: documentsStore
-                                    )
-                                    .padding(.vertical, 4)
-                                    .id(document.id)
-                                }
-                            }
-                            .onDelete(perform: deleteItems)
-                            //                        }
-                        }
-                        .listStyle(InsetListStyle())
-                        .onAppear {
-                            listProxy = scrollViewProxy
-                        }
-                        .refreshable {
-                            documentsStore.reload()
-                        }
-                    } else if documentsStore.viewMode == .grid {
-                        let columns: [GridItem] = [
-                            GridItem(.adaptive(minimum: 100), spacing: 0, alignment: .top)
-                        ]
-                        ScrollView {
-                            LazyVGrid(columns: columns) {
+                    ScrollViewReader { scrollViewProxy in
+                        if documentsStore.viewMode == .list {
+                            List {
+                                //                        Section(header: listSectionHeader) {
                                 ForEach($documentsStore.documents) { document in
                                     NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
-                                        DocumentGrid(
+                                        DocumentRow(
                                             document: document,
                                             shouldEdit: (document.id == lastCreatedNewFolder?.id),
                                             documentsStore: documentsStore
@@ -181,40 +176,84 @@ public struct FolderView: View {
                                         .id(document.id)
                                     }
                                 }
+                                .onDelete(perform: deleteItems)
+                                //                        }
                             }
-                            .padding(.horizontal, 16)
+                            .listStyle(InsetListStyle())
                             .onAppear {
                                 listProxy = scrollViewProxy
                             }
                             .refreshable {
                                 documentsStore.reload()
                             }
+                        } else if documentsStore.viewMode == .grid {
+                            let columns: [GridItem] = [
+                                GridItem(.adaptive(minimum: 100), spacing: 0, alignment: .top)
+                            ]
+                            ScrollView {
+                                LazyVGrid(columns: columns) {
+                                    ForEach($documentsStore.documents) { document in
+                                        NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
+                                            DocumentGrid(
+                                                document: document,
+                                                shouldEdit: (document.id == lastCreatedNewFolder?.id),
+                                                documentsStore: documentsStore
+                                            )
+                                            .padding(.vertical, 4)
+                                            .id(document.id)
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal, 16)
+                                .onAppear {
+                                    listProxy = scrollViewProxy
+                                }
+                                .refreshable {
+                                    documentsStore.reload()
+                                }
+                            }
                         }
                     }
-                }
-                .background(Color.clear)
-                .navigationBarItems(trailing: actionButtons)
-                .navigationTitle(title)
-                .sheet(isPresented:  $isPresentedPicker) {
-                    DocumentPicker(documentsStore: documentsStore) {
-                        NSLog("Docupicker callback")
+                    .background(Color.clear)
+                    .navigationBarItems(trailing: actionButtons)
+                    .navigationTitle(title)
+                    .sheet(isPresented:  $isPresentedPicker) {
+                        DocumentPicker(documentsStore: documentsStore) {
+                            NSLog("Docupicker callback")
+                        }
+                    }
+                    .sheet(isPresented:  $isPresentedPhotoPicker) {
+                        PhotoPicker(documentsStore: documentsStore) {
+                            NSLog("Imagepicker callback")
+                        }
+                    }
+                    
+                    if (documentsStore.documents.isEmpty) {
+                        emptyFolderView
                     }
                 }
-                .sheet(isPresented:  $isPresentedPhotoPicker) {
-                    PhotoPicker(documentsStore: documentsStore) {
-                        NSLog("Imagepicker callback")
-                    }
+                .task {
+                    documentsStore.loadDocuments()
                 }
                 
-                if (documentsStore.documents.isEmpty) {
-                    emptyFolderView
-                }
+                if viewModel.isSearching {
+                     SearchResultsView(searchText: $viewModel.searchText,
+                                       searchResults: $viewModel.searchResults,
+                                       isLoading: $viewModel.isLoading,
+                                       columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
+                     .frame(maxHeight: .infinity)
+                     .background(Color.white) // Set a solid background color here
+                     .edgesIgnoringSafeArea(.all)
+                 }
+
+                
             }
-            .task {
-                documentsStore.loadDocuments()
-            }
+//
+
         }
-        .frame(maxHeight: .infinity)
+//        .frame(maxHeight: .infinity)
+        
+
     }
     
     @ViewBuilder

@@ -23,13 +23,28 @@ struct SearchView: View {
                           selectedField: $viewModel.selectedField,
                           selectedCondition: $viewModel.selectedCondition,
                           showAdvancedSearch: $viewModel.showAdvancedSearch,
-                          onCommit: viewModel.search,
-                          onAdvancedSearch: viewModel.performAdvancedSearch)
+                          isSearching: $viewModel.isSearching,
+                          searchResults: $viewModel.searchResults,
+                          onCommit: {viewModel.search()
+                                     viewModel.updateSearchStatus()
+                          },
+                          onAdvancedSearch: {
+                              viewModel.performAdvancedSearch()
+                              viewModel.updateSearchStatus()
+                          })
+                .onChange(of: viewModel.searchText) { _ in
+                    viewModel.updateSearchStatus()
+                }
             
-            SearchResultsView(searchText: $viewModel.searchText,
-                              searchResults: $viewModel.searchResults,
-                              isLoading: $viewModel.isLoading,
-                              columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
+            Spacer()
+            
+            if viewModel.isSearching {
+                 SearchResultsView(searchText: $viewModel.searchText,
+                                   searchResults: $viewModel.searchResults,
+                                   isLoading: $viewModel.isLoading,
+                                   columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
+             }
+            
         }
         .navigationBarTitle("Search")
     }

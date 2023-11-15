@@ -16,6 +16,12 @@ class SearchViewModel: ObservableObject {
     @Published var selectedCriteriaConjunction = "AND"
     @Published var selectedField = "file_name"
     @Published var selectedCondition = "cont"
+    @Published var isSearching = false
+    
+    
+    func updateSearchStatus() {
+        isSearching = !searchText.isEmpty || !searchResults.isEmpty
+    }
 
     func search() {
         if showAdvancedSearch {
