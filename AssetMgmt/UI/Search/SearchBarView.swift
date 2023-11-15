@@ -9,7 +9,6 @@
 import Foundation
 import SwiftUI
 
-
 extension UIApplication {
     func endEditing(_ force: Bool) {
         if #available(iOS 15.0, *) {
@@ -85,7 +84,6 @@ struct SearchBarView: View {
         self.fieldOptions = Array(sampleSearchFiltersDict.keys)
     }
     
-    
     var body: some View {
         HStack {
             HStack {
@@ -101,15 +99,20 @@ struct SearchBarView: View {
                     }, onCommit: onCommit).foregroundColor(.primary)
                 }
                 
-                // Clear button
-                Button(action: {
-                    self.searchText = ""
-                }) {
-                    Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
+                if showCancelButton  {
+                    // Cancel button
+                    
+                    Button(action: {
+                        UIApplication.shared.endEditing(true) // this must be placed before the other commands here
+                        self.searchText = ""
+                        self.showCancelButton = false
+                    }) {
+                        Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
+                    }
                 }
+                        
                 // AdvancedSearch button
                 Button(action: {
-                    //                    self.searchText = ""
                     self.showAdvancedSearch.toggle()
                 }) {
                     Image(systemName: "ellipsis.circle")
@@ -119,76 +122,56 @@ struct SearchBarView: View {
             .foregroundColor(.secondary) // For magnifying glass and placeholder test
             .background(Color(.tertiarySystemFill))
             .cornerRadius(10.0)
-            
-            if showCancelButton  {
-                // Cancel button
-                Button("Cancel") {
-                    UIApplication.shared.endEditing(true) // this must be placed before the other commands here
-                    self.searchText = ""
-                    self.showCancelButton = false
-                }
-                .foregroundColor(Color(.systemBlue))
-            }
-            
         }
         .padding(.horizontal)
         //        .navigationBarHidden(showCancelButton)
         
         // Advanced search fields
         if showAdvancedSearch {
-            VStack {
-                HStack {
-                    Text("Criteria Conjunction")
-//                        .font(.headline)
-                    Spacer()
-                    Picker("Criteria Conjunction", selection: $selectedCriteriaConjunction) {
-                        ForEach(criteriaConjunction, id: \.self) { Text($0) }
+            
+            VStack(spacing: 0) {
+                    HStack {
+                        Text("Criteria Conjunction")
+                        Spacer()
+                        Picker("Criteria Conjunction", selection: $selectedCriteriaConjunction) {
+                            ForEach(criteriaConjunction, id: \.self) { Text($0) }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .frame(maxWidth: .infinity, alignment: .trailing) // Adjust to your needs
                     }
-                    .pickerStyle(MenuPickerStyle())
-//                    .frame(maxWidth: .infinity, alignment: .trailing) // Adjust to your needs
-                }
-                .padding(.vertical, 0)
-                .padding(.horizontal)
-                
-                Divider()
-                
-                HStack {
-                    Text("Select Field")
-//                        .font(.headline)
-                    Spacer()
-                    Picker("Select Field", selection: $selectedField) {
-                        ForEach(fieldOptions, id: \.self) { Text($0) }
+
+                    .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 0))
+                    .background(Color(.tertiarySystemFill))
+
+                    HStack {
+                        Text("Select Field")
+                        Spacer()
+                        Picker("Select Field", selection: $selectedField) {
+                            ForEach(fieldOptions, id: \.self) { Text($0) }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .frame(maxWidth: .infinity, alignment: .trailing) // Adjust to your needs
                     }
-                    .pickerStyle(MenuPickerStyle())
-                    .frame(maxWidth: .infinity, alignment: .trailing) // Adjust to your needs
+                    .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 0))
+                    .background(Color(.tertiarySystemFill))
 
-                }
-                .padding(.vertical, 0)
-                .padding(.horizontal)
-
-                Divider() // Adds a line between the first and second picker
-
-                HStack {
-                    Text("Select Condition")
-//                        .font(.headline)
-                    Spacer()
-                    Picker("Select Condition", selection: $selectedCondition) {
-                        ForEach(conditionOptions, id: \.self) { Text($0) }
+                    HStack {
+                        Text("Select Condition")
+                        Spacer()
+                        Picker("Select Condition", selection: $selectedCondition) {
+                            ForEach(conditionOptions, id: \.self) { Text($0) }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .frame(maxWidth: .infinity, alignment: .trailing) // Adjust to your needs
                     }
-                    .pickerStyle(MenuPickerStyle())
-//                    .frame(maxWidth: .infinity, alignment: .trailing) // Adjust to your needs
-         
-                }
-                .padding(.vertical, 0)
-                .padding(.horizontal)
-                
-                Divider()
-
+                    .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 0))
+                    .background(Color(.tertiarySystemFill))
 
             }
-            .frame(maxWidth: .infinity)
-            .background(Color(.secondarySystemBackground))
-            .cornerRadius(10)
+            .padding(.horizontal)
+            .cornerRadius(10.0)
+            
+
 
 
 //            List {
