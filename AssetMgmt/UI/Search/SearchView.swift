@@ -27,39 +27,13 @@ struct SearchView: View {
             SearchBarView(searchText: $searchText, selectedCriteriaConjunction: $selectedCriteriaConjunction, selectedField: $selectedField, selectedCondition: $selectedCondition, showAdvancedSearch: $showAdvancedSearch,
                 onCommit: search, onAdvancedSearch: performAdvancedSearch)
             
-            ScrollView {
-                
-                HStack {
-                    Spacer()
-                    Text("\(searchResults.count) matched found")
-                        .font(.subheadline)
-                        .padding(.top)
-                        .padding(.trailing)
-                }
-                .navigationBarTitle(Text("MediaBeacon"))
-                .resignKeyboardOnDragGesture()
-                
-                if isLoading {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle())
-                } else {
-                    LazyVGrid(columns: columns, spacing: 20) {
-                        ForEach(searchResults, id: \.id) { item in
-                            NavigationLink(destination: DocumentDetails(document: convertToDocument(from: item), mode: .remote)) {
-                                AssetThumbnailViewGrid(assetInfo: item)
-                            }
-                        }
-                    }
-                    .padding()
-                }
-                Spacer()
-            }
+            SearchResultsView(searchText: $searchText,
+                              searchResults: $searchResults,
+                              isLoading: $isLoading,
+                              columns: columns)
+
         }
         .navigationBarTitle("Search")
-//        .onAppear {
-//            // Perform initial search here
-//            search()
-//        }
     }
     
     

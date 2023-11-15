@@ -128,41 +128,24 @@ public struct FolderView: View {
     }
     
     public var body: some View {
-        ZStack {
-            ScrollViewReader { scrollViewProxy in
-                if documentsStore.viewMode == .list {
-                    List {
-                        //                        Section(header: listSectionHeader) {
-                        ForEach($documentsStore.documents) { document in
-                            NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
-                                DocumentRow(
-                                    document: document,
-                                    shouldEdit: (document.id == lastCreatedNewFolder?.id),
-                                    documentsStore: documentsStore
-                                )
-                                .padding(.vertical, 4)
-                                .id(document.id)
-                            }
-                        }
-                        .onDelete(perform: deleteItems)
-                        //                        }
-                    }
-                    .listStyle(InsetListStyle())
-                    .onAppear {
-                        listProxy = scrollViewProxy
-                    }
-                    .refreshable {
-                        documentsStore.reload()
-                    }
-                } else if documentsStore.viewMode == .grid {
-                    let columns: [GridItem] = [
-                        GridItem(.adaptive(minimum: 100), spacing: 0, alignment: .top)
-                    ]
-                    ScrollView {
-                        LazyVGrid(columns: columns) {
+        
+        VStack (spacing: 0) {
+            
+            
+//            
+//            SearchView()
+//            
+//            Spacer()
+//            
+            ZStack {
+
+                ScrollViewReader { scrollViewProxy in
+                    if documentsStore.viewMode == .list {
+                        List {
+                            //                        Section(header: listSectionHeader) {
                             ForEach($documentsStore.documents) { document in
                                 NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
-                                    DocumentGrid(
+                                    DocumentRow(
                                         document: document,
                                         shouldEdit: (document.id == lastCreatedNewFolder?.id),
                                         documentsStore: documentsStore
@@ -171,38 +154,67 @@ public struct FolderView: View {
                                     .id(document.id)
                                 }
                             }
+                            .onDelete(perform: deleteItems)
+                            //                        }
                         }
-                        .padding(.horizontal, 16)
+                        .listStyle(InsetListStyle())
                         .onAppear {
                             listProxy = scrollViewProxy
                         }
                         .refreshable {
                             documentsStore.reload()
                         }
+                    } else if documentsStore.viewMode == .grid {
+                        let columns: [GridItem] = [
+                            GridItem(.adaptive(minimum: 100), spacing: 0, alignment: .top)
+                        ]
+                        ScrollView {
+                            LazyVGrid(columns: columns) {
+                                ForEach($documentsStore.documents) { document in
+                                    NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
+                                        DocumentGrid(
+                                            document: document,
+                                            shouldEdit: (document.id == lastCreatedNewFolder?.id),
+                                            documentsStore: documentsStore
+                                        )
+                                        .padding(.vertical, 4)
+                                        .id(document.id)
+                                    }
+                                }
+                            }
+                            .padding(.horizontal, 16)
+                            .onAppear {
+                                listProxy = scrollViewProxy
+                            }
+                            .refreshable {
+                                documentsStore.reload()
+                            }
+                        }
                     }
                 }
-            }
-            .background(Color.clear)
-            .navigationBarItems(trailing: actionButtons)
-            .navigationTitle(title)
-            .sheet(isPresented:  $isPresentedPicker) {
-                DocumentPicker(documentsStore: documentsStore) {
-                    NSLog("Docupicker callback")
+                .background(Color.clear)
+                .navigationBarItems(trailing: actionButtons)
+                .navigationTitle(title)
+                .sheet(isPresented:  $isPresentedPicker) {
+                    DocumentPicker(documentsStore: documentsStore) {
+                        NSLog("Docupicker callback")
+                    }
+                }
+                .sheet(isPresented:  $isPresentedPhotoPicker) {
+                    PhotoPicker(documentsStore: documentsStore) {
+                        NSLog("Imagepicker callback")
+                    }
+                }
+                
+                if (documentsStore.documents.isEmpty) {
+                    emptyFolderView
                 }
             }
-            .sheet(isPresented:  $isPresentedPhotoPicker) {
-                PhotoPicker(documentsStore: documentsStore) {
-                    NSLog("Imagepicker callback")
-                }
-            }
-            
-            if (documentsStore.documents.isEmpty) {
-                emptyFolderView
+            .task {
+                documentsStore.loadDocuments()
             }
         }
-        .task {
-            documentsStore.loadDocuments()
-        }
+        .frame(maxHeight: .infinity)
     }
     
     @ViewBuilder
