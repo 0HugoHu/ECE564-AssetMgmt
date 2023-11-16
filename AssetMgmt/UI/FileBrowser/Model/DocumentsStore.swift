@@ -352,7 +352,19 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
                 }
             }
         } else if self.mode == .remote {
-            
+            let currentDirectory = self.relativePath == "" ? self.remoteUrl : self.relativePath
+            let fileExtension = url.pathExtension
+            var fileNameWithoutExtension = url.deletingPathExtension().lastPathComponent
+            var fileName = fileNameWithoutExtension.appending(".\(fileExtension)")
+            var count = 0
+            while self.documents.contains(where: { $0.name == fileName }) {
+                count += 1
+                fileNameWithoutExtension = fileNameWithoutExtension.appending("(\(count))")
+                fileName = fileNameWithoutExtension.appending(".\(fileExtension)")
+            }
+            let targetRemoteUrl = currentDirectory.appending("\(fileName)")
+            logger.info("Try to upload file from \(url), to \(targetRemoteUrl)")
+            uploadFiles(filePaths: [url], dest: currentDirectory, completion: { result in })
         }
     }
     
