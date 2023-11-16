@@ -22,27 +22,22 @@ struct AssetThumbnailViewGrid: View {
                 case .success(let image):
                     image.resizable() // Display the loaded image
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100)
+                        .frame(width: 80, height: 80)
                 case .failure:
                     Image(systemName: "photo") // Display a fallback image in case of failure
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100)
+                        .frame(width: 80, height: 80)
                 @unknown default:
                     EmptyView() // Future-proofing against new cases
                 }
     
-                VStack{
+                VStack(alignment: .leading) {
                     Text(assetInfo.name)
-                        .font(.caption)
-//                        .lineLimit(1)  Ensure the text does not take up more than one line
-
-
-//                    Text(fileExtensionForContentType(assetInfo.mimeType ?? "unknown"))
-//                        .font(.footnote)
-//                        .foregroundColor(.secondary) // For ma
-//                    
-
+                        .font(Font.system(size: 14))
+                        .lineLimit(2)
+                        .allowsTightening(true)
+                        .foregroundColor(Color.primary)
                 }
             }
             .padding(5)

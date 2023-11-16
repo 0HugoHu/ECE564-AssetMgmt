@@ -17,7 +17,8 @@ class SearchViewModel: ObservableObject {
     @Published var selectedField = "file_name"
     @Published var selectedCondition = "cont"
     @Published var isSearching = false
-    
+    @Published var searchDirectory = SearchDirectoryOptions.overall
+    @Published var currentDirectory = "/"
     
     func updateSearchStatus() {
         isSearching = !searchText.isEmpty || !searchResults.isEmpty
@@ -34,7 +35,8 @@ class SearchViewModel: ObservableObject {
     func performSimpleSearch() {
         isLoading = true
         // First, perform a simple search to get the IDs
-        simpleSearch(search: searchText) { simpleIDResponses in
+        simpleSearch(search: searchText, directory: currentDirectory
+        ) { simpleIDResponses in
             guard let ids: [String] = simpleIDResponses?.map({ "\($0.id)" }) else {
                 // Handle the error or empty state here
                 DispatchQueue.main.async {

@@ -42,6 +42,15 @@ extension View {
     }
 }
 
+
+enum SearchDirectoryOptions: String, CaseIterable, Identifiable {
+    case currentFolder = "Current Folder"
+    case overall = "Overall"
+
+    var id: String { self.rawValue }
+}
+
+
 struct SearchBarView: View {
     @Binding var searchText: String
     @State private var showCancelButton: Bool = false
@@ -55,6 +64,9 @@ struct SearchBarView: View {
     @Binding var isSearching: Bool
     
     @Binding var searchResults: [AssetInfoResponse]
+    
+    @State private var selectedSearchDirectoryOption: SearchDirectoryOptions = .overall
+
     
     let criteriaConjunction = ["AND", "OR", "NOT"]
     let fieldOptions: [String]
@@ -136,6 +148,21 @@ struct SearchBarView: View {
             .cornerRadius(10.0)
         }
         .padding(.horizontal)
+        
+        VStack(spacing: 0) {
+            Picker("Select an option", selection: $selectedSearchDirectoryOption) {
+                ForEach(SearchDirectoryOptions.allCases) { option in
+                    Text(option.rawValue).tag(option)
+                }
+            }
+            .pickerStyle(.segmented) // Use .segmented or other styles as per your UI needs
+//            .frame(height: 150)
+            .padding(.horizontal)
+        }
+            
+        
+        
+        
         //        .navigationBarHidden(showCancelButton)
         
         // Advanced search fields
