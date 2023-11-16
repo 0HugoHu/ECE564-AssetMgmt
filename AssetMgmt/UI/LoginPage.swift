@@ -19,7 +19,7 @@ struct LoginPage: View {
                 DirectoryBrowser()
             } else {
                 ZStack {
-                    Image("background")
+                    Image("duke chapel")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .mask(
@@ -32,7 +32,7 @@ struct LoginPage: View {
                             .resizable()
                             .frame(width: 300, height: 65)
                             .aspectRatio(contentMode: .fit)
-                            .offset(y: -190)
+                            .offset(y: -270)
                         NavigationLink(destination: WebView(url: initialURL, currentURL: $currentURL, isLoggedIn: $isLoggedIn)) {
                             Text("Login")
                                 .foregroundColor(.white)
@@ -41,7 +41,7 @@ struct LoginPage: View {
                                 .cornerRadius(40)
                                 .font(.system(size: 25))
                         }
-                        .offset(y: 180)
+                        .offset(y: 250)
                     }
                 }
             }
