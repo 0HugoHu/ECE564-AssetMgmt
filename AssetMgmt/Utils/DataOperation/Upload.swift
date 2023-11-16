@@ -20,7 +20,7 @@ func upload(baseURL: String, files: [URL], completion: @escaping (Bool) -> Void)
     do {
         let zipURL = try ZipUtility.zipFiles(files, fileName: "tmp.zip", destinationURL: .temporaryDirectory)
         
-        logger.info("\(zipURL)")
+        logger.info("Upload start, from \(zipURL) to \(baseURL)")
         
         AF.upload(multipartFormData: { multipartFormData in
             multipartFormData.append(zipURL, withName: "file")
