@@ -10,6 +10,7 @@ import SwiftUI
 
 struct AssetThumbnailViewRow: View {
     let url: String
+    @StateObject var themeManager = Themes.instance
     
     var body: some View {
         VStack {
@@ -24,7 +25,7 @@ struct AssetThumbnailViewRow: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 60, height: 60)
                 case .failure:
-                    Image("icon_directory")
+                    Image(uiImage: themeManager.getDirectoryIcon())
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 60, height: 60)

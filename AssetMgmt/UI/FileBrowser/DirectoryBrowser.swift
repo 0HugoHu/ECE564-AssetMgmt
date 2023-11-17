@@ -3,25 +3,12 @@ import FilePreviews
 
 public struct DirectoryBrowser: View {
     @StateObject var thumbnailer = Thumbnailer()
-    private var urls: [URL]
-    
-    public init(
-        urls: [URL] = [.libraryDirectory, .picturesDirectory]
-    ) {
-        self.urls = urls
-    }
     
     public var body: some View {
         //        NavigationView {
         List {
-            ForEach(urls, id:\.self) { url in
-                NavigationLink(url.lastPathComponent) {
-                    FolderView(documentsStore: DocumentsStore(root: url), title: url.lastPathComponent)
-                }
-            }
-            
             NavigationLink(destination: SearchView()) {
-                Text("Main Page")
+                Text("Search")
             }
             NavigationLink(destination: FolderView(documentsStore: DocumentsStore(root: "/", mode: .remote), title: "Index")) {
                 Text("Index")
