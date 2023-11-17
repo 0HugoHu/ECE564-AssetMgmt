@@ -36,3 +36,14 @@ func getFilePathById(_ id: String, progress: Binding<Int64>? = nil) -> URL? {
     downloadFiles(to: folderPath, ids: [id], progress: progress) {result in}
     return nil
 }
+
+func removeFileById(_ id: String) {
+    UserDefaults.standard.removeObject(forKey: "download@\(id)")
+    do {
+        let folderPath = cacheURL.appending(path: id)
+        try FileManager.default.removeItem(at: folderPath)
+        logger.info("Cache deleted, id: \(id)")
+    } catch {
+        logger.info("No cache for id: \(id), nothing to be deleted")
+    }
+}

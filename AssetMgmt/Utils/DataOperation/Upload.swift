@@ -47,6 +47,11 @@ func upload(baseURL: String, files: [URL], completion: @escaping (Bool) -> Void)
                     logger.error("Upload request failed with error: \(error)")
                     completion(false)
                 }
+                do {
+                    try FileManager.default.removeItem(at: zipURL)
+                } catch {
+                    logger.error("Fail to delete zipfile: \(error)")
+                }
             }
     } catch {
         logger.error("Error zipping files: \(error)")
