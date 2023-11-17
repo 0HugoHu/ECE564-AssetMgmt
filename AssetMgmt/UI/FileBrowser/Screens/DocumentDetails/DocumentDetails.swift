@@ -32,11 +32,15 @@ struct DocumentDetails: View {
                                     image.resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(width: 260)
-                                case .failure:
-                                    Image("icon_directory")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 160, height: 160)
+                                case .failure (let error):
+                                    VStack (alignment: .center) {
+                                        Image("doc.questionmark.fill")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 160, height: 160)
+                                        Text("Unsupported File Type")
+                                        Text("Error: \(error.localizedDescription)")
+                                    }
                                 @unknown default:
                                     EmptyView()
                                 }
