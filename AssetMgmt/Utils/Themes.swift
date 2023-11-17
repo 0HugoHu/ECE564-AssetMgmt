@@ -9,25 +9,44 @@ import Foundation
 import UIKit
 
 enum Theme: String, CaseIterable {
-    case `default`
-    case christmas
-    case newyear
-    case duke
+    case `default` = "Default"
+    case christmas = "Christmas"
+    case newyear = "New Year"
+    case duke = "Duke"
 }
 
 class Themes : ObservableObject {
     static let instance = Themes()
     
-    private let themeKey = "SelectedTheme"
+    private let themeKey = "Theme"
+    let themeArray = Theme.allCases.map { $0.rawValue }
+    
     
     var currentTheme: Theme {
         didSet {
             saveCurrentTheme()
         }
     }
+    @Published var selectedThemeIndex = 0
     
     private init() {
-        self.currentTheme = Theme(rawValue: UserDefaults.standard.string(forKey: themeKey) ?? "duke")!
+        if let savedThemeRawValue = UserDefaults.standard.string(forKey: themeKey),
+           let savedTheme = Theme(rawValue: savedThemeRawValue) {
+            self.currentTheme = savedTheme
+            
+            switch (currentTheme) {
+            case .default:
+                selectedThemeIndex = 0
+            case .christmas:
+                selectedThemeIndex = 1
+            case .newyear:
+                selectedThemeIndex = 2
+            case .duke:
+                selectedThemeIndex = 3
+            }
+        } else {
+            self.currentTheme = .default
+        }
     }
     
     func setTheme(theme: Theme) {
@@ -43,12 +62,28 @@ class Themes : ObservableObject {
         case .duke:
             return UIImage(named: "icon_directory_duke")!
         default:
-            return UIImage(named: "icon_directory")!
+            return UIImage(named: "icon_directory_default")!
+        }
+    }
+    
+    
+    func getDirectoryIcon(_ index: Int) -> UIImage {
+        switch (index) {
+        case 0:
+            return UIImage(named: "icon_directory_default")!
+        case 1:
+            return UIImage(named: "icon_directory_christmas")!
+        case 2:
+            return UIImage(named: "icon_directory_newyear")!
+        case 3:
+            return UIImage(named: "icon_directory_duke")!
+        default:
+            return UIImage(named: "icon_directory_default")!
         }
     }
     
     private func saveCurrentTheme() {
-        UserDefaults.standard.set(currentTheme, forKey: themeKey)
+        UserDefaults.standard.set(currentTheme.rawValue, forKey: themeKey)
     }
 }
 

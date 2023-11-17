@@ -5,20 +5,18 @@ public struct DirectoryBrowser: View {
     @StateObject var thumbnailer = Thumbnailer()
     
     public var body: some View {
-        //        NavigationView {
-        List {
-            NavigationLink(destination: SearchView()) {
-                Text("Search")
-            }
-            NavigationLink(destination: FolderView(documentsStore: DocumentsStore(root: "/", mode: .remote), title: "Index")) {
-                Text("Index")
-            }
-            NavigationLink(destination: UploadView()
-            ) {
-                Text("Upload Test")
-            }
+        TabView {
+            FolderView(documentsStore: DocumentsStore(root: "/", mode: .remote), title: "Index")
+                .tabItem {
+                    Image(systemName: "folder")
+                    Text("Browse")
+                }
+            SettingsView()
+                .tabItem {
+                    Image(systemName: "person")
+                    Text("Account")
+                }
         }
-        //        }
         .environmentObject(thumbnailer)
     }
 }

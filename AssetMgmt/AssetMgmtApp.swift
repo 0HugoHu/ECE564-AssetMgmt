@@ -12,13 +12,18 @@ let logger = Logger(label: "AssetMgmt")
 
 @main
 struct AssetMgmtApp: App {
+    @StateObject var appearanceManager = Appearances.instance
+    
     init() {
-        copyFilesToPicturesDirectory()
+        //        copyFilesToPicturesDirectory()
     }
     
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear {
+                    appearanceManager.reload()
+                }
         }
     }
 }
