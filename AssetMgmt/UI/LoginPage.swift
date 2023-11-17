@@ -32,7 +32,7 @@ struct LoginPage: View {
                             .resizable()
                             .frame(width: 300, height: 65)
                             .aspectRatio(contentMode: .fit)
-                            .offset(y: -270)
+                            .offset(y: -230)
                         NavigationLink(destination: WebView(url: initialURL, currentURL: $currentURL, isLoggedIn: $isLoggedIn)) {
                             Text("Login")
                                 .foregroundColor(.white)
@@ -41,7 +41,7 @@ struct LoginPage: View {
                                 .cornerRadius(40)
                                 .font(.system(size: 25))
                         }
-                        .offset(y: 250)
+                        .offset(y: 210)
                     }
                 }
             }
@@ -59,8 +59,6 @@ struct LoginPage: View {
         if let timestamp = UserDefaults.standard.object(forKey: "timestamp") as? Date {
             let currentTime = Date()
             let expiration: TimeInterval = 60 * 60 * 24
-            print(timestamp)
-            print(currentTime)
             if currentTime.timeIntervalSince(timestamp) < expiration {
                 return true
             }
