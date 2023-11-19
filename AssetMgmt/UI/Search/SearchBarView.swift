@@ -44,8 +44,8 @@ extension View {
 
 
 enum SearchDirectoryOptions: String, CaseIterable, Identifiable {
-    case currentFolder = "Current Folder"
     case overall = "Overall"
+    case currentFolder = "Current Folder"
 
     var id: String { self.rawValue }
 }
@@ -55,54 +55,49 @@ struct SearchBarView: View {
     @Binding var searchText: String
     @State private var showCancelButton: Bool = false
     
-    @Binding var selectedCriteriaConjunction: String
-    @Binding var selectedField: String
-    @Binding var selectedCondition: String
-    
-    @Binding var showAdvancedSearch: Bool
+//    @Binding var selectedCriteriaConjunction: String
+//    @Binding var selectedField: String
+//    @Binding var selectedCondition: String
+//    @Binding var showAdvancedSearch: Bool
     
     @Binding var isSearching: Bool
-    
     @Binding var searchResults: [AssetInfoResponse]
-    
     @State private var selectedSearchDirectoryOption: SearchDirectoryOptions = .overall
 
-    
-    let criteriaConjunction = ["AND", "OR", "NOT"]
-    let fieldOptions: [String]
-    
-    var conditionOptions: [String] {
-        guard let fieldType = sampleSearchFiltersDict[selectedField]?.fieldType else { return SearchFilter.FieldTypes.Other.getAllCases() }
-        return fieldType.getAllCases()
-    }
+//    let criteriaConjunction = ["AND", "OR", "NOT"]
+//    let fieldOptions: [String]
+//    
+//    var conditionOptions: [String] {
+//        guard let fieldType = sampleSearchFiltersDict[selectedField]?.fieldType else { return SearchFilter.FieldTypes.Other.getAllCases() }
+//        return fieldType.getAllCases()
+//    }
     
     var onCommit: () -> Void
-    var onAdvancedSearch: () -> Void
+//    var onAdvancedSearch: () -> Void
     
     init(searchText: Binding<String>,
-         selectedCriteriaConjunction: Binding<String>,
-         selectedField: Binding<String>,
-         selectedCondition: Binding<String>,
-         showAdvancedSearch: Binding<Bool>,
+//         selectedCriteriaConjunction: Binding<String>,
+//         selectedField: Binding<String>,
+//         selectedCondition: Binding<String>,
+//         showAdvancedSearch: Binding<Bool>,
          isSearching: Binding<Bool>, // Change this line
          searchResults: Binding<[AssetInfoResponse]>,
-         onCommit: @escaping () -> Void,
-         onAdvancedSearch: @escaping () -> Void
+         onCommit: @escaping () -> Void
+//         onAdvancedSearch: @escaping () -> Void
     ) {
         self._searchText = searchText
-        self._selectedCriteriaConjunction = selectedCriteriaConjunction
-        self._selectedField = selectedField
-        self._selectedCondition = selectedCondition
-        
-        self._showAdvancedSearch = showAdvancedSearch
+//        self._selectedCriteriaConjunction = selectedCriteriaConjunction
+//        self._selectedField = selectedField
+//        self._selectedCondition = selectedCondition
+//        self._showAdvancedSearch = showAdvancedSearch
         self._searchResults = searchResults
         
         self.onCommit = onCommit
-        self.onAdvancedSearch = onAdvancedSearch
+//        self.onAdvancedSearch = onAdvancedSearch
         
         self._isSearching = isSearching
         
-        self.fieldOptions = Array(sampleSearchFiltersDict.keys)
+//        self.fieldOptions = Array(sampleSearchFiltersDict.keys)
     }
     
     var body: some View {
@@ -135,12 +130,12 @@ struct SearchBarView: View {
                     }
                 }
                         
-                // AdvancedSearch button
-                Button(action: {
-                    self.showAdvancedSearch.toggle()
-                }) {
-                    Image(systemName: "ellipsis.circle")
-                }
+//                // AdvancedSearch button
+//                Button(action: {
+//                    self.showAdvancedSearch.toggle()
+//                }) {
+//                    Image(systemName: "ellipsis.circle")
+//                }
             }
             .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
             .foregroundColor(.secondary) // For magnifying glass and placeholder test
@@ -159,6 +154,7 @@ struct SearchBarView: View {
 //            .frame(height: 150)
             .padding(.horizontal)
         }
+        .padding(.top, 5)
             
         
         
@@ -166,50 +162,49 @@ struct SearchBarView: View {
         //        .navigationBarHidden(showCancelButton)
         
         // Advanced search fields
-        if showAdvancedSearch {
-            
-            VStack(spacing: 0) {
-                    HStack {
-                        Text("Criteria Conjunction")
-                        Spacer()
-                        Picker("Criteria Conjunction", selection: $selectedCriteriaConjunction) {
-                            ForEach(criteriaConjunction, id: \.self) { Text($0) }
-                        }
-                        .pickerStyle(MenuPickerStyle())
-                        .frame(maxWidth: .infinity, alignment: .trailing) // Adjust to your needs
-                    }
-
-                    .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 0))
-                    .background(Color(.tertiarySystemFill))
-
-                    HStack {
-                        Text("Select Field")
-                        Spacer()
-                        Picker("Select Field", selection: $selectedField) {
-                            ForEach(fieldOptions, id: \.self) { Text($0) }
-                        }
-                        .pickerStyle(MenuPickerStyle())
-                        .frame(maxWidth: .infinity, alignment: .trailing) // Adjust to your needs
-                    }
-                    .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 0))
-                    .background(Color(.tertiarySystemFill))
-
-                    HStack {
-                        Text("Select Condition")
-                        Spacer()
-                        Picker("Select Condition", selection: $selectedCondition) {
-                            ForEach(conditionOptions, id: \.self) { Text($0) }
-                        }
-                        .pickerStyle(MenuPickerStyle())
-                        .frame(maxWidth: .infinity, alignment: .trailing) // Adjust to your needs
-                    }
-                    .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 0))
-                    .background(Color(.tertiarySystemFill))
-
-            }
-            .padding(.horizontal)
-            .cornerRadius(10.0)
-            
-        }
+//        if showAdvancedSearch {
+//            
+//            VStack(spacing: 0) {
+//                    HStack {
+//                        Text("Criteria Conjunction")
+//                        Spacer()
+//                        Picker("Criteria Conjunction", selection: $selectedCriteriaConjunction) {
+//                            ForEach(criteriaConjunction, id: \.self) { Text($0) }
+//                        }
+//                        .pickerStyle(MenuPickerStyle())
+//                        .frame(maxWidth: .infinity, alignment: .trailing) // Adjust to your needs
+//                    }
+//
+//                    .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 0))
+//                    .background(Color(.tertiarySystemFill))
+//
+//                    HStack {
+//                        Text("Select Field")
+//                        Spacer()
+//                        Picker("Select Field", selection: $selectedField) {
+//                            ForEach(fieldOptions, id: \.self) { Text($0) }
+//                        }
+//                        .pickerStyle(MenuPickerStyle())
+//                        .frame(maxWidth: .infinity, alignment: .trailing) // Adjust to your needs
+//                    }
+//                    .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 0))
+//                    .background(Color(.tertiarySystemFill))
+//
+//                    HStack {
+//                        Text("Select Condition")
+//                        Spacer()
+//                        Picker("Select Condition", selection: $selectedCondition) {
+//                            ForEach(conditionOptions, id: \.self) { Text($0) }
+//                        }
+//                        .pickerStyle(MenuPickerStyle())
+//                        .frame(maxWidth: .infinity, alignment: .trailing) // Adjust to your needs
+//                    }
+//                    .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 0))
+//                    .background(Color(.tertiarySystemFill))
+//
+//            }
+//            .padding(.horizontal)
+//            .cornerRadius(10.0)
+//        }
     }
 }

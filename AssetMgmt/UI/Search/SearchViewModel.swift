@@ -12,10 +12,10 @@ class SearchViewModel: ObservableObject {
     @Published var searchText = ""
     @Published var searchResults: [AssetInfoResponse] = []
     @Published var isLoading = false
-    @Published var showAdvancedSearch = false
-    @Published var selectedCriteriaConjunction = "AND"
-    @Published var selectedField = "file_name"
-    @Published var selectedCondition = "cont"
+//    @Published var showAdvancedSearch = false
+//    @Published var selectedCriteriaConjunction = "AND"
+//    @Published var selectedField = "file_name"
+//    @Published var selectedCondition = "cont"
     @Published var isSearching = false
     @Published var searchDirectory = SearchDirectoryOptions.overall
     @Published var currentDirectory = "/"
@@ -25,11 +25,12 @@ class SearchViewModel: ObservableObject {
     }
 
     func search() {
-        if showAdvancedSearch {
-            performAdvancedSearch()
-        } else {
-            performSimpleSearch()
-        }
+        performSimpleSearch()
+//        if showAdvancedSearch {
+//            performAdvancedSearch()
+//        } else {
+//            performSimpleSearch()
+//        }
     }
     
     func performSimpleSearch() {
@@ -55,27 +56,27 @@ class SearchViewModel: ObservableObject {
         }
     }
     
-    func performAdvancedSearch() {
-        isLoading = true
-        let searchTextAdv = SearchFilter.createSearchCriteria(
-            conjunction: SearchFilter.Conjunction(rawValue: selectedCriteriaConjunction) ?? .and,
-            fieldId: sampleSearchFiltersDict[selectedField]?.fieldId ?? "",
-            condition: SearchFilter.OtherField(rawValue: selectedCondition) ?? .equals,
-            value: searchText
-        )
-
-        // Perform the search
-        advancedSearch(search: searchTextAdv, directory: "/", verbose: true) { assetsInfo in
-            // Handle the search results
-            if let firstResult = assetsInfo?.first {
-                logger.info("First result name: \(firstResult.id)")
-                DispatchQueue.main.async {
-                    self.isLoading = false
-                    self.searchResults = assetsInfo ?? []
-                }
-            } else {
-                logger.info("No results found")
-            }
-        }
-    }
+//    func performAdvancedSearch() {
+//        isLoading = true
+//        let searchTextAdv = SearchFilter.createSearchCriteria(
+//            conjunction: SearchFilter.Conjunction(rawValue: selectedCriteriaConjunction) ?? .and,
+//            fieldId: sampleSearchFiltersDict[selectedField]?.fieldId ?? "",
+//            condition: SearchFilter.OtherField(rawValue: selectedCondition) ?? .equals,
+//            value: searchText
+//        )
+//
+//        // Perform the search
+//        advancedSearch(search: searchTextAdv, directory: "/", verbose: true) { assetsInfo in
+//            // Handle the search results
+//            if let firstResult = assetsInfo?.first {
+//                logger.info("First result name: \(firstResult.id)")
+//                DispatchQueue.main.async {
+//                    self.isLoading = false
+//                    self.searchResults = assetsInfo ?? []
+//                }
+//            } else {
+//                logger.info("No results found")
+//            }
+//        }
+//    }
 }

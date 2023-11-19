@@ -138,19 +138,20 @@ public struct FolderView: View {
         VStack (spacing: 0) {
             
             SearchBarView(searchText: $viewModel.searchText,
-                          selectedCriteriaConjunction: $viewModel.selectedCriteriaConjunction,
-                          selectedField: $viewModel.selectedField,
-                          selectedCondition: $viewModel.selectedCondition,
-                          showAdvancedSearch: $viewModel.showAdvancedSearch,
+//                          selectedCriteriaConjunction: $viewModel.selectedCriteriaConjunction,
+//                          selectedField: $viewModel.selectedField,
+//                          selectedCondition: $viewModel.selectedCondition,
+//                          showAdvancedSearch: $viewModel.showAdvancedSearch,
                           isSearching: $viewModel.isSearching,
                           searchResults: $viewModel.searchResults,
                           onCommit: {viewModel.search()
                                      viewModel.updateSearchStatus()
-                          },
-                          onAdvancedSearch: {
-                              viewModel.performAdvancedSearch()
-                              viewModel.updateSearchStatus()
-                          })
+                          }
+//                          onAdvancedSearch: {
+//                              viewModel.performAdvancedSearch()
+//                              viewModel.updateSearchStatus()
+//                          }
+            )
                 .onChange(of: viewModel.searchText) { _ in
                     viewModel.updateSearchStatus()
                 }

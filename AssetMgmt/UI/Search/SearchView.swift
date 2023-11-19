@@ -19,31 +19,32 @@ struct SearchView: View {
         VStack {
             
             SearchBarView(searchText: $viewModel.searchText,
-                          selectedCriteriaConjunction: $viewModel.selectedCriteriaConjunction,
-                          selectedField: $viewModel.selectedField,
-                          selectedCondition: $viewModel.selectedCondition,
-                          showAdvancedSearch: $viewModel.showAdvancedSearch,
+                          //                          selectedCriteriaConjunction: $viewModel.selectedCriteriaConjunction,
+                          //                          selectedField: $viewModel.selectedField,
+                          //                          selectedCondition: $viewModel.selectedCondition,
+                          //                          showAdvancedSearch: $viewModel.showAdvancedSearch,
                           isSearching: $viewModel.isSearching,
                           searchResults: $viewModel.searchResults,
                           onCommit: {viewModel.search()
-                                     viewModel.updateSearchStatus()
-                          },
-                          onAdvancedSearch: {
-                              viewModel.performAdvancedSearch()
-                              viewModel.updateSearchStatus()
-                          })
-                .onChange(of: viewModel.searchText) { _ in
-                    viewModel.updateSearchStatus()
-                }
+                viewModel.updateSearchStatus()
+            }
+                          //                          onAdvancedSearch: {
+                          //                              viewModel.performAdvancedSearch()
+                          //                              viewModel.updateSearchStatus()
+                          //                          }
+            )
+            .onChange(of: viewModel.searchText) { _ in
+                viewModel.updateSearchStatus()
+            }
             
             Spacer()
             
             if viewModel.isSearching {
-                 SearchResultsView(searchText: $viewModel.searchText,
-                                   searchResults: $viewModel.searchResults,
-                                   isLoading: $viewModel.isLoading,
-                                   columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
-             }
+                SearchResultsView(searchText: $viewModel.searchText,
+                                  searchResults: $viewModel.searchResults,
+                                  isLoading: $viewModel.isLoading,
+                                  columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
+            }
             
         }
         .navigationBarTitle("Search")
