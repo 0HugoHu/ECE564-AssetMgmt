@@ -12,31 +12,45 @@ class SearchViewModel: ObservableObject {
     @Published var searchText = ""
     @Published var searchResults: [AssetInfoResponse] = []
     @Published var isLoading = false
-//    @Published var showAdvancedSearch = false
-//    @Published var selectedCriteriaConjunction = "AND"
-//    @Published var selectedField = "file_name"
-//    @Published var selectedCondition = "cont"
+    @Published var showAdvancedSearch = false
+    @Published var selectedCriteriaConjunction = "AND"
+    @Published var selectedField = "file_name"
+    @Published var selectedCondition = "cont"
     @Published var isSearching = false
-    @Published var searchDirectory = SearchDirectoryOptions.overall
-    @Published var currentDirectory = "/"
+    @Published var selectedSearchDirectoryOption = SearchDirectoryOptions.overall
+    @Published var currentDirectory: String
+    
+    init(currentDirectory: String) {
+        self.currentDirectory = currentDirectory
+        // other initializations
+    }
     
     func updateSearchStatus() {
         isSearching = !searchText.isEmpty || !searchResults.isEmpty
     }
 
     func search() {
-        performSimpleSearch()
-//        if showAdvancedSearch {
-//            performAdvancedSearch()
-//        } else {
-//            performSimpleSearch()
-//        }
+        if showAdvancedSearch {
+            performAdvancedSearch()
+        } else {
+            performSimpleSearch()
+        }
     }
     
     func performSimpleSearch() {
         isLoading = true
-        // First, perform a simple search to get the IDs
-        simpleSearch(search: searchText, directory: currentDirectory
+        
+        let directoryToSearch: String
+        switch selectedSearchDirectoryOption {
+        case .overall:
+            directoryToSearch = "/" // Assuming root directory signifies an overall search
+        case .currentFolder:
+            directoryToSearch = currentDirectory // Specific folder search
+        }
+        
+        print("\(directoryToSearch)")
+
+        simpleSearch(search: searchText, directory: directoryToSearch
         ) { simpleIDResponses in
             guard let ids: [String] = simpleIDResponses?.map({ "\($0.id)" }) else {
                 // Handle the error or empty state here
@@ -56,27 +70,27 @@ class SearchViewModel: ObservableObject {
         }
     }
     
-//    func performAdvancedSearch() {
-//        isLoading = true
-//        let searchTextAdv = SearchFilter.createSearchCriteria(
-//            conjunction: SearchFilter.Conjunction(rawValue: selectedCriteriaConjunction) ?? .and,
-//            fieldId: sampleSearchFiltersDict[selectedField]?.fieldId ?? "",
-//            condition: SearchFilter.OtherField(rawValue: selectedCondition) ?? .equals,
-//            value: searchText
-//        )
-//
-//        // Perform the search
-//        advancedSearch(search: searchTextAdv, directory: "/", verbose: true) { assetsInfo in
-//            // Handle the search results
-//            if let firstResult = assetsInfo?.first {
-//                logger.info("First result name: \(firstResult.id)")
-//                DispatchQueue.main.async {
-//                    self.isLoading = false
-//                    self.searchResults = assetsInfo ?? []
-//                }
-//            } else {
-//                logger.info("No results found")
-//            }
-//        }
-//    }
+    func performAdvancedSearch() {
+        isLoading = true
+        let searchTextAdv = SearchFilter.createSearchCriteria(
+            conjunction: SearchFilter.Conjunction(rawValue: selectedCriteriaConjunction) ?? .and,
+            fieldId: sampleSearchFiltersDict[selectedField]?.fieldId ?? "",
+            condition: SearchFilter.OtherField(rawValue: selectedCondition) ?? .equals,
+            value: searchText
+        )
+
+        // Perform the search
+        advancedSearch(search: searchTextAdv, directory: "/", verbose: true) { assetsInfo in
+            // Handle the search results
+            if let firstResult = assetsInfo?.first {
+                logger.info("First result name: \(firstResult.id)")
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    self.searchResults = assetsInfo ?? []
+                }
+            } else {
+                logger.info("No results found")
+            }
+        }
+    }
 }

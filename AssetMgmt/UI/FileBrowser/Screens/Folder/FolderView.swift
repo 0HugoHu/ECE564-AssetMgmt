@@ -9,7 +9,7 @@ public struct FolderView: View {
     @ObservedObject var documentsStore: DocumentsStore
     var title: String
     
-    @ObservedObject var viewModel = SearchViewModel()
+    @ObservedObject var searchViewModel: SearchViewModel
     
     let columns: [GridItem] = [
         GridItem(.adaptive(minimum: 100), spacing: 20)
@@ -131,30 +131,37 @@ public struct FolderView: View {
     public init(documentsStore: DocumentsStore, title: String) {
         self.documentsStore = documentsStore
         self.title = title
+        self.searchViewModel = SearchViewModel(currentDirectory: documentsStore.remoteUrl)
+        print(self.documentsStore.remoteUrl)
     }
     
     public var body: some View {
         
         VStack (spacing: 0) {
             
-            SearchBarView(searchText: $viewModel.searchText,
-//                          selectedCriteriaConjunction: $viewModel.selectedCriteriaConjunction,
-//                          selectedField: $viewModel.selectedField,
-//                          selectedCondition: $viewModel.selectedCondition,
-//                          showAdvancedSearch: $viewModel.showAdvancedSearch,
-                          isSearching: $viewModel.isSearching,
-                          searchResults: $viewModel.searchResults,
-                          onCommit: {viewModel.search()
-                                     viewModel.updateSearchStatus()
-                          }
-//                          onAdvancedSearch: {
-//                              viewModel.performAdvancedSearch()
-//                              viewModel.updateSearchStatus()
-//                          }
+            SearchBarView(
+                searchText: $searchViewModel.searchText,
+                          selectedCriteriaConjunction: $searchViewModel.selectedCriteriaConjunction,
+                          selectedField: $searchViewModel.selectedField,
+                          selectedCondition: $searchViewModel.selectedCondition,
+                          showAdvancedSearch: $searchViewModel.showAdvancedSearch,
+                          isSearching: $searchViewModel.isSearching,
+                          searchResults: $searchViewModel.searchResults,
+                          selectedSearchDirectoryOption:$searchViewModel.selectedSearchDirectoryOption,
+                          onCommit: {searchViewModel.search()
+                searchViewModel.updateSearchStatus()
+            },
+                          onAdvancedSearch: {
+                searchViewModel.performAdvancedSearch()
+                searchViewModel.updateSearchStatus()
+            }
             )
-                .onChange(of: viewModel.searchText) { _ in
-                    viewModel.updateSearchStatus()
-                }
+            .onChange(of: searchViewModel.searchText) { _ in
+                searchViewModel.updateSearchStatus()
+            }
+            .onChange(of: searchViewModel.selectedSearchDirectoryOption) { _ in
+                searchViewModel.search()
+            }
             
             Spacer()
             
@@ -237,10 +244,10 @@ public struct FolderView: View {
                     documentsStore.loadDocuments()
                 }
                 
-                if viewModel.isSearching {
-                     SearchResultsView(searchText: $viewModel.searchText,
-                                       searchResults: $viewModel.searchResults,
-                                       isLoading: $viewModel.isLoading,
+                if searchViewModel.isSearching {
+                     SearchResultsView(searchText: $searchViewModel.searchText,
+                                       searchResults: $searchViewModel.searchResults,
+                                       isLoading: $searchViewModel.isLoading,
                                        columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
 //                     .scaleEffect(viewModel.isSearching ? 1 : 0.5) // 1 means full size, 0.5 is half size
 //                        .opacity(viewModel.isSearching ? 1 : 0) // 1 for fully visible, 0 for invisible
