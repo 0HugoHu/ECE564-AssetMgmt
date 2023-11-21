@@ -18,10 +18,13 @@ struct SearchResultsView: View {
         ScrollView {
             HStack {
                 Spacer()
-                Text("\(searchResults.count) matches found")
-                    .font(.subheadline)
-                    .padding(.top)
-                    .padding(.trailing)
+                if !isLoading {
+                    Text("\(searchResults.count) matches found")
+                        .font(.subheadline)
+                        .padding(.top)
+                        .padding(.trailing)
+                    
+                }
             }
             .navigationBarTitle(Text("MediaBeacon"))
             .resignKeyboardOnDragGesture()

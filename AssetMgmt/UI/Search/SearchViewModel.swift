@@ -17,10 +17,20 @@ class SearchViewModel: ObservableObject {
     @Published var selectedField = "file_name"
     @Published var selectedCondition = "cont"
     @Published var isSearching = false
-    @Published var searchDirectory = SearchDirectoryOptions.overall
-    @Published var currentDirectory = "/"
+    @Published var selectedSearchDirectoryOption = SearchDirectoryOptions.overall
+    @Published var currentDirectory: String
+    
+    init(currentDirectory: String) {
+        self.currentDirectory = currentDirectory
+        // other initializations
+    }
     
     func updateSearchStatus() {
+        if searchText.isEmpty {
+            // Clear search results if searchText is empty
+            searchResults = []
+        }
+        //
         isSearching = !searchText.isEmpty || !searchResults.isEmpty
     }
 
@@ -34,8 +44,18 @@ class SearchViewModel: ObservableObject {
     
     func performSimpleSearch() {
         isLoading = true
-        // First, perform a simple search to get the IDs
-        simpleSearch(search: searchText, directory: currentDirectory
+        
+        let directoryToSearch: String
+        switch selectedSearchDirectoryOption {
+        case .overall:
+            directoryToSearch = "/" // Assuming root directory signifies an overall search
+        case .currentFolder:
+            directoryToSearch = currentDirectory // Specific folder search
+        }
+        
+        print("\(directoryToSearch)")
+
+        simpleSearch(search: searchText, directory: directoryToSearch
         ) { simpleIDResponses in
             guard let ids: [String] = simpleIDResponses?.map({ "\($0.id)" }) else {
                 // Handle the error or empty state here
