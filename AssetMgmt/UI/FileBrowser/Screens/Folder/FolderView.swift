@@ -127,7 +127,7 @@ public struct FolderView: View {
     public init(documentsStore: DocumentsStore, title: String) {
         self.documentsStore = documentsStore
         self.title = title
-        self.searchViewModel = SearchViewModel(currentDirectory: documentsStore.remoteUrl)
+        self.searchViewModel = SearchViewModel(currentDirectory: documentsStore.getRelativePath())
         print(self.documentsStore.remoteUrl)
     }
     
@@ -153,14 +153,18 @@ public struct FolderView: View {
                 searchViewModel.updateSearchStatus()
             }
             )
+            // As long as the search text updates, the searchStatus will update
             .onChange(of: searchViewModel.searchText) { _ in
+                if !searchViewModel.searchText.isEmpty {
+                    searchViewModel.search()
+                }
                 searchViewModel.updateSearchStatus()
             }
             .onChange(of: searchViewModel.selectedSearchDirectoryOption) { _ in
                 searchViewModel.search()
             }
-            
             Spacer()
+   
             
             
             ZStack {

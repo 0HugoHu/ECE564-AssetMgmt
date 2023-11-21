@@ -35,7 +35,11 @@ struct SearchView: View {
                 searchViewModel.updateSearchStatus()
             }
             )
+            // As long as the search text updates, the searchStatus will update
             .onChange(of: searchViewModel.searchText) { _ in
+                if !searchViewModel.searchText.isEmpty {
+                    searchViewModel.search()
+                }
                 searchViewModel.updateSearchStatus()
             }
             .onChange(of: searchViewModel.selectedSearchDirectoryOption) { _ in

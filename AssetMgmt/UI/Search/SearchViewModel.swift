@@ -26,6 +26,11 @@ class SearchViewModel: ObservableObject {
     }
     
     func updateSearchStatus() {
+        if searchText.isEmpty {
+            // Clear search results if searchText is empty
+            searchResults = []
+        }
+        //
         isSearching = !searchText.isEmpty || !searchResults.isEmpty
     }
 
