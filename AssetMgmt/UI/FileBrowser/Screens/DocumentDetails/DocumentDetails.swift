@@ -8,6 +8,8 @@ struct DocumentDetails: View {
     @State private var urlToPreview: URL?
     @State private var progress: Int64 = 0
     @State private var waitToShow: Bool = false
+    @State private var retryCount = 0
+    @State private var timer: Timer?
     
     public init(document: Document, mode: FileBrowserMode) {
         self.document = document
@@ -29,22 +31,37 @@ struct DocumentDetails: View {
                                 case .empty:
                                     ProgressView()
                                 case .success(let image):
+                                    stopRetryTimer()
+                                    
                                     image.resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(width: 260)
-                                case .failure (let error):
+                                        .cornerRadius(10)
+                                case .failure:
                                     VStack (alignment: .center) {
-                                        Image("doc.questionmark.fill")
+                                        Image("icon_preview_fail")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 160, height: 160)
+                                        Text("Loading Preview...")
+                                    }
+                                @unknown default:
+                                    VStack (alignment: .center) {
+                                        Image("icon_preview_fail")
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
                                             .frame(width: 160, height: 160)
                                         Text("Unsupported File Type")
-                                        Text("Error: \(error.localizedDescription)")
                                     }
-                                @unknown default:
-                                    EmptyView()
                                 }
                             }
+                            .onAppear {
+                                startRetryTimer()
+                            }
+                            .onDisappear {
+                                stopRetryTimer()
+                            }
+                            .id(retryCount)
                         }
                         .frame(maxWidth: .infinity)
                         .onTapGesture {
@@ -118,6 +135,18 @@ struct DocumentDetails: View {
     func showPreview() {
         urlToPreview = getFilePathById(String(document.mediaBeaconID), progress: $progress)
         waitToShow = true
+    }
+    
+    private func startRetryTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true) {  timer in
+            self.retryCount += 1
+        }
+    }
+    
+    private func stopRetryTimer() -> some View {
+        timer?.invalidate()
+        timer = nil
+        return EmptyView()
     }
 }
 
