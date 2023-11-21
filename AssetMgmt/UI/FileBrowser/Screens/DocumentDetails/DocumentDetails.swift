@@ -4,16 +4,16 @@ import SwiftUI
 struct DocumentDetails: View {
     var document: Document
     var mode: FileBrowserMode
-
+    
     @State private var urlToPreview: URL?
     @State private var progress: Int64 = 0
     @State private var waitToShow: Bool = false
-
+    
     public init(document: Document, mode: FileBrowserMode) {
         self.document = document
         self.mode = mode
     }
-
+    
     var body: some View {
         VStack(alignment: .center, spacing: 12) {
             List {
@@ -62,14 +62,20 @@ struct DocumentDetails: View {
                         .frame(maxWidth: .infinity)
                     }
                 }
-
+                
                 HStack {
                     Spacer()
-                    Text(document.name)
-                        .multilineTextAlignment(.center)
-                        .font(.headline)
+                    VStack {
+                        Text(document.name)
+                            .multilineTextAlignment(.center)
+                            .font(.headline)
+                        
+                        CustomePreviewView()
+                    }
                     Spacer()
                 }
+                
+                
                 if progress != 0 {
                     if progress == -1 {
                         DocumentAttributeRow(key: "Downloaded", value: document.formattedSize)
@@ -78,11 +84,11 @@ struct DocumentDetails: View {
                     }
                 }
                 DocumentAttributeRow(key: "Size", value: document.formattedSize)
-
+                
                 if let created = document.created {
                     DocumentAttributeRow(key: "Created", value: created.formatted())
                 }
-
+                
                 if let modified = document.modified {
                     DocumentAttributeRow(key: "Modified", value: modified.formatted())
                 }
@@ -108,7 +114,7 @@ struct DocumentDetails: View {
             }
         }
     }
-
+    
     func showPreview() {
         urlToPreview = getFilePathById(String(document.mediaBeaconID), progress: $progress)
         waitToShow = true
