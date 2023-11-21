@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @State private var selectedACL = 0
+    @State private var selectedACL: Int = 0
     @State private var selectedTheme = 0
     @State private var selectedAppearanceMode = 0
     @StateObject var themeManager = Themes.instance
     @StateObject var appearanceManager = Appearances.instance
     
-    let acls = ["ACL 1", "ACL 2", "ACL 3"]
+    @State private var ACLGroups: [ACLGroupsResponse] = []
     
     var body: some View {
         List {
@@ -24,8 +24,8 @@ struct SettingsView: View {
             
             Section(header: Text("Access Control List")) {
                 Picker("Select ACL", selection: $selectedACL) {
-                    ForEach(0..<acls.count, id: \.self) {
-                        Text(acls[$0])
+                    ForEach(ACLGroups) { group in
+                        Text(group.name)
                     }
                 }
             }
@@ -71,8 +71,23 @@ struct SettingsView: View {
         .onAppear {
             selectedTheme = themeManager.selectedThemeIndex
             selectedAppearanceMode = appearanceManager.selectedAppearanceIndex
+            getACLGroups()
             logger.info("Selected theme: \(selectedTheme)")
             logger.info("Selected appearance: \(selectedAppearanceMode)")
+        }
+        .onChange(of: selectedACL, perform: { newValue in
+            UserDefaults.standard.setValue(newValue, forKey: "selectedACL")
+        })
+    }
+    
+    private func getACLGroups() {
+        if let jsonData = UserDefaults.standard.data(forKey: "ACLGroups") {
+            if let groups = try? JSONDecoder().decode([ACLGroupsResponse].self, from: jsonData) {
+                ACLGroups = groups
+                selectedACL = UserDefaults.standard.integer(forKey: "selectedACL")
+            }
+        } else {
+            logger.error("Cannot read ACLGroups")
         }
     }
 }

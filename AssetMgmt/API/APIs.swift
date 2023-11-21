@@ -654,3 +654,17 @@ func getAssetDetails(ids: [String], completion: @escaping ([AssetInfoResponse]?)
         }
     }
 }
+
+func getACLGroups(completion: @escaping ([ACLGroupsResponse]?) -> Void) {
+    let queryURL = getGroupsURL()
+    logger.info("Try to get ACL groups from: \(queryURL)")
+    fetchData(from: queryURL, responseType: [ACLGroupsResponse].self) { result in
+        switch result {
+        case .success(let ACLGroups):
+            completion(ACLGroups)
+        case.failure(let error):
+            logger.error("Error getting ACL groups: \(error)")
+            completion(nil)
+        }
+    }
+}
