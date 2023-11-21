@@ -64,15 +64,8 @@ public struct FolderView: View {
                 Button(action: didClickCreateFolder) {
                     Label("     New Folder", systemImage: "folder.badge.plus")
                 }
-                Button(action: { isPresentedPicker = true }) {
-                    Label("     Import Files", systemImage: "doc.badge.arrow.up")
-                }
                 Button(action: { isPresentedPhotoPicker = true }) {
-                    Label("     Import Photos", systemImage: "photo.on.rectangle")
-                }
-                // Invoke camera here
-                Button(action: { }) {
-                    Label("     Scan Documents", systemImage: "doc.text.viewfinder")
+                    Label("     Upload Photos", systemImage: "photo.on.rectangle")
                 }
                 
                 Divider()
