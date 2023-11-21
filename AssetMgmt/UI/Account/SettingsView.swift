@@ -18,6 +18,10 @@ struct SettingsView: View {
     
     var body: some View {
         List {
+            Section(header: Text("Account Info")) {
+                AccountInfoView()
+            }
+            
             Section(header: Text("Access Control List")) {
                 Picker("Select ACL", selection: $selectedACL) {
                     ForEach(ACLGroups) { group in
@@ -51,8 +55,13 @@ struct SettingsView: View {
                     // Handle opening download folders
                 }
                 
+                Button("Revome Cache") {
+                    UserDefaults.standard.removeObject(forKey: "userInfo")
+                }
+                
                 Button("Log Out") {
-                    // Handle log out
+                    UserDefaults.standard.removeObject(forKey: "AuthToken")
+                    UserDefaults.standard.removeObject(forKey: "timestamp")
                 }
                 .foregroundColor(.red)
             }

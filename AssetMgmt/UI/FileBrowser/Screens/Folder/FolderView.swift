@@ -9,7 +9,7 @@ public struct FolderView: View {
     @ObservedObject var documentsStore: DocumentsStore
     var title: String
     
-    @ObservedObject var viewModel = SearchViewModel()
+    @ObservedObject var searchViewModel: SearchViewModel
     
     let columns: [GridItem] = [
         GridItem(.adaptive(minimum: 100), spacing: 20)
@@ -55,6 +55,7 @@ public struct FolderView: View {
     }
     
     var actionButtons: some View {
+        
         HStack {
             Menu {
                 Button(action: { }) {
@@ -63,15 +64,8 @@ public struct FolderView: View {
                 Button(action: didClickCreateFolder) {
                     Label("     New Folder", systemImage: "folder.badge.plus")
                 }
-                Button(action: { isPresentedPicker = true }) {
-                    Label("     Import Files", systemImage: "doc.badge.arrow.up")
-                }
                 Button(action: { isPresentedPhotoPicker = true }) {
-                    Label("     Import Photos", systemImage: "photo.on.rectangle")
-                }
-                // Invoke camera here
-                Button(action: { }) {
-                    Label("     Scan Documents", systemImage: "doc.text.viewfinder")
+                    Label("     Upload Photos", systemImage: "photo.on.rectangle")
                 }
                 
                 Divider()
@@ -114,53 +108,61 @@ public struct FolderView: View {
                 }) {
                     sortByTypeButton()
                 }
+                
             } label: {
                 Image(systemName: "ellipsis.circle")
             }
         }
     }
     
-    var emptyFolderView: some View {
-        VStack {
-            Text("Folder is empty")
-                .multilineTextAlignment(.center)
-                .padding()
-        }
-    }
+    var emptyFolderView = EmptyFolderView()
     
     public init(documentsStore: DocumentsStore, title: String) {
         self.documentsStore = documentsStore
         self.title = title
+        self.searchViewModel = SearchViewModel(currentDirectory: documentsStore.getRelativePath())
+        print(self.documentsStore.remoteUrl)
     }
     
     public var body: some View {
         
         VStack (spacing: 0) {
             
-            SearchBarView(searchText: $viewModel.searchText,
-                          selectedCriteriaConjunction: $viewModel.selectedCriteriaConjunction,
-                          selectedField: $viewModel.selectedField,
-                          selectedCondition: $viewModel.selectedCondition,
-                          showAdvancedSearch: $viewModel.showAdvancedSearch,
-                          isSearching: $viewModel.isSearching,
-                          searchResults: $viewModel.searchResults,
-                          onCommit: {viewModel.search()
-                                     viewModel.updateSearchStatus()
-                          },
+
+            SearchBarView(
+                searchText: $searchViewModel.searchText,
+                          selectedCriteriaConjunction: $searchViewModel.selectedCriteriaConjunction,
+                          selectedField: $searchViewModel.selectedField,
+                          selectedCondition: $searchViewModel.selectedCondition,
+                          showAdvancedSearch: $searchViewModel.showAdvancedSearch,
+                          isSearching: $searchViewModel.isSearching,
+                          searchResults: $searchViewModel.searchResults,
+                          selectedSearchDirectoryOption:$searchViewModel.selectedSearchDirectoryOption,
+                          onCommit: {searchViewModel.search()
+                searchViewModel.updateSearchStatus()
+            },
                           onAdvancedSearch: {
-                              viewModel.performAdvancedSearch()
-                              viewModel.updateSearchStatus()
-                          })
-                .onChange(of: viewModel.searchText) { _ in
-                    viewModel.updateSearchStatus()
+                searchViewModel.performAdvancedSearch()
+                searchViewModel.updateSearchStatus()
+            }
+            )
+            // As long as the search text updates, the searchStatus will update
+            .onChange(of: searchViewModel.searchText) { _ in
+                if !searchViewModel.searchText.isEmpty {
+                    searchViewModel.search()
                 }
-            
+                searchViewModel.updateSearchStatus()
+            }
+            .onChange(of: searchViewModel.selectedSearchDirectoryOption) { _ in
+                searchViewModel.search()
+            }
             Spacer()
+   
             
             
             ZStack {
                 ZStack {
-
+                    
                     ScrollViewReader { scrollViewProxy in
                         if documentsStore.viewMode == .list {
                             List {
@@ -199,7 +201,7 @@ public struct FolderView: View {
                                                 shouldEdit: (document.id == lastCreatedNewFolder?.id),
                                                 documentsStore: documentsStore
                                             )
-                                            .padding(.vertical, 4)
+                                            .padding(.vertical, 0)
                                             .id(document.id)
                                         }
                                     }
@@ -236,10 +238,11 @@ public struct FolderView: View {
                     documentsStore.loadDocuments()
                 }
                 
-                if viewModel.isSearching {
-                     SearchResultsView(searchText: $viewModel.searchText,
-                                       searchResults: $viewModel.searchResults,
-                                       isLoading: $viewModel.isLoading,
+
+                if searchViewModel.isSearching {
+                     SearchResultsView(searchText: $searchViewModel.searchText,
+                                       searchResults: $searchViewModel.searchResults,
+                                       isLoading: $searchViewModel.isLoading,
                                        columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
 //                     .scaleEffect(viewModel.isSearching ? 1 : 0.5) // 1 means full size, 0.5 is half size
 //                        .opacity(viewModel.isSearching ? 1 : 0) // 1 for fully visible, 0 for invisible
@@ -249,14 +252,15 @@ public struct FolderView: View {
                      .edgesIgnoringSafeArea(.all)
                  }
 
+
                 
             }
-//
-
+            //
+            
         }
-//        .frame(maxHeight: .infinity)
+        //        .frame(maxHeight: .infinity)
         
-
+        
     }
     
     @ViewBuilder

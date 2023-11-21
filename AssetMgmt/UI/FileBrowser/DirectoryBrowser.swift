@@ -21,6 +21,7 @@ public struct DirectoryBrowser: View {
         .task {
             setACLGroups()
         }
+        .background(Color(UIColor.systemBackground))
     }
     
     private func setACLGroups() {

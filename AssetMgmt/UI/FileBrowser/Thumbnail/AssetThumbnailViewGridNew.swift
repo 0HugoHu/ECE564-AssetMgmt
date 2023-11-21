@@ -23,12 +23,12 @@ struct AssetThumbnailViewGridNew: View {
                 case .success(let image):
                     image.resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 80, height: 80)
+                        .frame(width: 90, height: 90)
                 case .failure:
                     Image(uiImage: themeManager.getDirectoryIcon())
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 80, height: 80)
+                        .frame(width: 90, height: 90)
                 @unknown default:
                     EmptyView()
                 }

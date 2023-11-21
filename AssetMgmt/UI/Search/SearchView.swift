@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct SearchView: View {
-    @ObservedObject var viewModel = SearchViewModel()
+    @ObservedObject var searchViewModel = SearchViewModel(currentDirectory: "/")
     
     let columns: [GridItem] = [
         GridItem(.adaptive(minimum: 100), spacing: 20)
@@ -18,32 +18,41 @@ struct SearchView: View {
     var body: some View {
         VStack {
             
-            SearchBarView(searchText: $viewModel.searchText,
-                          selectedCriteriaConjunction: $viewModel.selectedCriteriaConjunction,
-                          selectedField: $viewModel.selectedField,
-                          selectedCondition: $viewModel.selectedCondition,
-                          showAdvancedSearch: $viewModel.showAdvancedSearch,
-                          isSearching: $viewModel.isSearching,
-                          searchResults: $viewModel.searchResults,
-                          onCommit: {viewModel.search()
-                                     viewModel.updateSearchStatus()
-                          },
+            SearchBarView(
+                searchText: $searchViewModel.searchText,
+                          selectedCriteriaConjunction: $searchViewModel.selectedCriteriaConjunction,
+                          selectedField: $searchViewModel.selectedField,
+                          selectedCondition: $searchViewModel.selectedCondition,
+                          showAdvancedSearch: $searchViewModel.showAdvancedSearch,
+                          isSearching: $searchViewModel.isSearching,
+                          searchResults: $searchViewModel.searchResults,
+                          selectedSearchDirectoryOption:$searchViewModel.selectedSearchDirectoryOption,
+                          onCommit: {searchViewModel.search()
+                searchViewModel.updateSearchStatus()
+            },
                           onAdvancedSearch: {
-                              viewModel.performAdvancedSearch()
-                              viewModel.updateSearchStatus()
-                          })
-                .onChange(of: viewModel.searchText) { _ in
-                    viewModel.updateSearchStatus()
+                searchViewModel.performAdvancedSearch()
+                searchViewModel.updateSearchStatus()
+            }
+            )
+            // As long as the search text updates, the searchStatus will update
+            .onChange(of: searchViewModel.searchText) { _ in
+                if !searchViewModel.searchText.isEmpty {
+                    searchViewModel.search()
                 }
-            
+                searchViewModel.updateSearchStatus()
+            }
+            .onChange(of: searchViewModel.selectedSearchDirectoryOption) { _ in
+                searchViewModel.search()
+            }
             Spacer()
             
-            if viewModel.isSearching {
-                 SearchResultsView(searchText: $viewModel.searchText,
-                                   searchResults: $viewModel.searchResults,
-                                   isLoading: $viewModel.isLoading,
-                                   columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
-             }
+            if searchViewModel.isSearching {
+                SearchResultsView(searchText: $searchViewModel.searchText,
+                                  searchResults: $searchViewModel.searchResults,
+                                  isLoading: $searchViewModel.isLoading,
+                                  columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
+            }
             
         }
         .navigationBarTitle("Search")
