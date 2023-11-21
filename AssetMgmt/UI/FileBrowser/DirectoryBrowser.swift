@@ -18,6 +18,7 @@ public struct DirectoryBrowser: View {
                 }
         }
         .environmentObject(thumbnailer)
+        .background(Color(UIColor.systemBackground))
     }
 }
 

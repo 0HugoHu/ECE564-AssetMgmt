@@ -13,11 +13,11 @@ struct PlainTextAPIResponse: Codable {
 
 struct UserInfoAPIResponse: Codable {
     let username: String
-    let firstName: String
-    let middleName: String
-    let lastName: String
     let status: String
+    let firstName: String
+    let lastName: String
     let type: String
+    let dept: String
     let address1: String
     let address2: String
     let city: String
@@ -25,13 +25,13 @@ struct UserInfoAPIResponse: Codable {
     let country: String
     let state: String
     let zip: String
-    let dept: String
     let email: String
     let ext: String
     let phone: String
     let position: String
     let wcrEnabled: Bool
     let blueEnabled: Bool
+    let middleName: String
 }
 
 

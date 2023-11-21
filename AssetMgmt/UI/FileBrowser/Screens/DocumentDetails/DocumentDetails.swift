@@ -4,16 +4,18 @@ import SwiftUI
 struct DocumentDetails: View {
     var document: Document
     var mode: FileBrowserMode
-
+    
     @State private var urlToPreview: URL?
     @State private var progress: Int64 = 0
     @State private var waitToShow: Bool = false
-
+    @State private var retryCount = 0
+    @State private var timer: Timer?
+    
     public init(document: Document, mode: FileBrowserMode) {
         self.document = document
         self.mode = mode
     }
-
+    
     var body: some View {
         VStack(alignment: .center, spacing: 12) {
             List {
@@ -29,22 +31,37 @@ struct DocumentDetails: View {
                                 case .empty:
                                     ProgressView()
                                 case .success(let image):
+                                    stopRetryTimer()
+                                    
                                     image.resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(width: 260)
-                                case .failure (let error):
+                                        .cornerRadius(10)
+                                case .failure:
                                     VStack (alignment: .center) {
-                                        Image("doc.questionmark.fill")
+                                        Image("icon_preview_fail")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 160, height: 160)
+                                        Text("Loading Preview...")
+                                    }
+                                @unknown default:
+                                    VStack (alignment: .center) {
+                                        Image("icon_preview_fail")
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
                                             .frame(width: 160, height: 160)
                                         Text("Unsupported File Type")
-                                        Text("Error: \(error.localizedDescription)")
                                     }
-                                @unknown default:
-                                    EmptyView()
                                 }
                             }
+                            .onAppear {
+                                startRetryTimer()
+                            }
+                            .onDisappear {
+                                stopRetryTimer()
+                            }
+                            .id(retryCount)
                         }
                         .frame(maxWidth: .infinity)
                         .onTapGesture {
@@ -62,14 +79,20 @@ struct DocumentDetails: View {
                         .frame(maxWidth: .infinity)
                     }
                 }
-
+                
                 HStack {
                     Spacer()
-                    Text(document.name)
-                        .multilineTextAlignment(.center)
-                        .font(.headline)
+                    VStack {
+                        Text(document.name)
+                            .multilineTextAlignment(.center)
+                            .font(.headline)
+                        
+                        CustomePreviewView()
+                    }
                     Spacer()
                 }
+                
+                
                 if progress != 0 {
                     if progress == -1 {
                         DocumentAttributeRow(key: "Downloaded", value: document.formattedSize)
@@ -78,11 +101,11 @@ struct DocumentDetails: View {
                     }
                 }
                 DocumentAttributeRow(key: "Size", value: document.formattedSize)
-
+                
                 if let created = document.created {
                     DocumentAttributeRow(key: "Created", value: created.formatted())
                 }
-
+                
                 if let modified = document.modified {
                     DocumentAttributeRow(key: "Modified", value: modified.formatted())
                 }
@@ -108,10 +131,22 @@ struct DocumentDetails: View {
             }
         }
     }
-
+    
     func showPreview() {
         urlToPreview = getFilePathById(String(document.mediaBeaconID), progress: $progress)
         waitToShow = true
+    }
+    
+    private func startRetryTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true) {  timer in
+            self.retryCount += 1
+        }
+    }
+    
+    private func stopRetryTimer() -> some View {
+        timer?.invalidate()
+        timer = nil
+        return EmptyView()
     }
 }
 

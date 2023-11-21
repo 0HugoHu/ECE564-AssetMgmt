@@ -55,6 +55,7 @@ public struct FolderView: View {
     }
     
     var actionButtons: some View {
+        
         HStack {
             Menu {
                 Button(action: { }) {
@@ -114,19 +115,14 @@ public struct FolderView: View {
                 }) {
                     sortByTypeButton()
                 }
+                
             } label: {
                 Image(systemName: "ellipsis.circle")
             }
         }
     }
     
-    var emptyFolderView: some View {
-        VStack {
-            Text("Folder is empty")
-                .multilineTextAlignment(.center)
-                .padding()
-        }
-    }
+    var emptyFolderView = EmptyFolderView()
     
     public init(documentsStore: DocumentsStore, title: String) {
         self.documentsStore = documentsStore
@@ -145,22 +141,22 @@ public struct FolderView: View {
                           isSearching: $viewModel.isSearching,
                           searchResults: $viewModel.searchResults,
                           onCommit: {viewModel.search()
-                                     viewModel.updateSearchStatus()
-                          },
+                viewModel.updateSearchStatus()
+            },
                           onAdvancedSearch: {
-                              viewModel.performAdvancedSearch()
-                              viewModel.updateSearchStatus()
-                          })
-                .onChange(of: viewModel.searchText) { _ in
-                    viewModel.updateSearchStatus()
-                }
+                viewModel.performAdvancedSearch()
+                viewModel.updateSearchStatus()
+            })
+            .onChange(of: viewModel.searchText) { _ in
+                viewModel.updateSearchStatus()
+            }
             
             Spacer()
             
             
             ZStack {
                 ZStack {
-
+                    
                     ScrollViewReader { scrollViewProxy in
                         if documentsStore.viewMode == .list {
                             List {
@@ -237,26 +233,26 @@ public struct FolderView: View {
                 }
                 
                 if viewModel.isSearching {
-                     SearchResultsView(searchText: $viewModel.searchText,
-                                       searchResults: $viewModel.searchResults,
-                                       isLoading: $viewModel.isLoading,
-                                       columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
-//                     .scaleEffect(viewModel.isSearching ? 1 : 0.5) // 1 means full size, 0.5 is half size
-//                        .opacity(viewModel.isSearching ? 1 : 0) // 1 for fully visible, 0 for invisible
-//                        .animation(.easeInOut(duration: 0.5), value: viewModel.isSearching)
-                     .frame(maxHeight: .infinity)
-                     .background(Color.white) // Set a solid background color here
-                     .edgesIgnoringSafeArea(.all)
-                 }
-
+                    SearchResultsView(searchText: $viewModel.searchText,
+                                      searchResults: $viewModel.searchResults,
+                                      isLoading: $viewModel.isLoading,
+                                      columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
+                    //                     .scaleEffect(viewModel.isSearching ? 1 : 0.5) // 1 means full size, 0.5 is half size
+                    //                        .opacity(viewModel.isSearching ? 1 : 0) // 1 for fully visible, 0 for invisible
+                    //                        .animation(.easeInOut(duration: 0.5), value: viewModel.isSearching)
+                    .frame(maxHeight: .infinity)
+                    .background(Color.white) // Set a solid background color here
+                    .edgesIgnoringSafeArea(.all)
+                }
+                
                 
             }
-//
-
+            //
+            
         }
-//        .frame(maxHeight: .infinity)
+        //        .frame(maxHeight: .infinity)
         
-
+        
     }
     
     @ViewBuilder
