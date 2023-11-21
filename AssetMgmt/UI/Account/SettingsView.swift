@@ -15,9 +15,34 @@ struct SettingsView: View {
     @StateObject var appearanceManager = Appearances.instance
     
     let acls = ["ACL 1", "ACL 2", "ACL 3"]
+    let accountInfo = getAccountInfo()
     
     var body: some View {
         List {
+            Section(header: Text("Account Info")) {
+                ZStack {
+                    if let uiDecoration = themeManager.getUserInfoIcon() {
+                        Image(uiImage: uiDecoration)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(maxWidth: 180, maxHeight: 80)
+                            .opacity(0.4)
+                    }
+                    
+                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 20), GridItem(.flexible(), spacing: 20)]) {
+                        ForEach(Array(accountInfo), id: \.key) { key, value in
+                            HStack {
+                                Text(key.capitalized + ":")
+                                    .font(.callout)
+                                Spacer()
+                                Text("\(value)")
+                                    .font(.callout)
+                            }
+                        }
+                    }
+                }
+            }
+            
             Section(header: Text("Access Control List")) {
                 Picker("Select ACL", selection: $selectedACL) {
                     ForEach(0..<acls.count, id: \.self) {

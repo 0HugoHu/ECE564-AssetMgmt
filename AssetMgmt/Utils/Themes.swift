@@ -82,6 +82,45 @@ class Themes : ObservableObject {
         }
     }
     
+    func getEmptyFolderIcon() -> UIImage {
+        switch (self.currentTheme) {
+        case .christmas:
+            return UIImage(named: "empty_christmas")!
+        case .newyear:
+            return UIImage(named: "empty_newyear")!
+        case .duke:
+            return UIImage(named: "empty_duke")!
+        default:
+            return UIImage(named: "empty_default")!
+        }
+    }
+    
+    func getPreviewIcon() -> UIImage? {
+        switch (self.currentTheme) {
+        case .christmas:
+            return UIImage(named: "decoration_christmas_1")!
+        case .newyear:
+            return UIImage(named: "decoration_newyear_1")!
+        case .duke:
+            return UIImage(named: "decoration_duke_1")!
+        default:
+            return nil
+        }
+    }
+    
+    func getUserInfoIcon() -> UIImage? {
+        switch (self.currentTheme) {
+        case .christmas:
+            return UIImage(named: "decoration_christmas_2")!
+        case .newyear:
+            return UIImage(named: "decoration_newyear_2")!
+        case .duke:
+            return UIImage(named: "decoration_duke_2")!
+        default:
+            return nil
+        }
+    }
+    
     private func saveCurrentTheme() {
         UserDefaults.standard.set(currentTheme.rawValue, forKey: themeKey)
     }

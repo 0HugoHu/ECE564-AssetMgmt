@@ -26,10 +26,10 @@ struct ThemeSelectionView: View {
                 Image(uiImage: imgUrl)
                     .resizable()
                     .scaledToFit()
-                    .frame(maxWidth: 60)
+                    .frame(maxWidth: 65)
                     .cornerRadius(5)
                 
-                Text(themeManager.themeArray[themeIndex] + "  " + (themeIndex == 0 ? " " : ""))
+                Text(themeManager.themeArray[themeIndex])
                     .font(.caption)
                     .padding(.top, 2)
             }

@@ -55,6 +55,7 @@ public struct FolderView: View {
     }
     
     var actionButtons: some View {
+        
         HStack {
             Menu {
                 Button(action: { }) {
@@ -114,19 +115,14 @@ public struct FolderView: View {
                 }) {
                     sortByTypeButton()
                 }
+                
             } label: {
                 Image(systemName: "ellipsis.circle")
             }
         }
     }
     
-    var emptyFolderView: some View {
-        VStack {
-            Text("Folder is empty")
-                .multilineTextAlignment(.center)
-                .padding()
-        }
-    }
+    var emptyFolderView = EmptyFolderView()
     
     public init(documentsStore: DocumentsStore, title: String) {
         self.documentsStore = documentsStore
@@ -139,6 +135,7 @@ public struct FolderView: View {
         
         VStack (spacing: 0) {
             
+
             SearchBarView(
                 searchText: $searchViewModel.searchText,
                           selectedCriteriaConjunction: $searchViewModel.selectedCriteriaConjunction,
@@ -168,7 +165,7 @@ public struct FolderView: View {
             
             ZStack {
                 ZStack {
-
+                    
                     ScrollViewReader { scrollViewProxy in
                         if documentsStore.viewMode == .list {
                             List {
@@ -244,6 +241,7 @@ public struct FolderView: View {
                     documentsStore.loadDocuments()
                 }
                 
+
                 if searchViewModel.isSearching {
                      SearchResultsView(searchText: $searchViewModel.searchText,
                                        searchResults: $searchViewModel.searchResults,
@@ -257,14 +255,15 @@ public struct FolderView: View {
                      .edgesIgnoringSafeArea(.all)
                  }
 
+
                 
             }
-//
-
+            //
+            
         }
-//        .frame(maxHeight: .infinity)
+        //        .frame(maxHeight: .infinity)
         
-
+        
     }
     
     @ViewBuilder
@@ -281,7 +280,7 @@ public struct FolderView: View {
                     title: document.name
                 )
             } else if documentsStore.mode == .remote {
-                let relativePath = "/" + document.name
+                let relativePath = documentsStore.getRelativePath() + "/" + document.name
                 FolderView(
                     documentsStore: DocumentsStore(
                         root: documentsStore.remoteUrl,
