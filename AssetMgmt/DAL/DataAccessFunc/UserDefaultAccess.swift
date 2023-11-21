@@ -22,7 +22,7 @@ func getUserInfo() -> UserInfoAPIResponse? {
             let userInfo = try JSONDecoder().decode(UserInfoAPIResponse.self, from: data)
             return userInfo
         } catch {
-            // log.error(error)
+             logger.error("\(error)")
         }
     }
     return nil

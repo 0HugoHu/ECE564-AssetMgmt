@@ -108,6 +108,19 @@ class Themes : ObservableObject {
         }
     }
     
+    func getUserInfoIcon() -> UIImage? {
+        switch (self.currentTheme) {
+        case .christmas:
+            return UIImage(named: "decoration_christmas_2")!
+        case .newyear:
+            return UIImage(named: "decoration_newyear_2")!
+        case .duke:
+            return UIImage(named: "decoration_duke_2")!
+        default:
+            return nil
+        }
+    }
+    
     private func saveCurrentTheme() {
         UserDefaults.standard.set(currentTheme.rawValue, forKey: themeKey)
     }
