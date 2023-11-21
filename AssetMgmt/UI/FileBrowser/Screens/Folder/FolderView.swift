@@ -9,7 +9,7 @@ public struct FolderView: View {
     @ObservedObject var documentsStore: DocumentsStore
     var title: String
     
-    @ObservedObject var viewModel = SearchViewModel()
+    @ObservedObject var searchViewModel: SearchViewModel
     
     let columns: [GridItem] = [
         GridItem(.adaptive(minimum: 100), spacing: 20)
@@ -127,31 +127,44 @@ public struct FolderView: View {
     public init(documentsStore: DocumentsStore, title: String) {
         self.documentsStore = documentsStore
         self.title = title
+        self.searchViewModel = SearchViewModel(currentDirectory: documentsStore.getRelativePath())
+        print(self.documentsStore.remoteUrl)
     }
     
     public var body: some View {
         
         VStack (spacing: 0) {
             
-            SearchBarView(searchText: $viewModel.searchText,
-                          selectedCriteriaConjunction: $viewModel.selectedCriteriaConjunction,
-                          selectedField: $viewModel.selectedField,
-                          selectedCondition: $viewModel.selectedCondition,
-                          showAdvancedSearch: $viewModel.showAdvancedSearch,
-                          isSearching: $viewModel.isSearching,
-                          searchResults: $viewModel.searchResults,
-                          onCommit: {viewModel.search()
-                viewModel.updateSearchStatus()
+
+            SearchBarView(
+                searchText: $searchViewModel.searchText,
+                          selectedCriteriaConjunction: $searchViewModel.selectedCriteriaConjunction,
+                          selectedField: $searchViewModel.selectedField,
+                          selectedCondition: $searchViewModel.selectedCondition,
+                          showAdvancedSearch: $searchViewModel.showAdvancedSearch,
+                          isSearching: $searchViewModel.isSearching,
+                          searchResults: $searchViewModel.searchResults,
+                          selectedSearchDirectoryOption:$searchViewModel.selectedSearchDirectoryOption,
+                          onCommit: {searchViewModel.search()
+                searchViewModel.updateSearchStatus()
             },
                           onAdvancedSearch: {
-                viewModel.performAdvancedSearch()
-                viewModel.updateSearchStatus()
-            })
-            .onChange(of: viewModel.searchText) { _ in
-                viewModel.updateSearchStatus()
+                searchViewModel.performAdvancedSearch()
+                searchViewModel.updateSearchStatus()
             }
-            
+            )
+            // As long as the search text updates, the searchStatus will update
+            .onChange(of: searchViewModel.searchText) { _ in
+                if !searchViewModel.searchText.isEmpty {
+                    searchViewModel.search()
+                }
+                searchViewModel.updateSearchStatus()
+            }
+            .onChange(of: searchViewModel.selectedSearchDirectoryOption) { _ in
+                searchViewModel.search()
+            }
             Spacer()
+   
             
             
             ZStack {
@@ -232,19 +245,21 @@ public struct FolderView: View {
                     documentsStore.loadDocuments()
                 }
                 
-                if viewModel.isSearching {
-                    SearchResultsView(searchText: $viewModel.searchText,
-                                      searchResults: $viewModel.searchResults,
-                                      isLoading: $viewModel.isLoading,
-                                      columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
-                    //                     .scaleEffect(viewModel.isSearching ? 1 : 0.5) // 1 means full size, 0.5 is half size
-                    //                        .opacity(viewModel.isSearching ? 1 : 0) // 1 for fully visible, 0 for invisible
-                    //                        .animation(.easeInOut(duration: 0.5), value: viewModel.isSearching)
-                    .frame(maxHeight: .infinity)
-                    .background(Color.white) // Set a solid background color here
-                    .edgesIgnoringSafeArea(.all)
-                }
-                
+
+                if searchViewModel.isSearching {
+                     SearchResultsView(searchText: $searchViewModel.searchText,
+                                       searchResults: $searchViewModel.searchResults,
+                                       isLoading: $searchViewModel.isLoading,
+                                       columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
+//                     .scaleEffect(viewModel.isSearching ? 1 : 0.5) // 1 means full size, 0.5 is half size
+//                        .opacity(viewModel.isSearching ? 1 : 0) // 1 for fully visible, 0 for invisible
+//                        .animation(.easeInOut(duration: 0.5), value: viewModel.isSearching)
+                     .frame(maxHeight: .infinity)
+                     .background(Color.white) // Set a solid background color here
+                     .edgesIgnoringSafeArea(.all)
+                 }
+
+
                 
             }
             //
