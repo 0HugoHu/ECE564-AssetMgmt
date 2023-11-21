@@ -273,7 +273,7 @@ public struct FolderView: View {
                     title: document.name
                 )
             } else if documentsStore.mode == .remote {
-                let relativePath = "/" + document.name
+                let relativePath = documentsStore.getRelativePath() + "/" + document.name
                 FolderView(
                     documentsStore: DocumentsStore(
                         root: documentsStore.remoteUrl,

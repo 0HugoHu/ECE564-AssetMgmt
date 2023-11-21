@@ -59,10 +59,14 @@ func getDirectoryURL() -> URL {
     return appendAuth(url: URL(string: REST_API + "directories")!)
 }
 
+func getGroupsURL() -> URL {
+    return appendAuth(url: URL(string: REST_API + "groups")!)
+}
+
 
 func appendAuth(url: URL) -> URL {
     if let authToken = UserDefaults.standard.string(forKey: "AuthToken") {
-        return URL(string: url.absoluteString + "?apikey=" + authToken)!
+        return URL(string: url.absoluteString + "?apikey=" + authToken + "&acl_id=0_42_A754B8A8-8E5C-4477-8466-894915E29E81")!
     }
     return url
 }

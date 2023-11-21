@@ -111,19 +111,12 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
             // Load all directories
             let finalPath = self.relativePath == "" ? self.remoteUrl : self.relativePath
             showDirectory(path: finalPath, depth: 1, justChildren: false) { directories in
-                if directories == nil {
-                    logger.info("No folder exists at \(self.remoteUrl)")
-                } else {
-                    var parentFolderId = 0
-                    for folder in directories! {
-                        let components = finalPath.split(separator: "/")
-                        let lastComponent = components.count == 0 ? "/" : components[components.count - 1] + "/"
-                        if folder.path ==  lastComponent{
-                            parentFolderId = folder.id
-                        } else {
-                            let doc = Document(mediaBeaconID: folder.id, name: folder.name, url: URL(string: folder.path)!, size: 0, type: "folder", isDirectory: true)
-                            self.appendDocument(doc)
-                        }
+                if let directories = directories {
+                    let parentFolderId = directories[0].id
+                    for i in 1..<directories.count {
+                        let folder = directories[i]
+                        let doc = Document(mediaBeaconID: folder.id, name: folder.name, url: URL(string: folder.path)!, size: 0, type: "folder", isDirectory: true)
+                        self.appendDocument(doc)
                     }
                     // Then load all files
                     let searchText = SearchFilter.createSearchCriteria(conjunction: .and, fieldId: "directory_id", condition: SearchFilter.OtherField.equals, value: String(parentFolderId))
@@ -138,6 +131,8 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
                         }
                         self.sortDocument(0)
                     }
+                } else {
+                    logger.info("No folder exists at \(self.remoteUrl)")
                 }
             }
         }
@@ -392,7 +387,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
                 var documentToUpdate = documents[renameIndex]
                 
                 if document.isDirectory {
-                    renameFiles(paths: [(self.relativePath == "" ? self.remoteUrl : self.relativePath) + document.name], newNames: [newName]) { response in
+                    renameFiles(paths: [(self.relativePath == "" ? self.remoteUrl : self.relativePath) + "/" + document.name], newNames: [newName]) { response in
                         switch response {
                         case true:
                             self.removeDocument(document.mediaBeaconID)
@@ -437,6 +432,10 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
            let loadedViewMode = ViewMode(rawValue: rawValue) {
             viewMode = loadedViewMode
         }
+    }
+    
+    func getRelativePath() -> String {
+        return relativePath
     }
 }
 
