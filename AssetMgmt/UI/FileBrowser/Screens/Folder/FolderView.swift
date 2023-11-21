@@ -201,7 +201,7 @@ public struct FolderView: View {
                                                 shouldEdit: (document.id == lastCreatedNewFolder?.id),
                                                 documentsStore: documentsStore
                                             )
-                                            .padding(.vertical, 4)
+                                            .padding(.vertical, 0)
                                             .id(document.id)
                                         }
                                     }
