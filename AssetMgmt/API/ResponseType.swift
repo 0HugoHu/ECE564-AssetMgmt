@@ -72,4 +72,22 @@ struct DirectoryResponse: Codable, Identifiable {
     let parentId: Int?
 }
 
-
+struct ACLGroupsResponse: Codable, Identifiable {
+    let name: String
+    let id: Int
+    let description: String
+    let hidden: Bool
+    let active: Bool
+    let acls: [ACL]
+    
+    struct ACL: Codable {
+        let name: String
+        let id: String
+        let description: String
+        let rootPath: String
+        let active: Bool
+        let hidden: Bool
+        let triggerworkflow: Bool
+        let revokedPermissions: [String]
+    }
+}

@@ -18,7 +18,24 @@ public struct DirectoryBrowser: View {
                 }
         }
         .environmentObject(thumbnailer)
+        .task {
+            setACLGroups()
+        }
     }
+    
+    private func setACLGroups() {
+        getACLGroups(completion: { result in
+            if let ACLGroups = result {
+                if let jsonData = try? JSONEncoder().encode(ACLGroups) {
+                    UserDefaults.standard.setValue(jsonData, forKey: "ACLGroups")
+                    if UserDefaults.standard.value(forKey: "selectedACL") == nil {
+                        UserDefaults.standard.setValue(ACLGroups[0].id, forKey: "selectedACL")
+                    }
+                }
+            }
+        })
+    }
+    
 }
 
 struct DirectoryBrowser_Previews: PreviewProvider {
