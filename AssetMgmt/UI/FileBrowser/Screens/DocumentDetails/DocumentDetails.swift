@@ -38,6 +38,8 @@ struct DocumentDetails: View {
                                         .frame(width: 260)
                                         .cornerRadius(10)
                                 case .failure:
+                                    startRetryTimer()
+                                    
                                     VStack (alignment: .center) {
                                         Image("icon_preview_fail")
                                             .resizable()
@@ -46,6 +48,8 @@ struct DocumentDetails: View {
                                         Text("Loading Preview...")
                                     }
                                 @unknown default:
+                                    stopRetryTimer()
+                                    
                                     VStack (alignment: .center) {
                                         Image("icon_preview_fail")
                                             .resizable()
@@ -54,12 +58,6 @@ struct DocumentDetails: View {
                                         Text("Unsupported File Type")
                                     }
                                 }
-                            }
-                            .onAppear {
-                                startRetryTimer()
-                            }
-                            .onDisappear {
-                                stopRetryTimer()
                             }
                             .id(retryCount)
                         }
@@ -137,15 +135,18 @@ struct DocumentDetails: View {
         waitToShow = true
     }
     
-    private func startRetryTimer() {
+    private func startRetryTimer() -> some View {
+        if timer != nil {
+            return EmptyView()
+        }
         timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true) {  timer in
             self.retryCount += 1
         }
+        return EmptyView()
     }
     
     private func stopRetryTimer() -> some View {
         timer?.invalidate()
-        timer = nil
         return EmptyView()
     }
 }
