@@ -23,7 +23,7 @@ struct SettingsView: View {
             }
             
             Section(header: Text("Access Control List")) {
-                Picker("Select ACL", selection: $selectedACL) {
+                Picker("Current ACL", selection: $selectedACL) {
                     ForEach(ACLGroups) { group in
                         Text(group.name)
                     }
@@ -62,6 +62,7 @@ struct SettingsView: View {
                 Button("Log Out") {
                     UserDefaults.standard.removeObject(forKey: "AuthToken")
                     UserDefaults.standard.removeObject(forKey: "timestamp")
+                    NotificationCenter.default.post(name: Notification.Name("LoggedOut"), object: nil)
                 }
                 .foregroundColor(.red)
             }
@@ -77,6 +78,7 @@ struct SettingsView: View {
         }
         .onChange(of: selectedACL, perform: { newValue in
             UserDefaults.standard.setValue(newValue, forKey: "selectedACL")
+            NotificationCenter.default.post(name: Notification.Name("ReloadAccountInfo"), object: nil)
         })
     }
     

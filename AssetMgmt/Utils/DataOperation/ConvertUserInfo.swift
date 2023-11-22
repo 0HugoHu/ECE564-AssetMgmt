@@ -17,14 +17,15 @@ var accountInfo: [String: String] = [
 ]
 
 func getAccountInfo() -> [String: String] {
-    if let accountInfoResponse : UserInfoAPIResponse = getUserInfo() {
-        accountInfo["Username"] = accountInfoResponse.username == "" ? "N/A" : accountInfoResponse.username
-        accountInfo["Status"] = accountInfoResponse.status == "" ? "N/A" : accountInfoResponse.status
-        accountInfo["FirstName"] = accountInfoResponse.firstName == "" ? "N/A" : accountInfoResponse.firstName
-        accountInfo["LastName"] = accountInfoResponse.lastName == "" ? "N/A" : accountInfoResponse.lastName
-        accountInfo["Type"] = accountInfoResponse.type == "" ? "N/A" : accountInfoResponse.type
-        accountInfo["Department"] = accountInfoResponse.dept == "" ? "N/A" : accountInfoResponse.dept
-    } else {
+    // TODO: Cannot use cache here, because it's not constant
+//    if let accountInfoResponse : UserInfoAPIResponse = getUserInfo() {
+//        accountInfo["Username"] = accountInfoResponse.username == "" ? "N/A" : accountInfoResponse.username
+//        accountInfo["Status"] = accountInfoResponse.status == "" ? "N/A" : accountInfoResponse.status
+//        accountInfo["FirstName"] = accountInfoResponse.firstName == "" ? "N/A" : accountInfoResponse.firstName
+//        accountInfo["LastName"] = accountInfoResponse.lastName == "" ? "N/A" : accountInfoResponse.lastName
+//        accountInfo["Type"] = accountInfoResponse.type == "" ? "N/A" : accountInfoResponse.type
+//        accountInfo["Department"] = accountInfoResponse.dept == "" ? "N/A" : accountInfoResponse.dept
+//    } else {
         getUserInfo() { result in
             if result != nil {
                 let unwrappedResult = result!
@@ -37,7 +38,7 @@ func getAccountInfo() -> [String: String] {
                 saveUserInfo(unwrappedResult)
             }
         }
-    }
-//    logger.info("accountInfo: \(accountInfo["Department"])")
+//    }
+//    logger.info("accountInfo: \(accountInfo["Department"]!)")
     return accountInfo
 }

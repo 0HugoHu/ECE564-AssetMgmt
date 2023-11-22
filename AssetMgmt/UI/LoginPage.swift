@@ -49,6 +49,9 @@ struct LoginPage: View {
         .onAppear() {
             currentURL = initialURL
             isLoggedIn = loggedIn()
+            NotificationCenter.default.addObserver(forName: Notification.Name("LoggedOut"), object: nil, queue: .main) { _ in
+                isLoggedIn = loggedIn()
+            }
         }
     }
     

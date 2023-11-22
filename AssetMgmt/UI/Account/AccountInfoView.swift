@@ -21,7 +21,7 @@ struct AccountInfoView: View {
                     .frame(maxWidth: 180, maxHeight: 80)
                     .opacity(0.4)
             }
-                
+            
             
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 20), GridItem(.flexible(), spacing: 20)]) {
                 HStack {
@@ -68,7 +68,10 @@ struct AccountInfoView: View {
         }
         .onAppear {
             accountInfoLocal = getAccountInfo()
-//            logger.info(accountInfoLocal["Username"]!)
+            // Set up a notification observer to listen for changes
+            NotificationCenter.default.addObserver(forName: Notification.Name("ReloadAccountInfo"), object: nil, queue: .main) { _ in
+                accountInfoLocal = getAccountInfo()
+            }
         }
     }
 }
