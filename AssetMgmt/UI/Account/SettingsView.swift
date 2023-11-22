@@ -9,8 +9,8 @@ import SwiftUI
 
 struct SettingsView: View {
     @State private var selectedACL: Int = 0
-    @State private var selectedTheme = 0
-    @State private var selectedAppearanceMode = 0
+    @State private var selectedTheme: Int = 0
+    @State private var selectedAppearanceMode: Int = 0
     @StateObject var themeManager = Themes.instance
     @StateObject var appearanceManager = Appearances.instance
     
@@ -34,7 +34,8 @@ struct SettingsView: View {
                 ScrollView(.horizontal) {
                     LazyHStack(spacing: 16) {
                         ForEach(0..<themeManager.themeArray.count, id: \.self) {
-                            ThemeSelectionView(themeIndex: $0, selectedTheme: $selectedTheme)
+                            ThemeSelectionView(themeIndex: $0, selectedTheme: selectedTheme)
+                                .id($0 * 100 + selectedTheme)
                         }
                     }
                 }
@@ -43,7 +44,8 @@ struct SettingsView: View {
             Section(header: Text("Appearance")) {
                 LazyHStack(spacing: 16) {
                     ForEach(0..<appearanceManager.appearanceArray.count, id: \.self) {
-                        AppearanceSelectionView(modeIndex: $0, selectedMode: $selectedAppearanceMode)
+                        AppearanceSelectionView(modeIndex: $0, selectedMode: selectedAppearanceMode)
+                            .id($0 * 100 + selectedAppearanceMode)
                     }
                     Spacer()
                 }
@@ -73,11 +75,27 @@ struct SettingsView: View {
             selectedTheme = themeManager.selectedThemeIndex
             selectedAppearanceMode = appearanceManager.selectedAppearanceIndex
             getACLGroups()
-            logger.info("Selected theme: \(selectedTheme)")
-            logger.info("Selected appearance: \(selectedAppearanceMode)")
+            NotificationCenter.default.addObserver(forName: Notification.Name("ReloadThemeSelection"), object: nil, queue: .main) { notification in
+                if let themeIndex = notification.object as? Int {
+                    selectedTheme = themeIndex
+                    themeManager.reload()
+                }
+            }
+            NotificationCenter.default.addObserver(forName: Notification.Name("ReloadAppearanceSelection"), object: nil, queue: .main) { notification in
+                if let modeIndex = notification.object as? Int {
+                    selectedAppearanceMode = modeIndex
+                    appearanceManager.reload()
+                }
+            }
         }
         .onChange(of: selectedACL, perform: { newValue in
             UserDefaults.standard.setValue(newValue, forKey: "selectedACL")
+            NotificationCenter.default.post(name: Notification.Name("ReloadAccountInfo"), object: nil)
+        })
+        .onChange(of: selectedTheme, perform: { newValue in
+            NotificationCenter.default.post(name: Notification.Name("ReloadAccountInfo"), object: nil)
+        })
+        .onChange(of: selectedAppearanceMode, perform: { newValue in
             NotificationCenter.default.post(name: Notification.Name("ReloadAccountInfo"), object: nil)
         })
     }

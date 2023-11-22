@@ -10,8 +10,8 @@ import SwiftUI
 
 struct ThemeSelectionView: View {
     var themeIndex: Int
-    @Binding var selectedTheme: Int
     @StateObject var themeManager = Themes.instance
+    @State var selectedTheme: Int
     
     var body: some View {
         let imgUrl = themeManager.getDirectoryIcon(themeIndex)
@@ -35,8 +35,7 @@ struct ThemeSelectionView: View {
             }
         }
         .onTapGesture {
-            self.selectedTheme = themeIndex
-            switch (selectedTheme) {
+            switch (themeIndex) {
             case 0:
                 themeManager.setTheme(theme: .default)
             case 1:
@@ -48,6 +47,8 @@ struct ThemeSelectionView: View {
             default:
                 themeManager.setTheme(theme: .default)
             }
+            NotificationCenter.default.post(name: Notification.Name("ReloadThemeSelection"), object: themeIndex)
+//            logger.error("\(themeIndex)")
         }
         .frame(height: 85)
     }

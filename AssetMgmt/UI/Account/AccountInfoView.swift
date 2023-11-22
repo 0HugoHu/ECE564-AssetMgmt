@@ -11,15 +11,16 @@ struct AccountInfoView: View {
     
     @StateObject var themeManager = Themes.instance
     @State var accountInfoLocal = getAccountInfo()
+    @State var uiDecoration : UIImage?
     
     var body: some View {
         ZStack {
-            if let uiDecoration = themeManager.getUserInfoIcon() {
+            if let uiDecoration {
                 Image(uiImage: uiDecoration)
                     .resizable()
                     .scaledToFill()
                     .frame(maxWidth: 180, maxHeight: 80)
-                    .opacity(0.4)
+                    .opacity(0.3)
             }
             
             
@@ -68,9 +69,10 @@ struct AccountInfoView: View {
         }
         .onAppear {
             accountInfoLocal = getAccountInfo()
-            // Set up a notification observer to listen for changes
+            uiDecoration = themeManager.getUserInfoIcon()
             NotificationCenter.default.addObserver(forName: Notification.Name("ReloadAccountInfo"), object: nil, queue: .main) { _ in
                 accountInfoLocal = getAccountInfo()
+                uiDecoration = themeManager.getUserInfoIcon()
             }
         }
     }
