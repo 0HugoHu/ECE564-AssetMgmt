@@ -5,23 +5,12 @@ public struct DirectoryBrowser: View {
     @StateObject var thumbnailer = Thumbnailer()
     
     public var body: some View {
-        TabView {
-            FolderView(documentsStore: DocumentsStore(root: "/", mode: .remote), title: "Index")
-                .tabItem {
-                    Image(systemName: "folder")
-                    Text("Browse")
-                }
-            SettingsView()
-                .tabItem {
-                    Image(systemName: "person")
-                    Text("Account")
-                }
-        }
-        .environmentObject(thumbnailer)
-        .task {
-            setACLGroups()
-        }
-        .background(Color(UIColor.systemBackground))
+        FolderView(documentsStore: DocumentsStore(root: "/", mode: .remote), title: "Index")
+            .environmentObject(thumbnailer)
+            .task {
+                setACLGroups()
+            }
+            .navigationBarTitleDisplayMode(.inline)
     }
     
     private func setACLGroups() {

@@ -350,6 +350,8 @@
 		C2C2D7C12B07073F0080C469 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				C2B652652AF435E600E45890 /* DownloadView.swift */,
+				C2B652672AF435EF00E45890 /* UploadView.swift */,
 				C2B652892AF459C300E45890 /* CopyResourcesToLocal.swift */,
 			);
 			path = Deprecated;
@@ -429,8 +431,6 @@
 			children = (
 				C2FB20D42AEEE15B002B3FCF /* Initialization.swift */,
 				AB53ABC82B01835C00C97CB4 /* LoginPage.swift */,
-				C2B652652AF435E600E45890 /* DownloadView.swift */,
-				C2B652672AF435EF00E45890 /* UploadView.swift */,
 				C2C2D7BC2B06EF590080C469 /* Account */,
 				C28274982AFDD37600C6A9DD /* Search */,
 				C2FB20EE2AEEF0FE002B3FCF /* FileBrowser */,

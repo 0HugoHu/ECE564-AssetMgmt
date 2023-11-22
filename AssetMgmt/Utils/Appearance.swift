@@ -42,6 +42,7 @@ class Appearances: ObservableObject {
             }
         } else {
             self.currentMode = .default
+            self.selectedAppearanceIndex = 1
         }
     }
     
