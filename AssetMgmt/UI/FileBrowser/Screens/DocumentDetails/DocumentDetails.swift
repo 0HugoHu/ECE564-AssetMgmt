@@ -107,8 +107,15 @@ struct DocumentDetails: View {
                 if let modified = document.modified {
                     DocumentAttributeRow(key: "Modified", value: modified.formatted())
                 }
+                
+                Section(header: Text("Dublin Core Metadata")) {
+                    DocumentAttributeRow(key: "Size", value: document.formattedSize)
+                }
             }
             .listStyle(InsetGroupedListStyle())
+            
+            
+           
         }
         .quickLookPreview($urlToPreview)
         .navigationBarItems(trailing: HStack {

@@ -56,6 +56,7 @@ struct SearchView: View {
             
         }
         .navigationBarTitle("Search")
+        .background(Color(UIColor.systemBackground)) 
     }
 }
 

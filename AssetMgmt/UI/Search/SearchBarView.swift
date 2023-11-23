@@ -99,16 +99,19 @@ struct SearchBarView: View {
         HStack {
             HStack {
                 Image(systemName: "magnifyingglass")
+                    .foregroundColor(.primary) // Adaptive color for the icon
                 
                 // Search text field
                 ZStack (alignment: .leading) {
                     if searchText.isEmpty { // Separate text for placeholder to give it the proper color
                         Text("Search")
+                            .foregroundColor(.secondary) // Adaptive color for the placeholder text
                     }
                     TextField("", text: $searchText, onEditingChanged: { isEditing in
                         self.showCancelButton = true
                     }, onCommit: onCommit).foregroundColor(.primary)
                 }
+                
                 
                 if showCancelButton  {
                     // Cancel button
@@ -122,6 +125,7 @@ struct SearchBarView: View {
                         
                     }) {
                         Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
+                            .foregroundColor(.primary)
                     }
                 }
                 
@@ -129,15 +133,17 @@ struct SearchBarView: View {
                 Button(action: {
                     self.showAdvancedSearch.toggle()
                 }) {
-                    Image(systemName: "ellipsis.circle")
+                    Image(systemName: "square.stack.3d.up.fill")
+                        .foregroundColor(.primary)
                 }
             }
             .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-            .foregroundColor(.secondary) // For magnifying glass and placeholder test
-            .background(Color(.tertiarySystemFill))
+            .foregroundColor(.secondary) // Adaptive color for the background
+            .background(Color(.tertiarySystemFill).opacity(0.5))
             .cornerRadius(10.0)
         }
         .padding(.horizontal)
+        .background(Color(UIColor.systemBackground)) //
         
         if isSearching {
             VStack(spacing: 0) {

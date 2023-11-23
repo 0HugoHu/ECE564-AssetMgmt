@@ -244,11 +244,9 @@ public struct FolderView: View {
                                        searchResults: $searchViewModel.searchResults,
                                        isLoading: $searchViewModel.isLoading,
                                        columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
-//                     .scaleEffect(viewModel.isSearching ? 1 : 0.5) // 1 means full size, 0.5 is half size
-//                        .opacity(viewModel.isSearching ? 1 : 0) // 1 for fully visible, 0 for invisible
-//                        .animation(.easeInOut(duration: 0.5), value: viewModel.isSearching)
+
                      .frame(maxHeight: .infinity)
-                     .background(Color.white) // Set a solid background color here
+                     .background(Color(UIColor.systemBackground)) 
                      .edgesIgnoringSafeArea(.all)
                  }
 

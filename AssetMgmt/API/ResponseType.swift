@@ -73,3 +73,11 @@ struct DirectoryResponse: Codable, Identifiable {
 }
 
 
+//struct DublinCoreResponse: Codable, Identifiable {
+//    let id: Int
+//    
+//    struct fields: Codable {
+//        let "http://purl.org/dc/elements/1.1/ title": String?
+//        let "http://purl.org/dc/elements/1.1/ subject": [String]?
+//    }
+//}
