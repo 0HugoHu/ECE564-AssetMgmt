@@ -126,8 +126,6 @@ public struct FolderView: View {
     public var body: some View {
         
         VStack (spacing: 0) {
-            
-
             SearchBarView(
                 searchText: $searchViewModel.searchText,
                           selectedCriteriaConjunction: $searchViewModel.selectedCriteriaConjunction,

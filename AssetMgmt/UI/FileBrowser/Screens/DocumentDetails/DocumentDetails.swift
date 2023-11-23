@@ -116,23 +116,23 @@ struct DocumentDetails: View {
                 Section(header: Text("Dublin Core Metadata")) {
                     
                     
-                    if let title = dcFields?.title?.first {
+                    if let title = dcFields?.title?.joined(separator: ", ") {
                         DocumentAttributeRow(key: "Title", value: title)
                     }
-                    if let subject = dcFields?.subject?.first {
-                        DocumentAttributeRow(key: "Subject", value: subject)
+                    if let keyword = dcFields?.keyword?.joined(separator: ", ") {
+                        DocumentAttributeRow(key: "Keywords", value: keyword)
                     }
                     if let description = dcFields?.description {
                         DocumentAttributeRow(key: "Description", value: description)
                     }
-                    if let creator = dcFields?.creator?.first {
-                        DocumentAttributeRow(key: "Creator", value: creator)
+                    if let creator = dcFields?.creator?.joined(separator: ", ") {
+                        DocumentAttributeRow(key: "Creators", value: creator)
                     }
-                    if let rights = dcFields?.rights?.first {
+                    if let rights = dcFields?.rights?.joined(separator: ", ") {
                         DocumentAttributeRow(key: "Rights", value: rights)
                     }
-                    if let contributor = dcFields?.contributor?.first {
-                        DocumentAttributeRow(key: "Contributor", value: contributor)
+                    if let contributor = dcFields?.contributor?.joined(separator: ", ") {
+                        DocumentAttributeRow(key: "Contributors", value: contributor)
                     }
                     if let publisher = dcFields?.publisher?.joined(separator: ", ") {
                         DocumentAttributeRow(key: "Publisher", value: publisher)
@@ -140,7 +140,7 @@ struct DocumentDetails: View {
                     if let coverage = dcFields?.coverage {
                         DocumentAttributeRow(key: "Coverage", value: coverage)
                     }
-                    if let date = dcFields?.date {
+                    if let date = dcFields?.date?.joined(separator: ", ") {
                         DocumentAttributeRow(key: "Date", value: date)
                     }
                     if let identifier = dcFields?.identifier {
@@ -152,7 +152,8 @@ struct DocumentDetails: View {
                     if let format = dcFields?.format {
                         DocumentAttributeRow(key: "Format", value: format)
                     }
-                }            }
+                }
+            }
             .listStyle(InsetGroupedListStyle())
             
             

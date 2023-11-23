@@ -85,21 +85,21 @@ struct DublinCoreResponse: Codable {
 
 struct Fields: Codable {
     let title: [String]?
-    let subject: [String]?
+    let keyword: [String]?
     let description: String?
     let creator: [String]?
-    let rights: [String]? // Changed to an array based on your JSON response
+    let rights: [String]?
     let contributor: [String]?
     let publisher: [String]?
     let coverage: String?
-    let date: String?
+    let date: [String]?
     let identifier: String?
     let source: String?
     let format: String?
 
     enum CodingKeys: String, CodingKey {
         case title = "http://purl.org/dc/elements/1.1/ title"
-        case subject = "http://purl.org/dc/elements/1.1/ subject"
+        case keyword = "http://purl.org/dc/elements/1.1/ subject"
         case description = "http://purl.org/dc/elements/1.1/ description"
         case creator = "http://purl.org/dc/elements/1.1/ creator"
         case rights = "http://purl.org/dc/elements/1.1/ rights"
