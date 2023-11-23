@@ -52,7 +52,7 @@ struct LoginPage: View {
                                 .resizable()
                                 .frame(width: 300, height: 65)
                                 .aspectRatio(contentMode: .fit)
-                                .offset(y: -230)
+                                .offset(y: -420)
                             Text("Login")
                                 .foregroundColor(.white)
                                 .frame(maxWidth: 180, minHeight: 50)

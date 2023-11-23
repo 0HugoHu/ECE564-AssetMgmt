@@ -76,6 +76,16 @@
 		C2E947A92B0C58E700C5F89E /* CustomePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E947A82B0C58E700C5F89E /* CustomePreviewView.swift */; };
 		C2E947AB2B0C68C000C5F89E /* ConvertUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E947AA2B0C68C000C5F89E /* ConvertUserInfo.swift */; };
 		C2E947AD2B0D1AED00C5F89E /* AccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E947AC2B0D1AED00C5F89E /* AccountInfoView.swift */; };
+		C2E947B02B0EBDD400C5F89E /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = C2E947AF2B0EBDD400C5F89E /* PopupView */; };
+		C2E947B32B0EBE4600C5F89E /* OperationSuccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E947B22B0EBE4600C5F89E /* OperationSuccess.swift */; };
+		C2E947BB2B0EC05800C5F89E /* WCLShineButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E947B52B0EC05800C5F89E /* WCLShineButton.swift */; };
+		C2E947BC2B0EC05800C5F89E /* WCLShineClickLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E947B62B0EC05800C5F89E /* WCLShineClickLayer.swift */; };
+		C2E947BD2B0EC05800C5F89E /* WCLShineAngleLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E947B72B0EC05800C5F89E /* WCLShineAngleLayer.swift */; };
+		C2E947BE2B0EC05800C5F89E /* WCLShineParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E947B82B0EC05800C5F89E /* WCLShineParams.swift */; };
+		C2E947BF2B0EC05800C5F89E /* WCLShineBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E947B92B0EC05800C5F89E /* WCLShineBundle.swift */; };
+		C2E947C02B0EC05800C5F89E /* WCLShineLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E947BA2B0EC05800C5F89E /* WCLShineLayer.swift */; };
+		C2E947C22B0EC09F00C5F89E /* WCLShineButtonWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E947C12B0EC09F00C5F89E /* WCLShineButtonWrapper.swift */; };
+		C2E947C42B0EC14B00C5F89E /* WCLShineButton.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C2E947C32B0EC14B00C5F89E /* WCLShineButton.bundle */; };
 		C2FB20C92AEEDECA002B3FCF /* APIs.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB20C82AEEDECA002B3FCF /* APIs.swift */; };
 		C2FB20CF2AEEE0C8002B3FCF /* LogModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB20CE2AEEE0C8002B3FCF /* LogModel.swift */; };
 		C2FB20D52AEEE15B002B3FCF /* Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB20D42AEEE15B002B3FCF /* Initialization.swift */; };
@@ -167,6 +177,15 @@
 		C2E947A82B0C58E700C5F89E /* CustomePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomePreviewView.swift; sourceTree = "<group>"; };
 		C2E947AA2B0C68C000C5F89E /* ConvertUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertUserInfo.swift; sourceTree = "<group>"; };
 		C2E947AC2B0D1AED00C5F89E /* AccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountInfoView.swift; sourceTree = "<group>"; };
+		C2E947B22B0EBE4600C5F89E /* OperationSuccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationSuccess.swift; sourceTree = "<group>"; };
+		C2E947B52B0EC05800C5F89E /* WCLShineButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WCLShineButton.swift; sourceTree = "<group>"; };
+		C2E947B62B0EC05800C5F89E /* WCLShineClickLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WCLShineClickLayer.swift; sourceTree = "<group>"; };
+		C2E947B72B0EC05800C5F89E /* WCLShineAngleLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WCLShineAngleLayer.swift; sourceTree = "<group>"; };
+		C2E947B82B0EC05800C5F89E /* WCLShineParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WCLShineParams.swift; sourceTree = "<group>"; };
+		C2E947B92B0EC05800C5F89E /* WCLShineBundle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WCLShineBundle.swift; sourceTree = "<group>"; };
+		C2E947BA2B0EC05800C5F89E /* WCLShineLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WCLShineLayer.swift; sourceTree = "<group>"; };
+		C2E947C12B0EC09F00C5F89E /* WCLShineButtonWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WCLShineButtonWrapper.swift; sourceTree = "<group>"; };
+		C2E947C32B0EC14B00C5F89E /* WCLShineButton.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = WCLShineButton.bundle; sourceTree = "<group>"; };
 		C2FB20C82AEEDECA002B3FCF /* APIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIs.swift; sourceTree = "<group>"; };
 		C2FB20CE2AEEE0C8002B3FCF /* LogModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogModel.swift; sourceTree = "<group>"; };
 		C2FB20D42AEEE15B002B3FCF /* Initialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Initialization.swift; sourceTree = "<group>"; };
@@ -183,6 +202,7 @@
 			files = (
 				C2B652712AF4405D00E45890 /* Zip in Frameworks */,
 				C2B652862AF453DB00E45890 /* Alamofire in Frameworks */,
+				C2E947B02B0EBDD400C5F89E /* PopupView in Frameworks */,
 				C2FB20E62AEEE5BF002B3FCF /* Logging in Frameworks */,
 				C2C7974A2AF18160005D41DE /* FilePreviews in Frameworks */,
 			);
@@ -350,6 +370,7 @@
 		C2C2D7C12B07073F0080C469 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				C2E947B22B0EBE4600C5F89E /* OperationSuccess.swift */,
 				C2B652652AF435E600E45890 /* DownloadView.swift */,
 				C2B652672AF435EF00E45890 /* UploadView.swift */,
 				C2B652892AF459C300E45890 /* CopyResourcesToLocal.swift */,
@@ -426,6 +447,29 @@
 			path = Decoration;
 			sourceTree = "<group>";
 		};
+		C2E947B12B0EBE2000C5F89E /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				C2E947C12B0EC09F00C5F89E /* WCLShineButtonWrapper.swift */,
+				C2E947B42B0EC00300C5F89E /* WCLShineButton */,
+			);
+			path = Others;
+			sourceTree = "<group>";
+		};
+		C2E947B42B0EC00300C5F89E /* WCLShineButton */ = {
+			isa = PBXGroup;
+			children = (
+				C2E947C32B0EC14B00C5F89E /* WCLShineButton.bundle */,
+				C2E947B72B0EC05800C5F89E /* WCLShineAngleLayer.swift */,
+				C2E947B92B0EC05800C5F89E /* WCLShineBundle.swift */,
+				C2E947B52B0EC05800C5F89E /* WCLShineButton.swift */,
+				C2E947B62B0EC05800C5F89E /* WCLShineClickLayer.swift */,
+				C2E947BA2B0EC05800C5F89E /* WCLShineLayer.swift */,
+				C2E947B82B0EC05800C5F89E /* WCLShineParams.swift */,
+			);
+			path = WCLShineButton;
+			sourceTree = "<group>";
+		};
 		C2FB20BE2AEEDCA9002B3FCF /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -434,6 +478,7 @@
 				C2C2D7BC2B06EF590080C469 /* Account */,
 				C28274982AFDD37600C6A9DD /* Search */,
 				C2FB20EE2AEEF0FE002B3FCF /* FileBrowser */,
+				C2E947B12B0EBE2000C5F89E /* Others */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -546,6 +591,7 @@
 				C2C797492AF18160005D41DE /* FilePreviews */,
 				C2B652702AF4405D00E45890 /* Zip */,
 				C2B652852AF453DB00E45890 /* Alamofire */,
+				C2E947AF2B0EBDD400C5F89E /* PopupView */,
 			);
 			productName = AssetMgmt;
 			productReference = C28A0B982AE5FB0C008258C8 /* AssetMgmt.app */;
@@ -624,6 +670,7 @@
 				C2C797482AF18160005D41DE /* XCRemoteSwiftPackageReference "FilePreviews" */,
 				C2B6526F2AF4405D00E45890 /* XCRemoteSwiftPackageReference "Zip" */,
 				C2B652842AF453DB00E45890 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				C2E947AE2B0EBDD400C5F89E /* XCRemoteSwiftPackageReference "PopupView" */,
 			);
 			productRefGroup = C28A0B992AE5FB0C008258C8 /* Products */;
 			projectDirPath = "";
@@ -645,6 +692,7 @@
 				ABBB0F822AF2E4B300CD812B /* Sample.pdf in Resources */,
 				C2B652882AF4575400E45890 /* NC-MICS-265.jpg in Resources */,
 				C28A0BA02AE5FB0D008258C8 /* Assets.xcassets in Resources */,
+				C2E947C42B0EC14B00C5F89E /* WCLShineButton.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -689,17 +737,22 @@
 				C28274912AFC9B8200C6A9DD /* FileBrowserMode.swift in Sources */,
 				C2C7975A2AF1C3CA005D41DE /* Upload.swift in Sources */,
 				2DAE8A452B055C12005A8742 /* SearchViewModel.swift in Sources */,
+				C2E947BE2B0EC05800C5F89E /* WCLShineParams.swift in Sources */,
 				AB53ABC92B01835C00C97CB4 /* LoginPage.swift in Sources */,
 				C2C797392AF18117005D41DE /* DocumentPicker.swift in Sources */,
+				C2E947C22B0EC09F00C5F89E /* WCLShineButtonWrapper.swift in Sources */,
 				C2B652662AF435E600E45890 /* DownloadView.swift in Sources */,
 				2D48EF912AF9939C00968F67 /* SearchBarView.swift in Sources */,
 				C2B6526C2AF43D2D00E45890 /* GetFileType.swift in Sources */,
+				C2E947BD2B0EC05800C5F89E /* WCLShineAngleLayer.swift in Sources */,
 				C2C2D7BE2B06EF7D0080C469 /* SettingsView.swift in Sources */,
+				C2E947C02B0EC05800C5F89E /* WCLShineLayer.swift in Sources */,
 				C2B652642AF4341F00E45890 /* GenerateUniqueUrl.swift in Sources */,
 				C2B652682AF435EF00E45890 /* UploadView.swift in Sources */,
 				ABBB0F852AF3254A00CD812B /* UserDefaultAccess.swift in Sources */,
 				C2FB20C92AEEDECA002B3FCF /* APIs.swift in Sources */,
 				C2924C782B018E9D004504E2 /* DocumentGrid.swift in Sources */,
+				C2E947B32B0EBE4600C5F89E /* OperationSuccess.swift in Sources */,
 				C28274952AFD530D00C6A9DD /* SearchFilter.swift in Sources */,
 				C2C2D7C32B0708A80080C469 /* ThemeSelectionView.swift in Sources */,
 				C2C7973D2AF18117005D41DE /* FolderView.swift in Sources */,
@@ -712,6 +765,7 @@
 				2D72D0E02AF414ED00C9208E /* SearchView.swift in Sources */,
 				C2C2D7C52B0708CB0080C469 /* AppearanceSelectionView.swift in Sources */,
 				C2C797422AF18117005D41DE /* DocumentsStore.swift in Sources */,
+				C2E947BF2B0EC05800C5F89E /* WCLShineBundle.swift in Sources */,
 				C2C7973F2AF18117005D41DE /* DocumentAttributeRow.swift in Sources */,
 				C2E947A52B0C57B200C5F89E /* EmptyFolderView.swift in Sources */,
 				C2C2D7C02B0705FF0080C469 /* Appearance.swift in Sources */,
@@ -719,7 +773,9 @@
 				C2C7973A2AF18117005D41DE /* PhotoPicker.swift in Sources */,
 				C2FB20D52AEEE15B002B3FCF /* Initialization.swift in Sources */,
 				C2C797582AF1C1F0005D41DE /* Download.swift in Sources */,
+				C2E947BC2B0EC05800C5F89E /* WCLShineClickLayer.swift in Sources */,
 				C2C797412AF18117005D41DE /* Formatters.swift in Sources */,
+				C2E947BB2B0EC05800C5F89E /* WCLShineButton.swift in Sources */,
 				ABBB0F872AFC79C600CD812B /* FileAccess.swift in Sources */,
 				C28A0B9C2AE5FB0C008258C8 /* AssetMgmtApp.swift in Sources */,
 				C2E947AB2B0C68C000C5F89E /* ConvertUserInfo.swift in Sources */,
@@ -1118,6 +1174,14 @@
 				minimumVersion = 0.2.0;
 			};
 		};
+		C2E947AE2B0EBDD400C5F89E /* XCRemoteSwiftPackageReference "PopupView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/PopupView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.3;
+			};
+		};
 		C2FB20E42AEEE5BF002B3FCF /* XCRemoteSwiftPackageReference "swift-log" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-log";
@@ -1143,6 +1207,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C2C797482AF18160005D41DE /* XCRemoteSwiftPackageReference "FilePreviews" */;
 			productName = FilePreviews;
+		};
+		C2E947AF2B0EBDD400C5F89E /* PopupView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C2E947AE2B0EBDD400C5F89E /* XCRemoteSwiftPackageReference "PopupView" */;
+			productName = PopupView;
 		};
 		C2FB20E52AEEE5BF002B3FCF /* Logging */ = {
 			isa = XCSwiftPackageProductDependency;

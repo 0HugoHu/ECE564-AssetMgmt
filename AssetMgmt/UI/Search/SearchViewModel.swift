@@ -53,7 +53,7 @@ class SearchViewModel: ObservableObject {
             directoryToSearch = currentDirectory // Specific folder search
         }
         
-        print("\(directoryToSearch)")
+//        print("\(directoryToSearch)")
 
         simpleSearch(search: searchText, directory: directoryToSearch
         ) { simpleIDResponses in

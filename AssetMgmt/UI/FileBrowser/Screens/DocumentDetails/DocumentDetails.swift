@@ -139,7 +139,7 @@ struct DocumentDetails: View {
         if timer != nil {
             return EmptyView()
         }
-        timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true) {  timer in
+        timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) {  timer in
             self.retryCount += 1
         }
         return EmptyView()
