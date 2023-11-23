@@ -119,29 +119,29 @@ struct DocumentDetails: View {
                     if let title = dcFields?.title?.joined(separator: ", ") {
                         DocumentAttributeRow(key: "Title", value: title)
                     }
-                    if let keyword = dcFields?.keyword?.joined(separator: ", ") {
-                        DocumentAttributeRow(key: "Keywords", value: keyword)
+                    if let keyword = dcFields?.keyword {
+                        DocumentAttributeRow(key: "Keywords", values: keyword)
                     }
                     if let description = dcFields?.description {
                         DocumentAttributeRow(key: "Description", value: description)
                     }
-                    if let creator = dcFields?.creator?.joined(separator: ", ") {
-                        DocumentAttributeRow(key: "Creators", value: creator)
+                    if let creator = dcFields?.creator {
+                        DocumentAttributeRow(key: "Creators", values: creator)
                     }
                     if let rights = dcFields?.rights?.joined(separator: ", ") {
                         DocumentAttributeRow(key: "Rights", value: rights)
                     }
-                    if let contributor = dcFields?.contributor?.joined(separator: ", ") {
-                        DocumentAttributeRow(key: "Contributors", value: contributor)
+                    if let contributor = dcFields?.contributor {
+                        DocumentAttributeRow(key: "Contributors", values: contributor)
                     }
-                    if let publisher = dcFields?.publisher?.joined(separator: ", ") {
-                        DocumentAttributeRow(key: "Publisher", value: publisher)
+                    if let publisher = dcFields?.publisher {
+                        DocumentAttributeRow(key: "Publisher", values: publisher)
                     }
                     if let coverage = dcFields?.coverage {
                         DocumentAttributeRow(key: "Coverage", value: coverage)
                     }
-                    if let date = dcFields?.date?.joined(separator: ", ") {
-                        DocumentAttributeRow(key: "Date", value: date)
+                    if let date = dcFields?.date {
+                        DocumentAttributeRow(key: "Date", values: date)
                     }
                     if let identifier = dcFields?.identifier {
                         DocumentAttributeRow(key: "Identifier", value: identifier)
