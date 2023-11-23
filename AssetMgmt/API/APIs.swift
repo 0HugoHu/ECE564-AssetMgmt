@@ -750,3 +750,66 @@ func getDublinCore(ids: [String], completion: @escaping ([DublinCoreResponse]?) 
     }
 }
 
+/*
+Set Dublin Core Metadata
+ 
+ - Parameters:
+ - datas
+    - id
+    - fields
+        - fields Id
+        - value
+        - append: false
+ 
+- Returns: Bool indicating success or failure
+ */
+
+func updateDublinCore(ids: [Int], newNames: [String], completion: @escaping (Bool) -> Void) {
+    guard var urlComponents = URLComponents(url: setFieldsURL(), resolvingAgainstBaseURL: false) else {
+        logger.error("Error constructing the setFields URL")
+        return completion(false)
+    }
+    
+    var existingQueryItems = urlComponents.queryItems ?? []
+    
+    let idDictionaries = zip(ids, newNames).map { ["id": $0, "name": $1] }
+    
+    do {
+        let jsonData = try JSONSerialization.data(withJSONObject: idDictionaries, options: .prettyPrinted)
+        
+        if let jsonString = String(data: jsonData, encoding: .utf8) {
+            let additionalQueryItems: [URLQueryItem] = [
+                URLQueryItem(name: "data", value: jsonString),
+                URLQueryItem(name: "verbose", value: String(true))
+            ]
+            
+            existingQueryItems.append(contentsOf: additionalQueryItems)
+            
+            urlComponents.queryItems = existingQueryItems
+            
+            guard let finalURL = urlComponents.url else {
+                logger.error("Error constructing the final rename URL")
+                return completion(false)
+            }
+            
+            logger.info("Rename URL: \(finalURL)")
+            
+            fetchData(from: finalURL, responseType: [AssetInfoResponse].self) { result in
+                switch result {
+                case .success(let response):
+                    if response.count == ids.count {
+                        completion(true)
+                    } else {
+                        logger.error("Error renaming files: \(response)")
+                        completion(false)
+                    }
+                case .failure(let error):
+                    logger.error("Error renaming files: \(error)")
+                    completion(false)
+                }
+            }
+        }
+    } catch {
+        print("Error in renaming files, cannot convert data to JSON: \(error)")
+    }
+}

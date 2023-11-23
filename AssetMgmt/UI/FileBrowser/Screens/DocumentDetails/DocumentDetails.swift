@@ -19,9 +19,12 @@ struct DocumentDetails: View {
         self.mode = mode
     }
     
-    
+        
     
     var body: some View {
+        
+        let viewModel = DocumentFieldsViewModel(dcFields: dcFields ?? Fields())
+        
         VStack(alignment: .center, spacing: 12) {
             List {
                 if mode == .local {
@@ -113,46 +116,7 @@ struct DocumentDetails: View {
                     DocumentAttributeRow(key: "Modified", value: modified.formatted())
                 }
                 
-                Section(header: Text("Dublin Core Metadata")) {
-                    
-                    
-                    if let title = dcFields?.title?.joined(separator: ", ") {
-                        DocumentAttributeRow(key: "Title", value: title)
-                    }
-                    if let keyword = dcFields?.keyword {
-                        DocumentAttributeRow(key: "Keywords", values: keyword)
-                    }
-                    if let description = dcFields?.description {
-                        DocumentAttributeRow(key: "Description", value: description)
-                    }
-                    if let creator = dcFields?.creator {
-                        DocumentAttributeRow(key: "Creators", values: creator)
-                    }
-                    if let rights = dcFields?.rights?.joined(separator: ", ") {
-                        DocumentAttributeRow(key: "Rights", value: rights)
-                    }
-                    if let contributor = dcFields?.contributor {
-                        DocumentAttributeRow(key: "Contributors", values: contributor)
-                    }
-                    if let publisher = dcFields?.publisher {
-                        DocumentAttributeRow(key: "Publisher", values: publisher)
-                    }
-                    if let coverage = dcFields?.coverage {
-                        DocumentAttributeRow(key: "Coverage", value: coverage)
-                    }
-                    if let date = dcFields?.date {
-                        DocumentAttributeRow(key: "Date", values: date)
-                    }
-                    if let identifier = dcFields?.identifier {
-                        DocumentAttributeRow(key: "Identifier", value: identifier)
-                    }
-                    if let source = dcFields?.source {
-                        DocumentAttributeRow(key: "Source", value: source)
-                    }
-                    if let format = dcFields?.format {
-                        DocumentAttributeRow(key: "Format", value: format)
-                    }
-                }
+                DCSectionView(viewModel: viewModel)
             }
             .listStyle(InsetGroupedListStyle())
             

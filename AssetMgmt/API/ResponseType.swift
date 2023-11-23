@@ -84,18 +84,18 @@ struct DublinCoreResponse: Codable {
 }
 
 struct Fields: Codable {
-    let title: [String]?
-    let keyword: [String]?
-    let description: String?
-    let creator: [String]?
-    let rights: [String]?
-    let contributor: [String]?
-    let publisher: [String]?
-    let coverage: String?
-    let date: [String]?
-    let identifier: String?
-    let source: String?
-    let format: String?
+    var title: [String]?
+    var keyword: [String]?
+    var description: String?
+    var creator: [String]?
+    var rights: [String]?
+    var contributor: [String]?
+    var publisher: [String]?
+    var coverage: String?
+    var date: [String]?
+    var identifier: String?
+    var source: String?
+    var format: String?
 
     enum CodingKeys: String, CodingKey {
         case title = "http://purl.org/dc/elements/1.1/ title"
@@ -112,4 +112,3 @@ struct Fields: Codable {
         case format = "http://purl.org/dc/elements/1.1/ format"
     }
 }
-

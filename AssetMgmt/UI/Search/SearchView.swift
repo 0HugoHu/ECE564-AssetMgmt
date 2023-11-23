@@ -42,7 +42,7 @@ struct SearchView: View {
                 }
                 searchViewModel.updateSearchStatus()
             }
-            .onChange(of: searchViewModel.selectedSearchDirectoryOption) { _ in
+            .onChange(of: searchViewModel.selectedSearchDirectoryOption) { _2 in
                 searchViewModel.search()
             }
             Spacer()
