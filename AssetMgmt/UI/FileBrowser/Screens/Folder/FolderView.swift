@@ -121,7 +121,6 @@ public struct FolderView: View {
         self.documentsStore = documentsStore
         self.title = title
         self.searchViewModel = SearchViewModel(currentDirectory: documentsStore.getRelativePath())
-        print(self.documentsStore.remoteUrl)
     }
     
     public var body: some View {

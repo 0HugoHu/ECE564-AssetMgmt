@@ -53,8 +53,6 @@ class SearchViewModel: ObservableObject {
             directoryToSearch = currentDirectory // Specific folder search
         }
         
-        print("\(directoryToSearch)")
-
         simpleSearch(search: searchText, directory: directoryToSearch
         ) { simpleIDResponses in
             guard let ids: [String] = simpleIDResponses?.map({ "\($0.id)" }) else {

@@ -5,16 +5,21 @@ struct DocumentDetails: View {
     var document: Document
     var mode: FileBrowserMode
     
+    
+    @State private var dcFields: Fields?
     @State private var urlToPreview: URL?
     @State private var progress: Int64 = 0
     @State private var waitToShow: Bool = false
     @State private var retryCount = 0
     @State private var timer: Timer?
     
+    
     public init(document: Document, mode: FileBrowserMode) {
         self.document = document
         self.mode = mode
     }
+    
+    
     
     var body: some View {
         VStack(alignment: .center, spacing: 12) {
@@ -109,13 +114,49 @@ struct DocumentDetails: View {
                 }
                 
                 Section(header: Text("Dublin Core Metadata")) {
-                    DocumentAttributeRow(key: "Size", value: document.formattedSize)
-                }
-            }
+                    
+                    
+                    if let title = dcFields?.title?.first {
+                        DocumentAttributeRow(key: "Title", value: title)
+                    }
+                    if let subject = dcFields?.subject?.first {
+                        DocumentAttributeRow(key: "Subject", value: subject)
+                    }
+                    if let description = dcFields?.description {
+                        DocumentAttributeRow(key: "Description", value: description)
+                    }
+                    if let creator = dcFields?.creator?.first {
+                        DocumentAttributeRow(key: "Creator", value: creator)
+                    }
+                    if let rights = dcFields?.rights?.first {
+                        DocumentAttributeRow(key: "Rights", value: rights)
+                    }
+                    if let contributor = dcFields?.contributor?.first {
+                        DocumentAttributeRow(key: "Contributor", value: contributor)
+                    }
+                    if let publisher = dcFields?.publisher?.joined(separator: ", ") {
+                        DocumentAttributeRow(key: "Publisher", value: publisher)
+                    }
+                    if let coverage = dcFields?.coverage {
+                        DocumentAttributeRow(key: "Coverage", value: coverage)
+                    }
+                    if let date = dcFields?.date {
+                        DocumentAttributeRow(key: "Date", value: date)
+                    }
+                    if let identifier = dcFields?.identifier {
+                        DocumentAttributeRow(key: "Identifier", value: identifier)
+                    }
+                    if let source = dcFields?.source {
+                        DocumentAttributeRow(key: "Source", value: source)
+                    }
+                    if let format = dcFields?.format {
+                        DocumentAttributeRow(key: "Format", value: format)
+                    }
+                }            }
             .listStyle(InsetGroupedListStyle())
             
             
-           
+            
         }
         .quickLookPreview($urlToPreview)
         .navigationBarItems(trailing: HStack {
@@ -127,6 +168,18 @@ struct DocumentDetails: View {
             if let data = UserDefaults.standard.value(forKey: "download@\(document.mediaBeaconID)") {
                 if let value = data as? Int64 {
                     progress = value
+                }
+            }
+        }
+        .onAppear {
+            getDublinCore(ids: [String(document.mediaBeaconID)]) { DublinCoreInfo in
+                DispatchQueue.main.async {
+                    
+                    if let dcFields = DublinCoreInfo?.first?.fields{
+                        print(dcFields)
+                        self.dcFields = dcFields
+                    }
+                    
                 }
             }
         }

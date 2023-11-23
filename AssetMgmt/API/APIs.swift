@@ -654,3 +654,99 @@ func getAssetDetails(ids: [String], completion: @escaping ([AssetInfoResponse]?)
         }
     }
 }
+
+
+
+/*
+ Get Dublin Core Metadata
+ 
+ - Parameters:
+ - ids: File ids
+ 
+ - Returns: [DublinCoreResponse]?
+ */
+//func getDublinCore(ids: [String], completion: @escaping ([DublinCoreResponse]?) -> Void) {
+//    guard var urlComponents = URLComponents(url: getAssetInfoURL(), resolvingAgainstBaseURL: false) else {
+//        logger.error("Error constructing the dublin core info URL")
+//        return completion(nil)
+//    }
+//
+//    // Existing query items
+//    var existingQueryItems = urlComponents.queryItems ?? []
+//
+//    // Prepare IDs
+//    let idsValue = "[" + ids.joined(separator: ",") + "]" // Adjust this as per API requirement
+//
+//    // Prepare Fields
+//    let fieldsValue = "[" + DublinCoreFieldsRequest.joined(separator: ",") + "]" // Ensure these are correctly formatted
+//
+//    // Add query items
+//    existingQueryItems += [
+//        URLQueryItem(name: "ids", value: idsValue),
+//        URLQueryItem(name: "fields", value: fieldsValue)
+//    ]
+//
+//    // Update URL components
+//    urlComponents.queryItems = existingQueryItems
+//
+//    // Final URL
+//    guard let finalURL = urlComponents.url else {
+//        logger.error("Error constructing the final dublin core URL")
+//        return completion(nil)
+//    }
+//
+//    // Log and fetch data
+//    logger.info("Dublin Core URL: \(finalURL)")
+//    fetchData(from: finalURL, responseType: [DublinCoreResponse].self) { result in
+//        switch result {
+//        case .success(let assetInfo):
+//            completion(assetInfo)
+//        case .failure(let error):
+//            logger.error("Error getting Dublin Core: \(error)")
+//            completion(nil)
+//        }
+//    }
+//}
+func getDublinCore(ids: [String], completion: @escaping ([DublinCoreResponse]?) -> Void) {
+    guard var urlComponents = URLComponents(url: getAssetInfoURL(), resolvingAgainstBaseURL: false) else {
+        logger.error("Error constructing the dublin core info URL")
+        return completion(nil)
+    }
+    
+    // Existing query items
+    var existingQueryItems = urlComponents.queryItems ?? []
+    
+    // Prepare IDs
+    let idsValue = "[" + ids.joined(separator: ",") + "]" // Adjust this as per API requirement
+    
+    // Prepare Fields
+    let fieldsValue = DublinCoreFieldsRequest
+    
+    // Add query items
+    existingQueryItems += [
+        URLQueryItem(name: "ids", value: idsValue),
+        URLQueryItem(name: "fields", value: fieldsValue)
+    ]
+    
+    // Update URL components
+    urlComponents.queryItems = existingQueryItems
+    
+    // Final URL
+    guard let finalURL = urlComponents.url else {
+        logger.error("Error constructing the final dublin core URL")
+        return completion(nil)
+    }
+    
+    // Log and fetch data
+    logger.info("Dublin Core URL: \(finalURL)")
+    fetchData(from: finalURL, responseType: [DublinCoreResponse].self) { result in
+        switch result {
+        case .success(let assetInfo):
+            completion(assetInfo)
+        case .failure(let error):
+            logger.error("Error getting Dublin Core: \(error)")
+            completion(nil)
+        }
+    }
+}
+
