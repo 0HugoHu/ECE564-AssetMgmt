@@ -83,7 +83,7 @@ struct DublinCoreResponse: Codable {
     }
 }
 
-struct Fields: Codable {
+struct Fields: Codable, Equatable {
     var title: [String]?
     var keyword: [String]?
     var description: String?
@@ -111,4 +111,45 @@ struct Fields: Codable {
         case source = "http://purl.org/dc/elements/1.1/ source"
         case format = "http://purl.org/dc/elements/1.1/ format"
     }
+}
+
+
+
+extension Fields {
+    func toCustomJSON(id: Int) -> [String: Any] {
+        var fieldsArray: [[String: Any]] = []
+
+        let mirror = Mirror(reflecting: self)
+        for child in mirror.children {
+            guard let key = child.label, let codingKey = codingKey(for: key) else { continue }
+            
+            if let value = child.value as? String {
+                fieldsArray.append(["fieldId": codingKey, "value": value, "append": false])
+            } else if let valueArray = child.value as? [String] {
+                let value = valueArray.joined(separator: ", ")
+                fieldsArray.append(["fieldId": codingKey, "value": value, "append": false])
+            }
+        }
+
+        return ["id": id, "fields": fieldsArray]  // Example ID used
+    }
+
+    private func codingKey(for label: String) -> String? {
+        switch label {
+            case "title": return "http://purl.org/dc/elements/1.1/ title"
+            case "keyword": return "http://purl.org/dc/elements/1.1/ subject"
+            case "description": return "http://purl.org/dc/elements/1.1/ description"
+            case "creator": return "http://purl.org/dc/elements/1.1/ creator"
+            case "rights": return "http://purl.org/dc/elements/1.1/ rights"
+            case "contributor": return "http://purl.org/dc/elements/1.1/ contributor"
+            case "publisher": return "http://purl.org/dc/elements/1.1/ publisher"
+            case "coverage": return "http://purl.org/dc/elements/1.1/ coverage"
+            case "date": return "http://purl.org/dc/elements/1.1/ date"
+            case "identifier": return "http://purl.org/dc/elements/1.1/ identifier"
+            case "source": return "http://purl.org/dc/elements/1.1/ source"
+            case "format": return "http://purl.org/dc/elements/1.1/ format"
+            default: return nil
+        }
+    }
+
 }

@@ -3,14 +3,29 @@ import SwiftUI
 
 class DocumentFieldsViewModel: ObservableObject {
     @Published var dcFields: Fields
+    @Published var id: Int
     @Published var isEditing: Bool = false
 
-    init(dcFields: Fields) {
+    init(dcFields: Fields, id: Int) {
         self.dcFields = dcFields
+        self.id = id
     }
 
     func toggleEditing() {
         isEditing.toggle()
+    }
+    
+    func updateDC() {
+//        let customJSON = dcFields.toCustomJSON(id: id)
+//        updateDublinCore(customJSON: customJSON) { success in
+//            if success {
+//                print("Update successful")
+//                // Handle successful update here
+//            } else {
+//                print("Update failed")
+//                // Handle failure here
+//            }
+//        }
     }
 }
 
@@ -24,24 +39,61 @@ struct DCSectionView: View {
             } else {
                 displayFields
             }
+            
             editButton
         }
+        .onChange(of: viewModel.dcFields) { _ in
+            viewModel.updateDC()
+        }
+        
+
     }
-    
+
     private var displayFields: some View {
         Group {
-            displayField("Title", value: viewModel.dcFields.title?.joined(separator: ", "))
-            displayField("Description", value: viewModel.dcFields.description)
-            displayField("Keywords", value: viewModel.dcFields.keyword?.joined(separator: ", "))
-            displayField("Creators", value: viewModel.dcFields.creator?.joined(separator: ", "))
-            displayField("Rights", value: viewModel.dcFields.rights?.joined(separator: ", "))
-            displayField("Contributors", value: viewModel.dcFields.contributor?.joined(separator: ", "))
-            displayField("Publisher", value: viewModel.dcFields.publisher?.joined(separator: ", "))
-            displayField("Coverage", value: viewModel.dcFields.coverage)
-            displayField("Date", value: viewModel.dcFields.date?.joined(separator: ", "))
-            displayField("Identifier", value: viewModel.dcFields.identifier)
-            displayField("Source", value: viewModel.dcFields.source)
-            displayField("Format", value: viewModel.dcFields.format)
+            let fields = [
+                viewModel.dcFields.title?.joined(separator: ", "),
+                viewModel.dcFields.description,
+                viewModel.dcFields.keyword?.joined(separator: ", "),
+                viewModel.dcFields.creator?.joined(separator: ", "),
+                viewModel.dcFields.rights?.joined(separator: ", "),
+                viewModel.dcFields.contributor?.joined(separator: ", "),
+                viewModel.dcFields.publisher?.joined(separator: ", "),
+                viewModel.dcFields.coverage,
+                viewModel.dcFields.date?.joined(separator: ", "),
+                viewModel.dcFields.identifier,
+                viewModel.dcFields.source,
+                viewModel.dcFields.format
+            ]
+            
+            let allFieldsEmpty = fields.compactMap { $0 }.allSatisfy { $0.isEmpty }
+            
+            if allFieldsEmpty {
+                
+                HStack {
+                    Spacer()
+                    Text("No values available for any fields")
+                        .foregroundColor(.secondary)
+                    Spacer()
+                }
+                
+            } else {
+                
+                // Display each field
+                displayField("Title", value: viewModel.dcFields.title?.joined(separator: ", "))
+                displayField("Description", value: viewModel.dcFields.description)
+                displayField("Keywords", value: viewModel.dcFields.keyword?.joined(separator: ", "))
+                displayField("Creators", value: viewModel.dcFields.creator?.joined(separator: ", "))
+                displayField("Rights", value: viewModel.dcFields.rights?.joined(separator: ", "))
+                displayField("Contributors", value: viewModel.dcFields.contributor?.joined(separator: ", "))
+                displayField("Publisher", value: viewModel.dcFields.publisher?.joined(separator: ", "))
+                displayField("Coverage", value: viewModel.dcFields.coverage)
+                displayField("Date", value: viewModel.dcFields.date?.joined(separator: ", "))
+                displayField("Identifier", value: viewModel.dcFields.identifier)
+                displayField("Source", value: viewModel.dcFields.source)
+                displayField("Format", value: viewModel.dcFields.format)
+                
+            }
         }
     }
     

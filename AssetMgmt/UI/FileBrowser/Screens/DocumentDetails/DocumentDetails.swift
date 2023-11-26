@@ -5,7 +5,6 @@ struct DocumentDetails: View {
     var document: Document
     var mode: FileBrowserMode
     
-    
     @State private var dcFields: Fields?
     @State private var urlToPreview: URL?
     @State private var progress: Int64 = 0
@@ -13,17 +12,14 @@ struct DocumentDetails: View {
     @State private var retryCount = 0
     @State private var timer: Timer?
     
-    
     public init(document: Document, mode: FileBrowserMode) {
         self.document = document
         self.mode = mode
     }
     
-        
-    
     var body: some View {
         
-        let viewModel = DocumentFieldsViewModel(dcFields: dcFields ?? Fields())
+        let viewModel = DocumentFieldsViewModel(dcFields: dcFields ?? Fields(), id: document.mediaBeaconID)
         
         VStack(alignment: .center, spacing: 12) {
             List {
@@ -141,7 +137,6 @@ struct DocumentDetails: View {
                 DispatchQueue.main.async {
                     
                     if let dcFields = DublinCoreInfo?.first?.fields{
-                        print(dcFields)
                         self.dcFields = dcFields
                     }
                     

@@ -738,7 +738,7 @@ func getDublinCore(ids: [String], completion: @escaping ([DublinCoreResponse]?) 
     }
     
     // Log and fetch data
-    logger.info("Dublin Core URL: \(finalURL)")
+//    logger.info("Dublin Core URL: \(finalURL)")
     fetchData(from: finalURL, responseType: [DublinCoreResponse].self) { result in
         switch result {
         case .success(let assetInfo):
@@ -764,7 +764,8 @@ Set Dublin Core Metadata
 - Returns: Bool indicating success or failure
  */
 
-func updateDublinCore(ids: [Int], newNames: [String], completion: @escaping (Bool) -> Void) {
+func updateDublinCore(customJSON: [String: Any], completion: @escaping (Bool) -> Void) {
+    // Construct the URL
     guard var urlComponents = URLComponents(url: setFieldsURL(), resolvingAgainstBaseURL: false) else {
         logger.error("Error constructing the setFields URL")
         return completion(false)
@@ -772,44 +773,40 @@ func updateDublinCore(ids: [Int], newNames: [String], completion: @escaping (Boo
     
     var existingQueryItems = urlComponents.queryItems ?? []
     
-    let idDictionaries = zip(ids, newNames).map { ["id": $0, "name": $1] }
-    
     do {
-        let jsonData = try JSONSerialization.data(withJSONObject: idDictionaries, options: .prettyPrinted)
+        let jsonData = try JSONSerialization.data(withJSONObject: customJSON, options: .prettyPrinted)
         
         if let jsonString = String(data: jsonData, encoding: .utf8) {
             let additionalQueryItems: [URLQueryItem] = [
                 URLQueryItem(name: "data", value: jsonString),
-                URLQueryItem(name: "verbose", value: String(true))
             ]
             
             existingQueryItems.append(contentsOf: additionalQueryItems)
-            
             urlComponents.queryItems = existingQueryItems
             
             guard let finalURL = urlComponents.url else {
-                logger.error("Error constructing the final rename URL")
+                logger.error("Error constructing the final set fields URL")
                 return completion(false)
             }
             
-            logger.info("Rename URL: \(finalURL)")
+            logger.info("SetFields URL: \(finalURL)")
             
-            fetchData(from: finalURL, responseType: [AssetInfoResponse].self) { result in
+            fetchData(from: finalURL, responseType: [DublinCoreResponse].self) { result in
                 switch result {
                 case .success(let response):
-                    if response.count == ids.count {
+                    if response.count == 1 {
                         completion(true)
                     } else {
-                        logger.error("Error renaming files: \(response)")
+                        logger.error("Error Setting Fields: \(response)")
                         completion(false)
                     }
                 case .failure(let error):
-                    logger.error("Error renaming files: \(error)")
+                    logger.error("Error Setting Fields: \(error)")
                     completion(false)
                 }
             }
         }
     } catch {
-        print("Error in renaming files, cannot convert data to JSON: \(error)")
+        print("Error in setting fields, cannot convert data to JSON: \(error)")
     }
 }
