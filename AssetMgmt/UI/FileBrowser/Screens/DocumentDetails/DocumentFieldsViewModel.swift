@@ -16,16 +16,16 @@ class DocumentFieldsViewModel: ObservableObject {
     }
     
     func updateDC() {
-//        let customJSON = dcFields.toCustomJSON(id: id)
-//        updateDublinCore(customJSON: customJSON) { success in
-//            if success {
-//                print("Update successful")
-//                // Handle successful update here
-//            } else {
-//                print("Update failed")
-//                // Handle failure here
-//            }
-//        }
+        let customJSON = dcFields.toCustomJSON(id: id)
+        updateDublinCore(customJSON: customJSON) { success in
+            if success {
+                print("Update successful")
+                // Handle successful update here
+            } else {
+                print("Update failed")
+                // Handle failure here
+            }
+        }
     }
 }
 
@@ -39,14 +39,8 @@ struct DCSectionView: View {
             } else {
                 displayFields
             }
-            
             editButton
         }
-        .onChange(of: viewModel.dcFields) { _ in
-            viewModel.updateDC()
-        }
-        
-
     }
 
     private var displayFields: some View {
@@ -109,6 +103,9 @@ struct DCSectionView: View {
         HStack {
             Spacer() // Pushes the button to the trailing edge
             Button(action: {
+                if viewModel.isEditing {
+                    viewModel.updateDC() // Call updateDC when saving
+                }
                 viewModel.toggleEditing()
             }) {
                 Text(viewModel.isEditing ? "Save" : "Edit")

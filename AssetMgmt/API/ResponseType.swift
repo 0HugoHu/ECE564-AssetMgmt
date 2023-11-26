@@ -83,6 +83,13 @@ struct DublinCoreResponse: Codable {
     }
 }
 
+
+struct SetFieldsResponse: Codable {
+    let id: Int
+    let triggerAssetModified: Bool
+}
+
+
 struct Fields: Codable, Equatable {
     var title: [String]?
     var keyword: [String]?
@@ -112,8 +119,6 @@ struct Fields: Codable, Equatable {
         case format = "http://purl.org/dc/elements/1.1/ format"
     }
 }
-
-
 
 extension Fields {
     func toCustomJSON(id: Int) -> [String: Any] {
@@ -151,5 +156,4 @@ extension Fields {
             default: return nil
         }
     }
-
 }

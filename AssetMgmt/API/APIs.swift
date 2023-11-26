@@ -791,7 +791,7 @@ func updateDublinCore(customJSON: [String: Any], completion: @escaping (Bool) ->
             
             logger.info("SetFields URL: \(finalURL)")
             
-            fetchData(from: finalURL, responseType: [DublinCoreResponse].self) { result in
+            fetchData(from: finalURL, responseType: [SetFieldsResponse].self) { result in
                 switch result {
                 case .success(let response):
                     if response.count == 1 {
