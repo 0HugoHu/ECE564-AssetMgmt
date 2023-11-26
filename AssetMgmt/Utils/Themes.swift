@@ -27,9 +27,29 @@ class Themes : ObservableObject {
             saveCurrentTheme()
         }
     }
-    @Published var selectedThemeIndex = 0
+    var selectedThemeIndex = 0
     
     private init() {
+        if let savedThemeRawValue = UserDefaults.standard.string(forKey: themeKey),
+           let savedTheme = Theme(rawValue: savedThemeRawValue) {
+            self.currentTheme = savedTheme
+            
+            switch (currentTheme) {
+            case .default:
+                selectedThemeIndex = 0
+            case .christmas:
+                selectedThemeIndex = 1
+            case .newyear:
+                selectedThemeIndex = 2
+            case .duke:
+                selectedThemeIndex = 3
+            }
+        } else {
+            self.currentTheme = .default
+        }
+    }
+    
+    func reload() {
         if let savedThemeRawValue = UserDefaults.standard.string(forKey: themeKey),
            let savedTheme = Theme(rawValue: savedThemeRawValue) {
             self.currentTheme = savedTheme

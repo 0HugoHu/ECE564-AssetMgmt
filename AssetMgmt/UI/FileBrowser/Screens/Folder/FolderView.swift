@@ -58,9 +58,9 @@ public struct FolderView: View {
         
         HStack {
             Menu {
-                Button(action: { }) {
-                    Label("     Select", systemImage: "checkmark.circle")
-                }
+                //                Button(action: { }) {
+                //                    Label("     Select", systemImage: "checkmark.circle")
+                //                }
                 Button(action: didClickCreateFolder) {
                     Label("     New Folder", systemImage: "folder.badge.plus")
                 }
@@ -121,27 +121,27 @@ public struct FolderView: View {
         self.documentsStore = documentsStore
         self.title = title
         self.searchViewModel = SearchViewModel(currentDirectory: documentsStore.getRelativePath())
+//        print(self.documentsStore.remoteUrl)
     }
     
     public var body: some View {
-        
         VStack (spacing: 0) {
             SearchBarView(
                 searchText: $searchViewModel.searchText,
-                          selectedCriteriaConjunction: $searchViewModel.selectedCriteriaConjunction,
-                          selectedField: $searchViewModel.selectedField,
-                          selectedCondition: $searchViewModel.selectedCondition,
-                          showAdvancedSearch: $searchViewModel.showAdvancedSearch,
-                          isSearching: $searchViewModel.isSearching,
-                          searchResults: $searchViewModel.searchResults,
-                          selectedSearchDirectoryOption:$searchViewModel.selectedSearchDirectoryOption,
-                          onCommit: {searchViewModel.search()
-                searchViewModel.updateSearchStatus()
-            },
-                          onAdvancedSearch: {
-                searchViewModel.performAdvancedSearch()
-                searchViewModel.updateSearchStatus()
-            }
+                selectedCriteriaConjunction: $searchViewModel.selectedCriteriaConjunction,
+                selectedField: $searchViewModel.selectedField,
+                selectedCondition: $searchViewModel.selectedCondition,
+                showAdvancedSearch: $searchViewModel.showAdvancedSearch,
+                isSearching: $searchViewModel.isSearching,
+                searchResults: $searchViewModel.searchResults,
+                selectedSearchDirectoryOption:$searchViewModel.selectedSearchDirectoryOption,
+                onCommit: {searchViewModel.search()
+                    searchViewModel.updateSearchStatus()
+                },
+                onAdvancedSearch: {
+                    searchViewModel.performAdvancedSearch()
+                    searchViewModel.updateSearchStatus()
+                }
             )
             // As long as the search text updates, the searchStatus will update
             .onChange(of: searchViewModel.searchText) { _ in
@@ -154,8 +154,6 @@ public struct FolderView: View {
                 searchViewModel.search()
             }
             Spacer()
-   
-            
             
             ZStack {
                 ZStack {
@@ -198,7 +196,7 @@ public struct FolderView: View {
                                                 shouldEdit: (document.id == lastCreatedNewFolder?.id),
                                                 documentsStore: documentsStore
                                             )
-                                            .padding(.vertical, 4)
+                                            .padding(.vertical, 0)
                                             .id(document.id)
                                         }
                                     }
@@ -235,27 +233,22 @@ public struct FolderView: View {
                     documentsStore.loadDocuments()
                 }
                 
-
                 if searchViewModel.isSearching {
-                     SearchResultsView(searchText: $searchViewModel.searchText,
-                                       searchResults: $searchViewModel.searchResults,
-                                       isLoading: $searchViewModel.isLoading,
-                                       columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
-
-                     .frame(maxHeight: .infinity)
-                     .background(Color(UIColor.systemBackground)) 
-                     .edgesIgnoringSafeArea(.all)
-                 }
-
-
-                
+                    SearchResultsView(searchText: $searchViewModel.searchText,
+                                      searchResults: $searchViewModel.searchResults,
+                                      isLoading: $searchViewModel.isLoading,
+                                      columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
+                    //                     .scaleEffect(viewModel.isSearching ? 1 : 0.5) // 1 means full size, 0.5 is half size
+                    //                        .opacity(viewModel.isSearching ? 1 : 0) // 1 for fully visible, 0 for invisible
+                    //                        .animation(.easeInOut(duration: 0.5), value: viewModel.isSearching)
+                    .frame(maxHeight: .infinity)
+                    .background(Color.white) // Set a solid background color here
+                    .edgesIgnoringSafeArea(.all)
+                }
             }
             //
-            
         }
         //        .frame(maxHeight: .infinity)
-        
-        
     }
     
     @ViewBuilder

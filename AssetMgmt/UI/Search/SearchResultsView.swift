@@ -23,13 +23,10 @@ struct SearchResultsView: View {
                         .font(.subheadline)
                         .padding(.top)
                         .padding(.trailing)
-                        .foregroundColor(Color.primary)
-      
                     
                 }
             }
             .navigationBarTitle(Text("MediaBeacon"))
-            .background(Color(UIColor.systemBackground))
             .resignKeyboardOnDragGesture()
             
             if isLoading {
@@ -40,8 +37,6 @@ struct SearchResultsView: View {
                     ForEach(searchResults, id: \.id) { item in
                         NavigationLink(destination: DocumentDetails(document: convertToDocument(from: item), mode: .remote)) {
                             AssetThumbnailViewGrid(assetInfo: item)
-                                
-                            
                         }
                     }
                 }
@@ -49,7 +44,5 @@ struct SearchResultsView: View {
             }
             Spacer()
         }
-        .edgesIgnoringSafeArea(.bottom)
-        .background(Color(UIColor.systemBackground))
     }
 }

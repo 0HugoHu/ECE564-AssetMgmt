@@ -99,19 +99,16 @@ struct SearchBarView: View {
         HStack {
             HStack {
                 Image(systemName: "magnifyingglass")
-                    .foregroundColor(.primary) // Adaptive color for the icon
                 
                 // Search text field
                 ZStack (alignment: .leading) {
                     if searchText.isEmpty { // Separate text for placeholder to give it the proper color
                         Text("Search")
-                            .foregroundColor(.secondary) // Adaptive color for the placeholder text
                     }
                     TextField("", text: $searchText, onEditingChanged: { isEditing in
                         self.showCancelButton = true
                     }, onCommit: onCommit).foregroundColor(.primary)
                 }
-                
                 
                 if showCancelButton  {
                     // Cancel button
@@ -125,7 +122,6 @@ struct SearchBarView: View {
                         
                     }) {
                         Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
-                            .foregroundColor(.primary)
                     }
                 }
                 
@@ -133,17 +129,15 @@ struct SearchBarView: View {
                 Button(action: {
                     self.showAdvancedSearch.toggle()
                 }) {
-                    Image(systemName: "square.stack.3d.up.fill")
-                        .foregroundColor(.primary)
+                    Image(systemName: "ellipsis.circle")
                 }
             }
             .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-            .foregroundColor(.secondary) // Adaptive color for the background
+            .foregroundColor(.secondary) // For magnifying glass and placeholder test
             .background(Color(.tertiarySystemFill))
             .cornerRadius(10.0)
         }
         .padding(.horizontal)
-        .background(Color(UIColor.systemBackground)) //
         
         if isSearching {
             VStack(spacing: 0) {
@@ -157,68 +151,51 @@ struct SearchBarView: View {
             }
             .padding(.top, 5)
         }
-        
+
         if showAdvancedSearch {
             VStack(spacing: 0) {
-                // Criteria Conjunction Picker
                 HStack {
                     Text("Criteria Conjunction")
-                        .font(.callout)
                     Spacer()
                     Picker("Criteria Conjunction", selection: $selectedCriteriaConjunction) {
                         ForEach(criteriaConjunction, id: \.self) { Text($0) }
                     }
                     .pickerStyle(MenuPickerStyle())
-                    .font(.callout)
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 0))
+                .background(Color(.tertiarySystemFill))
                 
-                Divider()
-
-                // Field Picker
                 HStack {
                     Text("Select Field")
-                        .font(.callout)
                     Spacer()
                     Picker("Select Field", selection: $selectedField) {
                         ForEach(fieldOptions, id: \.self) { Text($0) }
                     }
                     .pickerStyle(MenuPickerStyle())
-                    .font(.callout)
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 0))
+                .background(Color(.tertiarySystemFill))
                 
-                Divider()
-
-                // Condition Picker
                 HStack {
                     Text("Select Condition")
-                        .font(.callout)
                     Spacer()
                     Picker("Select Condition", selection: $selectedCondition) {
                         ForEach(conditionOptions, id: \.self) { Text($0) }
                     }
                     .pickerStyle(MenuPickerStyle())
-                    .font(.callout)
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }
+                .cornerRadius(10.0)
                 .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 0))
+                .background(Color(.tertiarySystemFill))
+                
             }
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color(.tertiarySystemFill))
-//                    .padding(.horizontal)
-                    
-                    // Adaptive color for both light and dark mode
-            )
-            .padding(.top, 5)
             .padding(.horizontal)
-
-//            .cornerRadius(10.0)
+            .cornerRadius(10.0)
+            .padding(.top, 5)
         }
-
         
     }
 }
