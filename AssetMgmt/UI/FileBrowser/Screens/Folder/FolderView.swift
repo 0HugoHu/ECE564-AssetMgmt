@@ -242,7 +242,7 @@ public struct FolderView: View {
                     //                        .opacity(viewModel.isSearching ? 1 : 0) // 1 for fully visible, 0 for invisible
                     //                        .animation(.easeInOut(duration: 0.5), value: viewModel.isSearching)
                     .frame(maxHeight: .infinity)
-                    .background(Color.white) // Set a solid background color here
+                    .background(Color(UIColor.systemBackground)) 
                     .edgesIgnoringSafeArea(.all)
                 }
             }
