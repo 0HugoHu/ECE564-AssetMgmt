@@ -17,27 +17,28 @@ var accountInfo: [String: String] = [
 ]
 
 func getAccountInfo() -> [String: String] {
-    if let accountInfoResponse : UserInfoAPIResponse = getUserInfo() {
-        accountInfo["Username"] = accountInfoResponse.username == "" ? "N/A" : accountInfoResponse.username
-        accountInfo["Status"] = accountInfoResponse.username == "" ? "N/A" : accountInfoResponse.status
-        accountInfo["FirstName"] = accountInfoResponse.username == "" ? "N/A" : accountInfoResponse.firstName
-        accountInfo["LastName"] = accountInfoResponse.username == "" ? "N/A" : accountInfoResponse.lastName
-        accountInfo["Type"] = accountInfoResponse.username == "" ? "N/A" : accountInfoResponse.type
-        accountInfo["Department"] = accountInfoResponse.username == "" ? "N/A" : accountInfoResponse.dept
-        saveUserInfo(accountInfoResponse)
-    } else {
+    // TODO: Cannot use cache here, because it's not constant
+//    if let accountInfoResponse : UserInfoAPIResponse = getUserInfo() {
+//        accountInfo["Username"] = accountInfoResponse.username == "" ? "N/A" : accountInfoResponse.username
+//        accountInfo["Status"] = accountInfoResponse.status == "" ? "N/A" : accountInfoResponse.status
+//        accountInfo["FirstName"] = accountInfoResponse.firstName == "" ? "N/A" : accountInfoResponse.firstName
+//        accountInfo["LastName"] = accountInfoResponse.lastName == "" ? "N/A" : accountInfoResponse.lastName
+//        accountInfo["Type"] = accountInfoResponse.type == "" ? "N/A" : accountInfoResponse.type
+//        accountInfo["Department"] = accountInfoResponse.dept == "" ? "N/A" : accountInfoResponse.dept
+//    } else {
         getUserInfo() { result in
             if result != nil {
                 let unwrappedResult = result!
                 accountInfo["Username"] = unwrappedResult.username == "" ? "N/A" : unwrappedResult.username
-                accountInfo["Status"] = unwrappedResult.username == "" ? "N/A" : unwrappedResult.status
-                accountInfo["FirstName"] = unwrappedResult.username == "" ? "N/A" : unwrappedResult.firstName
-                accountInfo["LastName"] = unwrappedResult.username == "" ? "N/A" : unwrappedResult.lastName
-                accountInfo["Type"] = unwrappedResult.username == "" ? "N/A" : unwrappedResult.type
-                accountInfo["Department"] = unwrappedResult.username == "" ? "N/A" : unwrappedResult.dept
+                accountInfo["Status"] = unwrappedResult.status == "" ? "N/A" : unwrappedResult.status
+                accountInfo["FirstName"] = unwrappedResult.firstName == "" ? "N/A" : unwrappedResult.firstName
+                accountInfo["LastName"] = unwrappedResult.lastName == "" ? "N/A" : unwrappedResult.lastName
+                accountInfo["Type"] = unwrappedResult.type == "" ? "N/A" : unwrappedResult.type
+                accountInfo["Department"] = unwrappedResult.dept == "" ? "N/A" : unwrappedResult.dept
                 saveUserInfo(unwrappedResult)
             }
         }
-    }
+//    }
+//    logger.info("accountInfo: \(accountInfo["Department"]!)")
     return accountInfo
 }

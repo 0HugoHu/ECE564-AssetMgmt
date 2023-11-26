@@ -42,7 +42,7 @@ struct SearchView: View {
                 }
                 searchViewModel.updateSearchStatus()
             }
-            .onChange(of: searchViewModel.selectedSearchDirectoryOption) { _2 in
+            .onChange(of: searchViewModel.selectedSearchDirectoryOption) { _ in
                 searchViewModel.search()
             }
             Spacer()
@@ -56,7 +56,6 @@ struct SearchView: View {
             
         }
         .navigationBarTitle("Search")
-        .background(Color(UIColor.systemBackground)) 
     }
 }
 

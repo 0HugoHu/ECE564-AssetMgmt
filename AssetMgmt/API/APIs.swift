@@ -655,158 +655,16 @@ func getAssetDetails(ids: [String], completion: @escaping ([AssetInfoResponse]?)
     }
 }
 
-
-
-/*
- Get Dublin Core Metadata
- 
- - Parameters:
- - ids: File ids
- 
- - Returns: [DublinCoreResponse]?
- */
-//func getDublinCore(ids: [String], completion: @escaping ([DublinCoreResponse]?) -> Void) {
-//    guard var urlComponents = URLComponents(url: getAssetInfoURL(), resolvingAgainstBaseURL: false) else {
-//        logger.error("Error constructing the dublin core info URL")
-//        return completion(nil)
-//    }
-//
-//    // Existing query items
-//    var existingQueryItems = urlComponents.queryItems ?? []
-//
-//    // Prepare IDs
-//    let idsValue = "[" + ids.joined(separator: ",") + "]" // Adjust this as per API requirement
-//
-//    // Prepare Fields
-//    let fieldsValue = "[" + DublinCoreFieldsRequest.joined(separator: ",") + "]" // Ensure these are correctly formatted
-//
-//    // Add query items
-//    existingQueryItems += [
-//        URLQueryItem(name: "ids", value: idsValue),
-//        URLQueryItem(name: "fields", value: fieldsValue)
-//    ]
-//
-//    // Update URL components
-//    urlComponents.queryItems = existingQueryItems
-//
-//    // Final URL
-//    guard let finalURL = urlComponents.url else {
-//        logger.error("Error constructing the final dublin core URL")
-//        return completion(nil)
-//    }
-//
-//    // Log and fetch data
-//    logger.info("Dublin Core URL: \(finalURL)")
-//    fetchData(from: finalURL, responseType: [DublinCoreResponse].self) { result in
-//        switch result {
-//        case .success(let assetInfo):
-//            completion(assetInfo)
-//        case .failure(let error):
-//            logger.error("Error getting Dublin Core: \(error)")
-//            completion(nil)
-//        }
-//    }
-//}
-func getDublinCore(ids: [String], completion: @escaping ([DublinCoreResponse]?) -> Void) {
-    guard var urlComponents = URLComponents(url: getAssetInfoURL(), resolvingAgainstBaseURL: false) else {
-        logger.error("Error constructing the dublin core info URL")
-        return completion(nil)
-    }
-    
-    // Existing query items
-    var existingQueryItems = urlComponents.queryItems ?? []
-    
-    // Prepare IDs
-    let idsValue = "[" + ids.joined(separator: ",") + "]" // Adjust this as per API requirement
-    
-    // Prepare Fields
-    let fieldsValue = DublinCoreFieldsRequest
-    
-    // Add query items
-    existingQueryItems += [
-        URLQueryItem(name: "ids", value: idsValue),
-        URLQueryItem(name: "fields", value: fieldsValue)
-    ]
-    
-    // Update URL components
-    urlComponents.queryItems = existingQueryItems
-    
-    // Final URL
-    guard let finalURL = urlComponents.url else {
-        logger.error("Error constructing the final dublin core URL")
-        return completion(nil)
-    }
-    
-    // Log and fetch data
-//    logger.info("Dublin Core URL: \(finalURL)")
-    fetchData(from: finalURL, responseType: [DublinCoreResponse].self) { result in
+func getACLGroups(completion: @escaping ([ACLGroupsResponse]?) -> Void) {
+    let queryURL = getGroupsURL()
+    logger.info("Try to get ACL groups from: \(queryURL)")
+    fetchData(from: queryURL, responseType: [ACLGroupsResponse].self) { result in
         switch result {
-        case .success(let assetInfo):
-            completion(assetInfo)
-        case .failure(let error):
-            logger.error("Error getting Dublin Core: \(error)")
+        case .success(let ACLGroups):
+            completion(ACLGroups)
+        case.failure(let error):
+            logger.error("Error getting ACL groups: \(error)")
             completion(nil)
         }
-    }
-}
-
-/*
-Set Dublin Core Metadata
- 
- - Parameters:
- - datas
-    - id
-    - fields
-        - fields Id
-        - value
-        - append: false
- 
-- Returns: Bool indicating success or failure
- */
-
-func updateDublinCore(customJSON: [String: Any], completion: @escaping (Bool) -> Void) {
-    // Construct the URL
-    guard var urlComponents = URLComponents(url: setFieldsURL(), resolvingAgainstBaseURL: false) else {
-        logger.error("Error constructing the setFields URL")
-        return completion(false)
-    }
-    
-    var existingQueryItems = urlComponents.queryItems ?? []
-    
-    do {
-        let jsonData = try JSONSerialization.data(withJSONObject: customJSON, options: .prettyPrinted)
-        
-        if let jsonString = String(data: jsonData, encoding: .utf8) {
-            let additionalQueryItems: [URLQueryItem] = [
-                URLQueryItem(name: "data", value: jsonString),
-            ]
-            
-            existingQueryItems.append(contentsOf: additionalQueryItems)
-            urlComponents.queryItems = existingQueryItems
-            
-            guard let finalURL = urlComponents.url else {
-                logger.error("Error constructing the final set fields URL")
-                return completion(false)
-            }
-            
-            logger.info("SetFields URL: \(finalURL)")
-            
-            fetchData(from: finalURL, responseType: [SetFieldsResponse].self) { result in
-                switch result {
-                case .success(let response):
-                    if response.count == 1 {
-                        completion(true)
-                    } else {
-                        logger.error("Error Setting Fields: \(response)")
-                        completion(false)
-                    }
-                case .failure(let error):
-                    logger.error("Error Setting Fields: \(error)")
-                    completion(false)
-                }
-            }
-        }
-    } catch {
-        print("Error in setting fields, cannot convert data to JSON: \(error)")
     }
 }

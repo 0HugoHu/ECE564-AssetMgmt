@@ -224,7 +224,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
         } else if self.mode == .remote {
             let ids = [String(document.mediaBeaconID)]
             if document.isDirectory {
-                deleteFiles(paths: [(self.relativePath == "" ? self.remoteUrl : self.relativePath) + document.name]) { response in
+                deleteFiles(paths: [(self.relativePath == "" ? self.remoteUrl : self.relativePath + "/") + document.name]) { response in
                     switch response {
                     case true:
                         self.removeDocument(document.mediaBeaconID)
