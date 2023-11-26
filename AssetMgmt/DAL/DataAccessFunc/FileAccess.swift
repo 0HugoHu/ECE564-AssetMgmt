@@ -47,17 +47,3 @@ func removeFileById(_ id: String) {
         logger.info("No cache for id: \(id), nothing to be deleted")
     }
 }
-
-
-func deleteAllFilesInCacheFolder() {
-    do {
-        let fileURLs = try FileManager.default.contentsOfDirectory(at: cacheURL)
-        for fileURL in fileURLs {
-            try FileManager.default.removeItem(at: fileURL)
-            logger.info("File deleted: \(fileURL.lastPathComponent)")
-        }
-    } catch {
-        logger.error("Failed to delete files in folder: \(cacheURL.path), error: \(error)")
-    }
-}
-

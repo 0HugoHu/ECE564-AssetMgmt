@@ -5,6 +5,7 @@ struct DocumentDetails: View {
     var document: Document
     var mode: FileBrowserMode
     
+    @State private var dcFields: Fields?
     @State private var urlToPreview: URL?
     @State private var progress: Int64 = 0
     @State private var waitToShow: Bool = false
@@ -17,6 +18,9 @@ struct DocumentDetails: View {
     }
     
     var body: some View {
+        
+        let viewModel = DocumentFieldsViewModel(dcFields: dcFields ?? Fields(), id: document.mediaBeaconID)
+        
         VStack(alignment: .center, spacing: 12) {
             List {
                 if mode == .local {
@@ -107,8 +111,13 @@ struct DocumentDetails: View {
                 if let modified = document.modified {
                     DocumentAttributeRow(key: "Modified", value: modified.formatted())
                 }
+                
+                DCSectionView(viewModel: viewModel)
             }
             .listStyle(InsetGroupedListStyle())
+            
+            
+            
         }
         .quickLookPreview($urlToPreview)
         .navigationBarItems(trailing: HStack {
@@ -120,6 +129,17 @@ struct DocumentDetails: View {
             if let data = UserDefaults.standard.value(forKey: "download@\(document.mediaBeaconID)") {
                 if let value = data as? Int64 {
                     progress = value
+                }
+            }
+        }
+        .onAppear {
+            getDublinCore(ids: [String(document.mediaBeaconID)]) { DublinCoreInfo in
+                DispatchQueue.main.async {
+                    
+                    if let dcFields = DublinCoreInfo?.first?.fields{
+                        self.dcFields = dcFields
+                    }
+                    
                 }
             }
         }
@@ -139,7 +159,7 @@ struct DocumentDetails: View {
         if timer != nil {
             return EmptyView()
         }
-        timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) {  timer in
+        timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true) {  timer in
             self.retryCount += 1
         }
         return EmptyView()

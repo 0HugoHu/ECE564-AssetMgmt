@@ -22,7 +22,7 @@ struct AssetMgmtApp: App {
         WindowGroup {
             ContentView()
                 .onAppear {
-                    appearanceManager.reloadScene()
+                    appearanceManager.reload()
                 }
         }
     }

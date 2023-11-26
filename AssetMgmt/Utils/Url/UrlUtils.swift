@@ -14,7 +14,7 @@ func getGetAPIKeyURL() -> URL {
 
 
 func getUserInfoURL() -> URL {
-    return appendAuth(url: URL(string: REST_API + "userInfo")!, acl: false)
+    return appendAuth(url: URL(string: REST_API + "userInfo")!)
 }
 
 
@@ -60,26 +60,16 @@ func getDirectoryURL() -> URL {
 }
 
 func getGroupsURL() -> URL {
-    return appendAuth(url: URL(string: REST_API + "groups")!, acl: false)
+    return appendAuth(url: URL(string: REST_API + "groups")!)
 }
 
+func setFieldsURL() -> URL {
+    return appendAuth(url: URL(string: REST_API + "setFields")!)
+}
 
-func appendAuth(url: URL, acl: Bool = true) -> URL {
+func appendAuth(url: URL) -> URL {
     if let authToken = UserDefaults.standard.string(forKey: "AuthToken") {
-        var finalURL = URL(string: url.absoluteString + "?apikey=" + authToken)
-        if acl {
-            if let jsonData = UserDefaults.standard.data(forKey: "ACLGroups") {
-                if let groups = try? JSONDecoder().decode([ACLGroupsResponse].self, from: jsonData) {
-                    let ACLGroups = groups
-                    let selectedACL = UserDefaults.standard.integer(forKey: "selectedACL")
-                    let aclId = ACLGroups.first(where: { $0.id == selectedACL })?.acls[0].id
-                    finalURL = URL(string: finalURL!.absoluteString + "&acl_id=" + aclId!)
-                }
-            } else {
-                logger.error("Cannot read ACLGroups")
-            }
-        }
-        return finalURL!
+        return URL(string: url.absoluteString + "?apikey=" + authToken + "&acl_id=0_42_A754B8A8-8E5C-4477-8466-894915E29E81")!
     }
     return url
 }

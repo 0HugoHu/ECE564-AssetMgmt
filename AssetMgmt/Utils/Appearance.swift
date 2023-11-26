@@ -25,28 +25,9 @@ class Appearances: ObservableObject {
             saveCurrentMode()
         }
     }
-    var selectedAppearanceIndex = 0
+    @Published var selectedAppearanceIndex = 0
     
     private init() {
-        if let savedModeRawValue = UserDefaults.standard.string(forKey: modeKey),
-           let savedMode = Appearance(rawValue: savedModeRawValue) {
-            self.currentMode = savedMode
-            
-            switch (currentMode) {
-            case .light:
-                selectedAppearanceIndex = 0
-            case .default:
-                selectedAppearanceIndex = 1
-            case .dark:
-                selectedAppearanceIndex = 2
-            }
-        } else {
-            self.currentMode = .default
-            self.selectedAppearanceIndex = 1
-        }
-    }
-    
-    func reload() {
         if let savedModeRawValue = UserDefaults.standard.string(forKey: modeKey),
            let savedMode = Appearance(rawValue: savedModeRawValue) {
             self.currentMode = savedMode
@@ -70,10 +51,10 @@ class Appearances: ObservableObject {
     
     private func saveCurrentMode() {
         UserDefaults.standard.set(currentMode.rawValue, forKey: modeKey)
-        reloadScene()
+        reload()
     }
     
-    func reloadScene() {
+    func reload() {
         // Change application-wide setting
         let scenes = UIApplication.shared.connectedScenes
         let windowScene = scenes.first as? UIWindowScene

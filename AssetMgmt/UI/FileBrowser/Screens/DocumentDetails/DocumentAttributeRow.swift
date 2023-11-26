@@ -1,20 +1,31 @@
 import SwiftUI
 
 struct DocumentAttributeRow: View {
-    var key, value: String
+    var key: String
+    var value: String?
+
+    init(key: String, value: String) {
+        self.key = key
+        self.value = value
+    }
 
     var body: some View {
         HStack {
             Text(key)
             Spacer()
-            Text(value)
-                .multilineTextAlignment(.trailing)
-                .foregroundColor(.secondary)
+            if let value = value {
+                Text(value)
+                    .multilineTextAlignment(.trailing)
+                    .foregroundColor(.secondary)
+            }
         }
     }
 }
-struct DocumentAttributeRow_Previews: PreviewProvider {
+
+// Preview for a single value
+struct DocumentAttributeRow_SingleValue_Previews: PreviewProvider {
     static var previews: some View {
         DocumentAttributeRow(key: "Size", value: "2.3 MB").padding()
     }
 }
+

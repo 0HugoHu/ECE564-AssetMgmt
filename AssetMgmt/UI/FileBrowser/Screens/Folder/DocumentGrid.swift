@@ -57,12 +57,12 @@ struct DocumentGrid: View {
             }) {
                 Label("Rename", systemImage: "pencil")
             }
-            //            Button(action: {}) {
-            //                Label("Move", systemImage: "folder.badge.gear")
-            //            }
-            //            Button(action: {}) {
-            //                Label("Share", systemImage: "square.and.arrow.up")
-            //            }
+            Button(action: {}) {
+                Label("Move", systemImage: "folder.badge.gear")
+            }
+            Button(action: {}) {
+                Label("Share", systemImage: "square.and.arrow.up")
+            }
         }
         .onChange(of: isEditing) {
             nameEditIsFocused = $0

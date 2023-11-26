@@ -12,6 +12,31 @@ var sampleSearchFiltersDict: [String: (fieldId: String, fieldType:SearchFilter.F
     "date": (fieldId: "http://purl.org/dc/elements/1.1/ date", fieldType: .Date),
 ]
 
+
+var DCDict: [String: (fieldId: String, value: [String]?)] = [
+    "Title": (fieldId: "http://purl.org/dc/elements/1.1/ title", value: nil),
+    "Description": (fieldId: "http://purl.org/dc/elements/1.1/ description", value: nil),
+    "Creators": (fieldId: "http://purl.org/dc/elements/1.1/ creator", value: nil),
+    "Rights": (fieldId: "http://purl.org/dc/elements/1.1/ rights", value: nil),
+//    "keywords": (fieldId: , value: nil),
+    "Contributors": (fieldId: "http://purl.org/dc/elements/1.1/ contributor", value: nil),
+    "Publishers":(fieldId: "http://purl.org/dc/elements/1.1/ publisher", value: nil),
+    "Coverage": (fieldId: "http://purl.org/dc/elements/1.1/ coverage", value: nil),
+    "Date": (fieldId: "http://purl.org/dc/elements/1.1/ date", value: nil),
+    "unique Identifier": (fieldId: "http://purl.org/dc/elements/1.1/ identifier", value: nil),
+    "Source Unique Identifier": (fieldId: "http://purl.org/dc/elements/1.1/ source", value: nil),
+    "File Format": (fieldId: "http://purl.org/dc/elements/1.1/ format", value: nil),
+]
+
+
+//var DCStore: [String: [String] = [
+//    "title": "",
+//    "creater": "",
+//    "title": "",
+//    "title": "",
+//
+//]
+
 //var allSearchFiltersDict: [String: (fieldId: String, fieldType: String)] =
 //    ["TransmissionReference": (fieldId: "http://ns.adobe.com/photoshop/1.0/ TransmissionReference", fieldType: "textarea"),
 //     "Source": (fieldId: "http://ns.adobe.com/photoshop/1.0/ Source", fieldType: "string"),
@@ -34,7 +59,7 @@ var sampleSearchFiltersDict: [String: (fieldId: String, fieldType:SearchFilter.F
 //     "CreatorContactInfo/Iptc4xmpCore:CiAdrExtadr": (fieldId: "http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/ CreatorContactInfo/Iptc4xmpCore:CiAdrExtadr", fieldType: "string"),
 //     "AuthorsPosition": (fieldId: "http://ns.adobe.com/photoshop/1.0/ AuthorsPosition", fieldType: "string"),
 //     "CreatorContactInfo/Iptc4xmpCore:CiTelWork": (fieldId: "http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/ CreatorContactInfo/Iptc4xmpCore:CiTelWork", fieldType: "string"),
-//     "UsageTerms": (fieldId: "http://ns.adobe.com/xap/1.0/rights/ UsageTerms", fieldType: "textarea"), 
+//     "UsageTerms": (fieldId: "http://ns.adobe.com/xap/1.0/rights/ UsageTerms", fieldType: "textarea"),
 //     "source": (fieldId: "http://purl.org/dc/elements/1.1/ source", fieldType: "string"),
 //     "identifier": (fieldId: "http://purl.org/dc/elements/1.1/ identifier", fieldType: "string"), 
 //     "contributor": (fieldId: "http://purl.org/dc/elements/1.1/ contributor", fieldType: "list_string"),

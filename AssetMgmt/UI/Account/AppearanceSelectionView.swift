@@ -10,8 +10,8 @@ import SwiftUI
 
 struct AppearanceSelectionView: View {
     var modeIndex: Int
+    @Binding var selectedMode: Int
     @StateObject var appearanceManager = Appearances.instance
-    @State var selectedMode: Int
     
     var body: some View {
         let imgUrl = appearanceManager.getModeIcon(modeIndex)
@@ -35,7 +35,8 @@ struct AppearanceSelectionView: View {
             }
         }
         .onTapGesture {
-            switch (modeIndex) {
+            selectedMode = modeIndex
+            switch (selectedMode) {
             case 0:
                 appearanceManager.setMode(mode: .light)
             case 1:
@@ -45,7 +46,6 @@ struct AppearanceSelectionView: View {
             default:
                 appearanceManager.setMode(mode: .default)
             }
-            NotificationCenter.default.post(name: Notification.Name("ReloadAppearanceSelection"), object: modeIndex)
         }
         .frame(height: 80)
     }
