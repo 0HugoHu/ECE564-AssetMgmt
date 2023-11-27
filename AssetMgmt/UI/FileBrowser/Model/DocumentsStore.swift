@@ -22,6 +22,7 @@ protocol DocumentImporter {
 @MainActor
 public class DocumentsStore: ObservableObject, DocumentImporter {
     var uploadProgress: Binding<Double>? = nil
+    var loading: Binding<Bool>? = nil
     @Published var documents: [Document] = []
     @Published var sorting: SortOption = .date(ascending: false)
     @Published var viewMode: ViewMode = .list {
@@ -101,6 +102,9 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
     }
     
     func loadDocuments() {
+        if let loading = loading {
+            loading.wrappedValue = true
+        }
         if self.mode == .local {
             do {
                 let allFiles = try documentManager.contentsOfDirectory(at: workingDirectory)
@@ -120,6 +124,11 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
                         let doc = Document(mediaBeaconID: folder.id, name: folder.name, url: URL(string: folder.path)!, size: 0, type: "folder", isDirectory: true)
                         self.appendDocument(doc)
                     }
+                    if directories.count > 1 {
+                        if let loading = self.loading {
+                            loading.wrappedValue = false
+                        }
+                    }
                     // Then load all files
                     let searchText = SearchFilter.createSearchCriteria(conjunction: .and, fieldId: "directory_id", condition: SearchFilter.OtherField.equals, value: String(parentFolderId))
                     advancedSearch(search: searchText, directory: finalPath, verbose: true) { files in
@@ -130,6 +139,9 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
                         for file in files! {
                             let doc = Document(mediaBeaconID: file.id, name: file.name, url: URL(string: getThumbnailURL(originalURLString: file.previews.thumbnail))!, size: file.bytes as NSNumber, modified: Date(timeIntervalSince1970: file.lastModified / 1000.0), highQualityPreviewUrl: file.previews.high, type: file.mimeType ?? "unkown", isDirectory: false)
                             self.appendDocument(doc)
+                        }
+                        if let loading = self.loading {
+                            loading.wrappedValue = false
                         }
                         self.sortDocument(0)
                     }
@@ -352,7 +364,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
         } else if self.mode == .remote {
             let currentDirectory = self.relativePath == "" ? self.remoteUrl : self.relativePath
             if let uploadProgress = uploadProgress {
-                uploadProgress.wrappedValue = 0
+                uploadProgress.wrappedValue = 0.01
             }
             uploadFiles(filePaths: [url], dest: currentDirectory, uploadProgress: uploadProgress, completion: { result in })
         }
