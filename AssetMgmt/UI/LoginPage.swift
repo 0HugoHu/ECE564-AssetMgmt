@@ -43,7 +43,7 @@ struct LoginPage: View {
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .mask(
-                                LinearGradient(gradient: Gradient(colors: [.clear, .white]), startPoint: .top, endPoint: .center)
+                                LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.5), .white]), startPoint: .top, endPoint: .center)
                             )
                             .edgesIgnoringSafeArea(.all)
                         

@@ -63,6 +63,10 @@ func getGroupsURL() -> URL {
     return appendAuth(url: URL(string: REST_API + "groups")!, acl: false)
 }
 
+func setFieldsURL() -> URL {
+    return appendAuth(url: URL(string: REST_API + "setFields")!)
+}
+
 
 func appendAuth(url: URL, acl: Bool = true) -> URL {
     if let authToken = UserDefaults.standard.string(forKey: "AuthToken") {
