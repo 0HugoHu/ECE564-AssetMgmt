@@ -259,10 +259,6 @@ public struct FolderView: View {
                         .edgesIgnoringSafeArea(.all)
                     }
                 }
-                .task {
-                    documentsStore.loadDocuments()
-                }
-                
                 if searchViewModel.isSearching {
                     SearchResultsView(searchText: $searchViewModel.searchText,
                                       searchResults: $searchViewModel.searchResults,
