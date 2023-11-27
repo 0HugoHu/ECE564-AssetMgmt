@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import SwiftUI
 
 
 /*
@@ -16,7 +17,7 @@ import Alamofire
  - baseURL: The base URL of the server
  - files: The URLs of the files to upload
  */
-func upload(baseURL: String, files: [URL], completion: @escaping (Bool) -> Void) {
+func upload(baseURL: String, files: [URL], uploadProgress: Binding<Double>? = nil, completion: @escaping (Bool) -> Void) {
     do {
         let zipURL = try ZipUtility.zipFiles(files, fileName: "tmp.zip", destinationURL: .temporaryDirectory)
         
@@ -26,10 +27,10 @@ func upload(baseURL: String, files: [URL], completion: @escaping (Bool) -> Void)
             multipartFormData.append(zipURL, withName: "file")
         }, to: baseURL, method: .post, headers: ["Content-Type": "application/zip"])
             .uploadProgress { progress in
+                if let uploadProgress = uploadProgress {
+                    uploadProgress.wrappedValue = progress.fractionCompleted
+                }
                 print("Upload Progress: \(progress.fractionCompleted)")
-            }
-            .downloadProgress { progress in
-                print("Download Progress: \(progress.fractionCompleted)")
             }
             .responseData { response in
                 print(response)

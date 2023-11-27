@@ -5,6 +5,8 @@ public struct FolderView: View {
     @State var isPresentedPhotoPicker = false
     @State var listProxy: ScrollViewProxy? = nil
     @State var lastCreatedNewFolder: Document?
+    @State private var uploadProgress: Double = -1
+    @State private var showPopup = false
     
     @ObservedObject var documentsStore: DocumentsStore
     var title: String
@@ -64,7 +66,11 @@ public struct FolderView: View {
                 Button(action: didClickCreateFolder) {
                     Label("     New Folder", systemImage: "folder.badge.plus")
                 }
-                Button(action: { isPresentedPhotoPicker = true }) {
+                Button(action: {
+                    isPresentedPhotoPicker = true
+                    uploadProgress = -1
+                    self.documentsStore.uploadProgress = $uploadProgress
+                }) {
                     Label("     Upload Photos", systemImage: "photo.on.rectangle")
                 }
                 
@@ -125,108 +131,132 @@ public struct FolderView: View {
     }
     
     public var body: some View {
-        VStack (spacing: 0) {
-            SearchBarView(
-                searchText: $searchViewModel.searchText,
-                selectedCriteriaConjunction: $searchViewModel.selectedCriteriaConjunction,
-                selectedField: $searchViewModel.selectedField,
-                selectedCondition: $searchViewModel.selectedCondition,
-                showAdvancedSearch: $searchViewModel.showAdvancedSearch,
-                isSearching: $searchViewModel.isSearching,
-                searchResults: $searchViewModel.searchResults,
-                selectedSearchDirectoryOption:$searchViewModel.selectedSearchDirectoryOption,
-                onCommit: {searchViewModel.search()
-                    searchViewModel.updateSearchStatus()
-                },
-                onAdvancedSearch: {
-                    searchViewModel.performAdvancedSearch()
+        GeometryReader { geometry in
+            let screenWidth = geometry.size.width
+            let screenHeight = geometry.size.height
+            let smallerDimension = min(screenWidth, screenHeight)
+            let circleSize = 0.25 * smallerDimension
+            let centerX = screenWidth / 2
+            let centerY = screenHeight / 2
+            VStack (spacing: 0) {
+                SearchBarView(
+                    searchText: $searchViewModel.searchText,
+                    selectedCriteriaConjunction: $searchViewModel.selectedCriteriaConjunction,
+                    selectedField: $searchViewModel.selectedField,
+                    selectedCondition: $searchViewModel.selectedCondition,
+                    showAdvancedSearch: $searchViewModel.showAdvancedSearch,
+                    isSearching: $searchViewModel.isSearching,
+                    searchResults: $searchViewModel.searchResults,
+                    selectedSearchDirectoryOption:$searchViewModel.selectedSearchDirectoryOption,
+                    onCommit: {searchViewModel.search()
+                        searchViewModel.updateSearchStatus()
+                    },
+                    onAdvancedSearch: {
+                        searchViewModel.performAdvancedSearch()
+                        searchViewModel.updateSearchStatus()
+                    }
+                )
+                // As long as the search text updates, the searchStatus will update
+                .onChange(of: searchViewModel.searchText) { _ in
+                    if !searchViewModel.searchText.isEmpty {
+                        searchViewModel.search()
+                    }
                     searchViewModel.updateSearchStatus()
                 }
-            )
-            // As long as the search text updates, the searchStatus will update
-            .onChange(of: searchViewModel.searchText) { _ in
-                if !searchViewModel.searchText.isEmpty {
+                .onChange(of: searchViewModel.selectedSearchDirectoryOption) { _ in
                     searchViewModel.search()
                 }
-                searchViewModel.updateSearchStatus()
-            }
-            .onChange(of: searchViewModel.selectedSearchDirectoryOption) { _ in
-                searchViewModel.search()
-            }
-            Spacer()
-            
-            ZStack {
+                Spacer()
+                
                 ZStack {
-                    
-                    ScrollViewReader { scrollViewProxy in
-                        if documentsStore.viewMode == .list {
-                            List {
-                                //                        Section(header: listSectionHeader) {
-                                ForEach($documentsStore.documents) { document in
-                                    NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
-                                        DocumentRow(
-                                            document: document,
-                                            shouldEdit: (document.id == lastCreatedNewFolder?.id),
-                                            documentsStore: documentsStore
-                                        )
-                                        .padding(.vertical, 4)
-                                        .id(document.id)
-                                    }
-                                }
-                                .onDelete(perform: deleteItems)
-                                //                        }
-                            }
-                            .listStyle(InsetListStyle())
-                            .onAppear {
-                                listProxy = scrollViewProxy
-                            }
-                            .refreshable {
-                                documentsStore.reload()
-                            }
-                        } else if documentsStore.viewMode == .grid {
-                            let columns: [GridItem] = [
-                                GridItem(.adaptive(minimum: 100), spacing: 0, alignment: .top)
-                            ]
-                            ScrollView {
-                                LazyVGrid(columns: columns) {
+                    ZStack {
+                        
+                        ScrollViewReader { scrollViewProxy in
+                            if documentsStore.viewMode == .list {
+                                List {
+                                    //                        Section(header: listSectionHeader) {
                                     ForEach($documentsStore.documents) { document in
                                         NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
-                                            DocumentGrid(
+                                            DocumentRow(
                                                 document: document,
                                                 shouldEdit: (document.id == lastCreatedNewFolder?.id),
                                                 documentsStore: documentsStore
                                             )
-                                            .padding(.vertical, 0)
+                                            .padding(.vertical, 4)
                                             .id(document.id)
                                         }
                                     }
+                                    .onDelete(perform: deleteItems)
+                                    //                        }
                                 }
-                                .padding(.horizontal, 16)
+                                .listStyle(InsetListStyle())
                                 .onAppear {
                                     listProxy = scrollViewProxy
                                 }
                                 .refreshable {
                                     documentsStore.reload()
                                 }
+                            } else if documentsStore.viewMode == .grid {
+                                let columns: [GridItem] = [
+                                    GridItem(.adaptive(minimum: 100), spacing: 0, alignment: .top)
+                                ]
+                                ScrollView {
+                                    LazyVGrid(columns: columns) {
+                                        ForEach($documentsStore.documents) { document in
+                                            NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
+                                                DocumentGrid(
+                                                    document: document,
+                                                    shouldEdit: (document.id == lastCreatedNewFolder?.id),
+                                                    documentsStore: documentsStore
+                                                )
+                                                .padding(.vertical, 0)
+                                                .id(document.id)
+                                            }
+                                        }
+                                    }
+                                    .padding(.horizontal, 16)
+                                    .onAppear {
+                                        listProxy = scrollViewProxy
+                                    }
+                                    .refreshable {
+                                        documentsStore.reload()
+                                    }
+                                }
                             }
                         }
-                    }
-                    .background(Color.clear)
-                    .navigationBarItems(trailing: actionButtons)
-                    .navigationTitle(title)
-                    .sheet(isPresented:  $isPresentedPicker) {
-                        DocumentPicker(documentsStore: documentsStore) {
-                            NSLog("Docupicker callback")
+                        .background(Color.clear)
+                        .navigationBarItems(trailing: actionButtons)
+                        .navigationTitle(title)
+                        .sheet(isPresented:  $isPresentedPicker) {
+                            DocumentPicker(documentsStore: documentsStore) {
+                                NSLog("Docupicker callback")
+                            }
+                        }
+                        .sheet(isPresented:  $isPresentedPhotoPicker) {
+                            PhotoPicker(documentsStore: documentsStore) {
+                                NSLog("Imagepicker callback")
+                            }
+                        }
+                        
+                        if (documentsStore.documents.isEmpty) {
+                            emptyFolderView
                         }
                     }
-                    .sheet(isPresented:  $isPresentedPhotoPicker) {
-                        PhotoPicker(documentsStore: documentsStore) {
-                            NSLog("Imagepicker callback")
-                        }
+                    .task {
+                        documentsStore.loadDocuments()
                     }
                     
-                    if (documentsStore.documents.isEmpty) {
-                        emptyFolderView
+                    if searchViewModel.isSearching {
+                        SearchResultsView(searchText: $searchViewModel.searchText,
+                                          searchResults: $searchViewModel.searchResults,
+                                          isLoading: $searchViewModel.isLoading,
+                                          columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
+                        //                     .scaleEffect(viewModel.isSearching ? 1 : 0.5) // 1 means full size, 0.5 is half size
+                        //                        .opacity(viewModel.isSearching ? 1 : 0) // 1 for fully visible, 0 for invisible
+                        //                        .animation(.easeInOut(duration: 0.5), value: viewModel.isSearching)
+                        .frame(maxHeight: .infinity)
+                        .background(Color.white) // Set a solid background color here
+                        .edgesIgnoringSafeArea(.all)
                     }
                 }
                 .task {
@@ -246,9 +276,53 @@ public struct FolderView: View {
                     .edgesIgnoringSafeArea(.all)
                 }
             }
-            //
+            .onChange(of: uploadProgress, perform: { newValue in
+                if newValue != -1 {
+                    showPopup = true
+                }
+            })
+            .popup(isPresented: $showPopup) {
+                if uploadProgress == 1 {
+                    VStack {
+                        VStack {}
+                            .frame(height: max(screenWidth, screenHeight) * 0.60 / 2)
+                        
+                        VStack (alignment: .center) {
+                            ShineButtonWrapper (x: Int(centerX), y: Int(centerY), r: Int(circleSize), type: .success) {
+                                
+                            }
+                            .offset(x: min(screenWidth, screenHeight) * 0.6 / 2 - circleSize / 2, y: 0)
+                            .padding(.top, 48)
+                            
+                            Spacer()
+                            
+                            Text("Success")
+                                .font(.title3)
+                                .fontWeight(.bold)
+                                .padding(.bottom, 48)
+                        }
+                        // TODO: for dark mode
+                        .background(Color.white)
+                        .frame(width: min(screenWidth, screenHeight) * 0.6, height: max(screenWidth, screenHeight) * 0.35)
+                        .cornerRadius(10)
+                    }
+                } else {
+                    Circle()
+                        .trim(from: 0, to: CGFloat(uploadProgress))
+                        .stroke(Color.blue, style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
+                        .rotationEffect(.degrees(-90))
+                }
+            } customize: {
+                $0
+                    .isOpaque(true)
+                    .type(.floater())
+                    .position(.top)
+                    .animation(.spring())
+                    .closeOnTapOutside(true)
+                    .backgroundColor(.black.opacity(0.5))
+            }
+            //        .frame(maxHeight: .infinity)
         }
-        //        .frame(maxHeight: .infinity)
     }
     
     @ViewBuilder

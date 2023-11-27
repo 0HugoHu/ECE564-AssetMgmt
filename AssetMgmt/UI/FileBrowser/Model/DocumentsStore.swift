@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import SwiftUI
 
 enum DocumentsStoreError: Error, LocalizedError {
     case fileExists
@@ -20,6 +21,7 @@ protocol DocumentImporter {
 
 @MainActor
 public class DocumentsStore: ObservableObject, DocumentImporter {
+    var uploadProgress: Binding<Double>? = nil
     @Published var documents: [Document] = []
     @Published var sorting: SortOption = .date(ascending: false)
     @Published var viewMode: ViewMode = .list {
@@ -349,7 +351,10 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
             }
         } else if self.mode == .remote {
             let currentDirectory = self.relativePath == "" ? self.remoteUrl : self.relativePath
-            uploadFiles(filePaths: [url], dest: currentDirectory, completion: { result in })
+            if let uploadProgress = uploadProgress {
+                uploadProgress.wrappedValue = 0
+            }
+            uploadFiles(filePaths: [url], dest: currentDirectory, uploadProgress: uploadProgress, completion: { result in })
         }
     }
     
