@@ -54,6 +54,7 @@ func deleteAllFilesInCacheFolder() {
         let fileURLs = try FileManager.default.contentsOfDirectory(at: cacheURL)
         for fileURL in fileURLs {
             try FileManager.default.removeItem(at: fileURL)
+            UserDefaults.standard.removeObject(forKey: "download@\(fileURL.lastPathComponent)")
             logger.info("File deleted: \(fileURL.lastPathComponent)")
         }
     } catch {

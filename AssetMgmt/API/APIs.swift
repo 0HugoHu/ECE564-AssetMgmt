@@ -80,7 +80,7 @@ func downloadFiles(to: URL, ids: [String], keepDirectoryStructure: Bool = false,
  
  - Returns: Bool indicating success or failure
  */
-func uploadFiles(filePaths: [URL], dest: String, completion: @escaping (Bool) -> Void) {
+func uploadFiles(filePaths: [URL], dest: String, uploadProgress: Binding<Double>? = nil, completion: @escaping (Bool) -> Void) {
     guard var urlComponents = URLComponents(url: getUploadURL(), resolvingAgainstBaseURL: false) else {
         logger.error("Error constructing the upload URL")
         return completion(false)
@@ -105,7 +105,7 @@ func uploadFiles(filePaths: [URL], dest: String, completion: @escaping (Bool) ->
     
     logger.info("Upload URL: \(finalURL)")
     
-    upload(baseURL: finalURL.absoluteString, files: filePaths) { success in
+    upload(baseURL: finalURL.absoluteString, files: filePaths, uploadProgress: uploadProgress) { success in
         completion(success)
     }
 }
