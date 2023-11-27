@@ -7,6 +7,7 @@ public struct FolderView: View {
     @State var lastCreatedNewFolder: Document?
     @State private var uploadProgress: Double = -1
     @State private var showPopup = false
+    @State private var loading = true
     
     @ObservedObject var documentsStore: DocumentsStore
     var title: String
@@ -127,7 +128,7 @@ public struct FolderView: View {
         self.documentsStore = documentsStore
         self.title = title
         self.searchViewModel = SearchViewModel(currentDirectory: documentsStore.getRelativePath())
-//        print(self.documentsStore.remoteUrl)
+        //        print(self.documentsStore.remoteUrl)
     }
     
     public var body: some View {
@@ -167,10 +168,8 @@ public struct FolderView: View {
                     searchViewModel.search()
                 }
                 Spacer()
-                
                 ZStack {
                     ZStack {
-                        
                         ScrollViewReader { scrollViewProxy in
                             if documentsStore.viewMode == .list {
                                 List {
@@ -218,9 +217,9 @@ public struct FolderView: View {
                                     .onAppear {
                                         listProxy = scrollViewProxy
                                     }
-                                    .refreshable {
-                                        documentsStore.reload()
-                                    }
+                                }
+                                .refreshable {
+                                    documentsStore.reload()
                                 }
                             }
                         }
@@ -237,13 +236,13 @@ public struct FolderView: View {
                                 NSLog("Imagepicker callback")
                             }
                         }
-                        
                         if (documentsStore.documents.isEmpty) {
-                            emptyFolderView
+                            if loading {
+                                Text("Loading...")
+                            } else {
+                                emptyFolderView
+                            }
                         }
-                    }
-                    .task {
-                        documentsStore.loadDocuments()
                     }
                     
                     if searchViewModel.isSearching {
@@ -268,9 +267,14 @@ public struct FolderView: View {
                     //                        .opacity(viewModel.isSearching ? 1 : 0) // 1 for fully visible, 0 for invisible
                     //                        .animation(.easeInOut(duration: 0.5), value: viewModel.isSearching)
                     .frame(maxHeight: .infinity)
-                    .background(Color(UIColor.systemBackground)) 
+                    .background(Color(UIColor.systemBackground))
                     .edgesIgnoringSafeArea(.all)
                 }
+            }
+            .task {
+                loading = true
+                documentsStore.loading = $loading
+                documentsStore.loadDocuments()
             }
             .onChange(of: uploadProgress, perform: { newValue in
                 if newValue != -1 {
@@ -278,12 +282,14 @@ public struct FolderView: View {
                 }
             })
             .popup(isPresented: $showPopup) {
-                if uploadProgress == 1 {
-                    VStack {
-                        VStack {}
-                            .frame(height: max(screenWidth, screenHeight) * 0.60 / 2)
+                
+                VStack {
+                    VStack {}
+                        .frame(height: max(screenWidth, screenHeight) * 0.60 / 2)
+                    
+                    VStack (alignment: .center) {
                         
-                        VStack (alignment: .center) {
+                        if uploadProgress == 1 {
                             ShineButtonWrapper (x: Int(centerX), y: Int(centerY), r: Int(circleSize), type: .success) {
                                 
                             }
@@ -296,18 +302,29 @@ public struct FolderView: View {
                                 .font(.title3)
                                 .fontWeight(.bold)
                                 .padding(.bottom, 48)
+                        } else {
+                            VStack {
+                                Circle()
+                                    .trim(from: 0, to: CGFloat(uploadProgress))
+                                    .stroke(Color.blue, style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
+                                    .rotationEffect(.degrees(-90))
+                                    .padding(EdgeInsets(top: 30, leading: 30, bottom: 30, trailing: 30))
+                                Spacer()
+                                Text("Uploading")
+                                    .font(.title3)
+                                    .fontWeight(.bold)
+                                    .padding(.bottom, 48)
+                            }
+                            .frame(width: min(screenWidth, screenHeight) * 0.6, height: max(screenWidth, screenHeight) * 0.35)
+                            .cornerRadius(10)
                         }
-                        // TODO: for dark mode
-                        .background(Color.white)
-                        .frame(width: min(screenWidth, screenHeight) * 0.6, height: max(screenWidth, screenHeight) * 0.35)
-                        .cornerRadius(10)
                     }
-                } else {
-                    Circle()
-                        .trim(from: 0, to: CGFloat(uploadProgress))
-                        .stroke(Color.blue, style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
-                        .rotationEffect(.degrees(-90))
+                    // TODO: for dark mode
+                    .background(Color.white)
+                    .frame(width: min(screenWidth, screenHeight) * 0.6, height: max(screenWidth, screenHeight) * 0.35)
+                    .cornerRadius(10)
                 }
+                
             } customize: {
                 $0
                     .isOpaque(true)
