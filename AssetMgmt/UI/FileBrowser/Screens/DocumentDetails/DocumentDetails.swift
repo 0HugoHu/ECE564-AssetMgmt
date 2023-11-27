@@ -93,30 +93,30 @@ struct DocumentDetails: View {
                     }
                     Spacer()
                 }
-                
-                
-                if progress != 0 {
-                    if progress == -1 {
-                        DocumentAttributeRow(key: "Downloaded", value: document.formattedSize)
-                    } else {
-                        DocumentAttributeRow(key: "Downloaded", value: Int64(truncating: progress as NSNumber).formatted(ByteCountFormatStyle()))
-                    }
-                }
-                DocumentAttributeRow(key: "Size", value: document.formattedSize)
-                
-                if let created = document.created {
-                    DocumentAttributeRow(key: "Created", value: created.formatted())
-                }
-                
-                if let modified = document.modified {
-                    DocumentAttributeRow(key: "Modified", value: modified.formatted())
-                }
-                
-                DCSectionView(viewModel: viewModel)
-            }
-            .listStyle(InsetGroupedListStyle())
             
-            
+                
+                 if progress != 0 {
+                     if progress == -1 {
+                         DocumentAttributeRow(key: "Downloaded", value: document.formattedSize)
+                     } else {
+                         DocumentAttributeRow(key: "Downloaded", value: Int64(truncating: progress as NSNumber).formatted(ByteCountFormatStyle()))
+                     }
+                 }
+                 DocumentAttributeRow(key: "Size", value: document.formattedSize)
+                 
+                 if let created = document.created {
+                     DocumentAttributeRow(key: "Created", value: created.formatted())
+                 }
+                 
+                 if let modified = document.modified {
+                     DocumentAttributeRow(key: "Modified", value: modified.formatted())
+                 }
+                 
+                 DCSectionView(viewModel: viewModel)
+             }
+             .listStyle(InsetGroupedListStyle())
+             
+
             
         }
         .quickLookPreview($urlToPreview)
