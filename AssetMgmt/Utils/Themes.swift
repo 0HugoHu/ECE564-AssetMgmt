@@ -131,11 +131,11 @@ class Themes : ObservableObject {
     func getUserInfoIcon() -> UIImage? {
         switch (self.currentTheme) {
         case .christmas:
-            return UIImage(named: "decoration_christmas_2")!
+            return UIImage(named: "decoration_christmas_userinfo")!
         case .newyear:
-            return UIImage(named: "decoration_newyear_2")!
+            return UIImage(named: "decoration_newyear_userinfo")!
         case .duke:
-            return UIImage(named: "decoration_duke_2")!
+            return UIImage(named: "decoration_duke_userinfo")!
         default:
             return nil
         }

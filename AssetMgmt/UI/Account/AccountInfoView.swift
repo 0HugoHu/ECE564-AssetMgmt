@@ -19,8 +19,8 @@ struct AccountInfoView: View {
                 Image(uiImage: uiDecoration)
                     .resizable()
                     .scaledToFill()
-                    .frame(maxWidth: 180, maxHeight: 80)
-                    .opacity(0.3)
+                    .frame(maxHeight: 100)
+                    .opacity(0.25)
             }
             
             
@@ -45,7 +45,7 @@ struct AccountInfoView: View {
                     .padding(.bottom, 8)
                     Spacer()
                 }
-                HStack {
+                HStack (alignment: .top) {
                     VStack (alignment: .leading) {
                         Text("Type:")
                             .font(.caption)
@@ -55,7 +55,7 @@ struct AccountInfoView: View {
                     .padding(.bottom, 8)
                     Spacer()
                 }
-                HStack {
+                HStack (alignment: .top) {
                     VStack (alignment: .leading) {
                         Text("Department:")
                             .font(.caption)
