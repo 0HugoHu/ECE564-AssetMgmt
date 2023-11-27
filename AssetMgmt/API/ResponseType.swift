@@ -91,7 +91,7 @@ struct SetFieldsResponse: Codable {
 
 
 struct Fields: Codable, Equatable {
-    var title: [String]?
+    var title: String?
     var keyword: [String]?
     var description: String?
     var creator: [String]?
@@ -121,23 +121,46 @@ struct Fields: Codable, Equatable {
 }
 
 extension Fields {
-    func toCustomJSON(id: Int) -> [String: Any] {
+//    func toCustomJSON(id: Int) -> [String: Any] {
+//        var fieldsArray: [[String: Any]] = []
+//
+//        let mirror = Mirror(reflecting: self)
+//        for child in mirror.children {
+//            guard let key = child.label, let codingKey = codingKey(for: key) else { continue }
+//            
+//            if let value = child.value as? String {
+//                fieldsArray.append(["fieldId": codingKey, "value": value, "append": false])
+//            } else if let valueArray = child.value as? [String] {
+//                let value = valueArray.joined(separator: ", ")
+//                fieldsArray.append(["fieldId": codingKey, "value": value, "append": false])
+//            }
+//        }
+//
+//        return ["id": id, "fields": fieldsArray]  // Example ID used
+//    }
+    
+    func toJSONField(id: Int, key: String, value: Any) -> [String: Any] {
         var fieldsArray: [[String: Any]] = []
+        print(key)
+        guard let codingKey = codingKey(for: key.lowercased()) else { return ["id": id, "fields": []] }
 
-        let mirror = Mirror(reflecting: self)
-        for child in mirror.children {
-            guard let key = child.label, let codingKey = codingKey(for: key) else { continue }
-            
-            if let value = child.value as? String {
-                fieldsArray.append(["fieldId": codingKey, "value": value, "append": false])
-            } else if let valueArray = child.value as? [String] {
-                let value = valueArray.joined(separator: ", ")
-                fieldsArray.append(["fieldId": codingKey, "value": value, "append": false])
-            }
+        if let stringValue = value as? String {
+            // Handle the case where value is a String
+            fieldsArray.append(["fieldId": codingKey, "value": stringValue, "append": false])
+        } else if let arrayValue = value as? [String] {
+            // Handle the case where value is an Array of Strings
+            print(arrayValue)
+
+            fieldsArray.append(["fieldId": codingKey, "value": arrayValue, "append": false])
+
+        } else {
+            // Handle other types or report an error
+            print("Invalid type for value. Only String or [String] are supported.")
         }
 
-        return ["id": id, "fields": fieldsArray]  // Example ID used
+        return ["id": id, "fields": fieldsArray]
     }
+
 
     private func codingKey(for label: String) -> String? {
         switch label {

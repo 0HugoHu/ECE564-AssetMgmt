@@ -13,8 +13,3 @@ struct DocumentAttributeRow: View {
         }
     }
 }
-struct DocumentAttributeRow_Previews: PreviewProvider {
-    static var previews: some View {
-        DocumentAttributeRow(key: "Size", value: "2.3 MB").padding()
-    }
-}
