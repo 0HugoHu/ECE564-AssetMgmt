@@ -351,13 +351,6 @@
 			path = File;
 			sourceTree = "<group>";
 		};
-		C2B652722AF44D0200E45890 /* DB */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = DB;
-			sourceTree = "<group>";
-		};
 		C2C2D7BC2B06EF590080C469 /* Account */ = {
 			isa = PBXGroup;
 			children = (
@@ -525,7 +518,6 @@
 		C2FB20C42AEEDD79002B3FCF /* DAL */ = {
 			isa = PBXGroup;
 			children = (
-				C2B652722AF44D0200E45890 /* DB */,
 				ABBB0F832AF3252600CD812B /* DataAccessFunc */,
 				C2FB20C62AEEDDDB002B3FCF /* Model */,
 			);
