@@ -85,17 +85,18 @@ class SearchViewModel: ObservableObject {
         )
 
         // Perform the search
-        advancedSearch(search: searchTextAdv, directory: "/", verbose: true) { assetsInfo in
-            // Handle the search results
-            if let firstResult = assetsInfo?.first {
-                logger.info("First result name: \(firstResult.id)")
-                DispatchQueue.main.async {
-                    self.isLoading = false
-                    self.searchResults = assetsInfo ?? []
-                }
-            } else {
-                logger.info("No results found")
-            }
-        }
+         advancedSearch(search: searchTextAdv, directory: "/", verbose: true) { assetsInfo in
+             DispatchQueue.main.async {
+                 // Always stop loading regardless of the result
+                 self.isLoading = false
+                 if let assets = assetsInfo, !assets.isEmpty {
+                     logger.info("First result name: \(assets.first!.id)")
+                     self.searchResults = assets
+                 } else {
+                     logger.info("No results found")
+                     self.searchResults = [] // Clear the search results if no assets are found
+                 }
+             }
+         }
     }
 }
