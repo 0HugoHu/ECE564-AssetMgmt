@@ -133,8 +133,11 @@ struct SettingsView: View {
                             .fontWeight(.bold)
                             .padding(.bottom, 48)
                     }
-                    // TODO: for dark mode
-                    .background(Color.white)
+                    .background(
+                        Color(UIColor { traitCollection in
+                            traitCollection.userInterfaceStyle == .dark ? UIColor.systemGray6 : UIColor.systemBackground
+                        })
+                    )
                     .frame(width: min(screenWidth, screenHeight) * 0.6, height: max(screenWidth, screenHeight) * 0.35)
                     .cornerRadius(10)
                 }

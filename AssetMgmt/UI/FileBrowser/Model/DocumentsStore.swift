@@ -238,13 +238,21 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
         } else if self.mode == .remote {
             let ids = [String(document.mediaBeaconID)]
             if document.isDirectory {
-                deleteFiles(paths: [(self.relativePath == "" ? self.remoteUrl : self.relativePath + "/") + document.name]) { response in
-                    switch response {
-                    case true:
-                        self.removeDocument(document.mediaBeaconID)
-                        logger.info("Successfully deleted folder")
-                    case false:
-                        logger.info("Failed to delete folder")
+                NotificationCenter.default.post(name: Notification.Name("BlockingDeleteFolders"), object: document.mediaBeaconID)
+                NotificationCenter.default.addObserver(forName: Notification.Name("ConfirmedDeleteFolders"), object: nil, queue: .main) { notification in
+                    if let folderId = notification.object as? Int {
+                        DispatchQueue.main.async {
+                            deleteFiles(paths: [(self.relativePath == "" ? self.remoteUrl : self.relativePath + "/") + document.name]) { response in
+                                switch response {
+                                case true:
+                                    self.removeDocument(folderId)
+                                    logger.info("Observer ConfirmedDeleteFolders called")
+                                case false:
+                                    NotificationCenter.default.post(name: Notification.Name("DeleteFailed"), object: nil)
+                                    logger.info("Failed to delete folder")
+                                }
+                            }
+                        }
                     }
                 }
             } else {
@@ -255,6 +263,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
                         removeFileById(String(document.mediaBeaconID))
                         logger.info("Successfully deleted file")
                     case false:
+                        NotificationCenter.default.post(name: Notification.Name("DeleteFailed"), object: nil)
                         logger.info("Failed to delete file")
                     }
                 }

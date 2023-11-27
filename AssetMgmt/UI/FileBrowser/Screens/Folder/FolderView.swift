@@ -6,7 +6,12 @@ public struct FolderView: View {
     @State var listProxy: ScrollViewProxy? = nil
     @State var lastCreatedNewFolder: Document?
     @State private var uploadProgress: Double = -1
-    @State private var showPopup = false
+    @State private var showPopupSuccess = false
+    @State private var onlyShowPopupSuccess = false
+    @State private var showPopupWarning = false
+    // Folder ID used to set warning
+    @State private var folderID: Int = -1
+    @State private var showPopupFail = false
     @State private var loading = true
     
     @ObservedObject var documentsStore: DocumentsStore
@@ -278,18 +283,27 @@ public struct FolderView: View {
             }
             .onChange(of: uploadProgress, perform: { newValue in
                 if newValue != -1 {
-                    showPopup = true
+                    showPopupSuccess = true
                 }
             })
-            .popup(isPresented: $showPopup) {
-                
+            .onAppear {
+                NotificationCenter.default.addObserver(forName: Notification.Name("BlockingDeleteFolders"), object: nil, queue: .main) { notification in
+                    if let folderId = notification.object as? Int {
+                        self.folderID = folderId
+                        self.showPopupWarning = true
+                    }
+                }
+                NotificationCenter.default.addObserver(forName: Notification.Name("DeleteFailed"), object: nil, queue: .main) { notification in
+                    self.showPopupFail = true
+                }
+            }
+            .popup(isPresented: $showPopupSuccess) {
                 VStack {
                     VStack {}
                         .frame(height: max(screenWidth, screenHeight) * 0.60 / 2)
                     
                     VStack (alignment: .center) {
-                        
-                        if uploadProgress == 1 {
+                        if uploadProgress == 1 || onlyShowPopupSuccess {
                             ShineButtonWrapper (x: Int(centerX), y: Int(centerY), r: Int(circleSize), type: .success) {
                                 
                             }
@@ -301,7 +315,7 @@ public struct FolderView: View {
                             Text("Success")
                                 .font(.title3)
                                 .fontWeight(.bold)
-                                .padding(.bottom, 48)
+                                .padding(.bottom, 36)
                         } else {
                             VStack {
                                 Circle()
@@ -319,12 +333,14 @@ public struct FolderView: View {
                             .cornerRadius(10)
                         }
                     }
-                    // TODO: for dark mode
-                    .background(Color.white)
+                    .background(
+                        Color(UIColor { traitCollection in
+                            traitCollection.userInterfaceStyle == .dark ? UIColor.systemGray6 : UIColor.systemBackground
+                        })
+                    )
                     .frame(width: min(screenWidth, screenHeight) * 0.6, height: max(screenWidth, screenHeight) * 0.35)
                     .cornerRadius(10)
                 }
-                
             } customize: {
                 $0
                     .isOpaque(true)
@@ -335,6 +351,106 @@ public struct FolderView: View {
                     .backgroundColor(.black.opacity(0.5))
             }
             //        .frame(maxHeight: .infinity)
+            .popup(isPresented: $showPopupWarning) {
+                VStack {
+                    VStack {}
+                        .frame(height: max(screenWidth, screenHeight) * 0.60 / 2)
+                    
+                    VStack (alignment: .center) {
+                        ShineButtonWrapper (x: Int(centerX), y: Int(centerY), r: Int(circleSize), type: .warning) {
+                            
+                        }
+                        .offset(x: min(screenWidth, screenHeight) * 0.6 / 2 - circleSize / 2, y: 0)
+                        .padding(.top, 32)
+                        
+                        Spacer()
+                        
+                        Text("This action will delete all files recursively under the folder.")
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                            .padding(.bottom, 16)
+                            .padding(.horizontal, 8)
+                        
+                            .padding(.horizontal, 8)
+                        
+                        Divider()
+                            .padding(.bottom, 0)
+                        
+                        HStack(spacing: 20) {
+                            Button(action: {
+                                NotificationCenter.default.post(name: Notification.Name("ConfirmedDeleteFolders"), object: self.folderID)
+                                self.showPopupWarning = false
+                            }) {
+                                Text("Continue")
+                                    .padding()
+                                    .foregroundColor(Color.red)
+                                    .cornerRadius(10)
+                                    .font(.caption)
+                            }
+                            
+                            Button(action: {
+                                self.showPopupWarning = false
+                            }) {
+                                Text("Back")
+                                    .padding()
+                                    .foregroundColor(.accentColor)
+                                    .cornerRadius(10)
+                            }
+                        }
+                    }
+                    .background(
+                        Color(UIColor { traitCollection in
+                            traitCollection.userInterfaceStyle == .dark ? UIColor.systemGray6 : UIColor.systemBackground
+                        })
+                    )
+                    .frame(width: min(screenWidth, screenHeight) * 0.6, height: max(screenWidth, screenHeight) * 0.45)
+                    .cornerRadius(10)
+                }
+            } customize: {
+                $0
+                    .isOpaque(true)
+                    .type(.floater())
+                    .position(.top)
+                    .animation(.spring())
+                    .closeOnTapOutside(true)
+                    .backgroundColor(.black.opacity(0.5))
+            }
+            .popup(isPresented: $showPopupFail) {
+                VStack {
+                    VStack {}
+                        .frame(height: max(screenWidth, screenHeight) * 0.60 / 2)
+                    
+                    VStack (alignment: .center) {
+                        ShineButtonWrapper (x: Int(centerX), y: Int(centerY), r: Int(circleSize), type: .error) {
+                            
+                        }
+                        .offset(x: min(screenWidth, screenHeight) * 0.6 / 2 - circleSize / 2, y: 0)
+                        .padding(.top, 48)
+                        
+                        Spacer()
+                        
+                        Text("Operation Failed")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                            .padding(.bottom, 36)
+                    }
+                    .background(
+                        Color(UIColor { traitCollection in
+                            traitCollection.userInterfaceStyle == .dark ? UIColor.systemGray6 : UIColor.systemBackground
+                        })
+                    )
+                    .frame(width: min(screenWidth, screenHeight) * 0.6, height: max(screenWidth, screenHeight) * 0.35)
+                    .cornerRadius(10)
+                }
+            } customize: {
+                $0
+                    .isOpaque(true)
+                    .type(.floater())
+                    .position(.top)
+                    .animation(.spring())
+                    .closeOnTapOutside(true)
+                    .backgroundColor(.black.opacity(0.5))
+            }
         }
     }
     
@@ -381,12 +497,12 @@ public struct FolderView: View {
         } catch {
             switch error {
             case DocumentsStoreError.remoteCreationSuccedded:
-                logger.error("\(documentsStore.documents.last?.name ?? "unknown") created remotely")
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
-                    withAnimation {
-                        listProxy?.scrollTo(documentsStore.documents.last?.id, anchor: .bottom)
-                    }
-                }
+                logger.info("\(documentsStore.documents.last?.name ?? "unknown") created remotely")
+//                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
+//                    withAnimation {
+//                        listProxy?.scrollTo(documentsStore.documents.last?.id, anchor: .bottom)
+//                    }
+//                }
             default:
                 break
             }
