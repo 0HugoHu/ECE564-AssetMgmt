@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct AccountInfoView: View {
-    
+    var screenWidth : CGFloat
     @StateObject var themeManager = Themes.instance
     @State var accountInfoLocal = getAccountInfo()
     @State var uiDecoration : UIImage?
     
     var body: some View {
+        let gridWidth = screenWidth / 2
         ZStack {
             if let uiDecoration {
                 Image(uiImage: uiDecoration)
@@ -23,49 +24,40 @@ struct AccountInfoView: View {
                     .opacity(0.25)
             }
             
-            
-            LazyVGrid(columns: [GridItem(.flexible(), spacing: 20), GridItem(.flexible(), spacing: 20)]) {
+            VStack (alignment: .leading) {
                 HStack {
                     VStack (alignment: .leading) {
                         Text("Username:")
                             .font(.caption)
-                        Text("\(accountInfoLocal["Username"]!)")
-                            .font(.callout)
+                        BlurView(text: "\(accountInfoLocal["Username"]!)", textSize: 16, startTime: 0, fastAnimation: false)
                     }
-                    .padding(.bottom, 8)
-                    Spacer()
-                }
-                HStack {
+                    
                     VStack (alignment: .leading) {
                         Text("Status:")
                             .font(.caption)
-                        Text("\(accountInfoLocal["Status"]!)")
-                            .font(.callout)
+                        BlurView(text: "\(accountInfoLocal["Status"]!)", textSize: 16, startTime: 0, fastAnimation: false)
                     }
-                    .padding(.bottom, 8)
-                    Spacer()
+                    .padding(.leading, 72)
+                    
                 }
-                HStack (alignment: .top) {
-                    VStack (alignment: .leading) {
-                        Text("Type:")
-                            .font(.caption)
-                        Text("\(accountInfoLocal["Type"]!)")
-                            .font(.callout)
-                    }
-                    .padding(.bottom, 8)
-                    Spacer()
-                }
-                HStack (alignment: .top) {
+                .padding(.bottom, 8)
+                
+                HStack {
                     VStack (alignment: .leading) {
                         Text("Department:")
                             .font(.caption)
-                        Text("\(accountInfoLocal["Department"]!)")
-                            .font(.callout)
+                        BlurView(text: "\(accountInfoLocal["Department"]!)", textSize: 16, startTime: 0, fastAnimation: true)
+                            .lineLimit(2)
                     }
-                    .padding(.bottom, 8)
-                    Spacer()
                 }
+                
+                Text(junkString)
+                    .foregroundStyle(Color.clear)
+                    .frame(height: 0)
+                    .padding(.bottom, 8)
             }
+            
+            
         }
         .onAppear {
             accountInfoLocal = getAccountInfo()
@@ -74,10 +66,11 @@ struct AccountInfoView: View {
                 accountInfoLocal = getAccountInfo()
                 uiDecoration = themeManager.getUserInfoIcon()
             }
+            
         }
     }
 }
 
 #Preview {
-    AccountInfoView()
+    AccountInfoView(screenWidth: 300)
 }

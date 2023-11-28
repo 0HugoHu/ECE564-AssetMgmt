@@ -28,7 +28,7 @@ struct SettingsView: View {
             
             List {
                 Section(header: Text("Account Info")) {
-                    AccountInfoView()
+                    AccountInfoView(screenWidth: smallerDimension)
                 }
                 
                 Section(header: Text("Access Control List")) {
