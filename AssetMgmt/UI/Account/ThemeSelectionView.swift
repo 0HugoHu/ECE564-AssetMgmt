@@ -48,7 +48,6 @@ struct ThemeSelectionView: View {
                 themeManager.setTheme(theme: .default)
             }
             NotificationCenter.default.post(name: Notification.Name("ReloadThemeSelection"), object: themeIndex)
-//            logger.error("\(themeIndex)")
         }
         .frame(height: 85)
     }

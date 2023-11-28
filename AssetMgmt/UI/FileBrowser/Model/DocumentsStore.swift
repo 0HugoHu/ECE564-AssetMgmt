@@ -1,3 +1,12 @@
+//
+//  DocumentStore.swift
+//  AssetMgmt
+//
+//  Created by ntsh (https://github.com/ntsh/DirectoryBrowser)
+//  Adapted by Hugooooo on 11/3/23.
+//
+
+
 import Foundation
 import Combine
 import SwiftUI
@@ -472,14 +481,3 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
     }
 }
 
-class DocumentsStore_Preview: DocumentsStore {
-    override var documents: [Document] {
-        set {
-            super.documents = newValue
-        }
-        get {
-            return  [Document(name: "Hello.pdf", url: URL(string: "/")!, size:1700, modified: Date()),
-                     Document(name: "Travel documentation list.txt", url: URL(string: "/")!, size:100000, modified: Date().addingTimeInterval(-30000))]
-        }
-    }
-}

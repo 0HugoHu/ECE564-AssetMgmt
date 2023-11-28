@@ -171,11 +171,4 @@ struct DocumentDetails: View {
     }
 }
 
-struct DocumentDetails_Previews: PreviewProvider {
-    static var previews: some View {
-        DocumentDetails(document: DocumentsStore_Preview(root: URL.temporaryDirectory, relativePath: "/", sorting: .date(ascending: true)).documents[1], mode: .remote)
-            .preferredColorScheme(.dark)
-            .environment(\.sizeCategory, .large)
-    }
-}
 

@@ -8,9 +8,7 @@
 import SwiftUI
 import WebKit
 
-/*
- TODO: Login View
- */
+
 struct Initialization: View {
     @Environment(\.presentationMode) var presentationMode
     
@@ -20,9 +18,6 @@ struct Initialization: View {
     var body: some View {
         NavigationView {
             List {
-//                NavigationLink(destination: WebView(url: initialURL, currentURL: $currentURL)) {
-//                    Text("Log In")
-//                }
                 NavigationLink(destination: UserInfoView()) {
                     Text("Get User Info")
                 }
@@ -128,9 +123,6 @@ struct WebView: UIViewRepresentable {
 }
 
 
-/*
- TODO: This view should in Profile view
- */
 struct UserInfoView: View {
     @State private var userInfo: String = "Loading..."
     

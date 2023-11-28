@@ -53,7 +53,7 @@ struct AssetInfoResponse: Codable, Identifiable {
     let previews: Previews
     let replaceDate: Int
     let versionNumber: Int
-
+    
     struct Previews: Codable {
         let thumbnail: String
         let viewex: String
@@ -76,7 +76,7 @@ struct DirectoryResponse: Codable, Identifiable {
 struct DublinCoreResponse: Codable {
     let id: Int
     let fields: Fields
-
+    
     enum CodingKeys: String, CodingKey {
         case id
         case fields
@@ -103,7 +103,7 @@ struct Fields: Codable, Equatable {
     var identifier: String?
     var source: String?
     var format: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case title = "http://purl.org/dc/elements/1.1/ title"
         case keyword = "http://purl.org/dc/elements/1.1/ subject"
@@ -121,62 +121,44 @@ struct Fields: Codable, Equatable {
 }
 
 extension Fields {
-//    func toCustomJSON(id: Int) -> [String: Any] {
-//        var fieldsArray: [[String: Any]] = []
-//
-//        let mirror = Mirror(reflecting: self)
-//        for child in mirror.children {
-//            guard let key = child.label, let codingKey = codingKey(for: key) else { continue }
-//            
-//            if let value = child.value as? String {
-//                fieldsArray.append(["fieldId": codingKey, "value": value, "append": false])
-//            } else if let valueArray = child.value as? [String] {
-//                let value = valueArray.joined(separator: ", ")
-//                fieldsArray.append(["fieldId": codingKey, "value": value, "append": false])
-//            }
-//        }
-//
-//        return ["id": id, "fields": fieldsArray]  // Example ID used
-//    }
-    
     func toJSONField(id: Int, key: String, value: Any) -> [String: Any] {
         var fieldsArray: [[String: Any]] = []
         print(key)
         guard let codingKey = codingKey(for: key.lowercased()) else { return ["id": id, "fields": []] }
-
+        
         if let stringValue = value as? String {
             // Handle the case where value is a String
             fieldsArray.append(["fieldId": codingKey, "value": stringValue, "append": false])
         } else if let arrayValue = value as? [String] {
             // Handle the case where value is an Array of Strings
             print(arrayValue)
-
+            
             fieldsArray.append(["fieldId": codingKey, "value": arrayValue, "append": false])
-
+            
         } else {
             // Handle other types or report an error
             print("Invalid type for value. Only String or [String] are supported.")
         }
-
+        
         return ["id": id, "fields": fieldsArray]
     }
-
-
+    
+    
     private func codingKey(for label: String) -> String? {
         switch label {
-            case "title": return "http://purl.org/dc/elements/1.1/ title"
-            case "keyword": return "http://purl.org/dc/elements/1.1/ subject"
-            case "description": return "http://purl.org/dc/elements/1.1/ description"
-            case "creator": return "http://purl.org/dc/elements/1.1/ creator"
-            case "rights": return "http://purl.org/dc/elements/1.1/ rights"
-            case "contributor": return "http://purl.org/dc/elements/1.1/ contributor"
-            case "publisher": return "http://purl.org/dc/elements/1.1/ publisher"
-            case "coverage": return "http://purl.org/dc/elements/1.1/ coverage"
-            case "date": return "http://purl.org/dc/elements/1.1/ date"
-            case "identifier": return "http://purl.org/dc/elements/1.1/ identifier"
-            case "source": return "http://purl.org/dc/elements/1.1/ source"
-            case "format": return "http://purl.org/dc/elements/1.1/ format"
-            default: return nil
+        case "title": return "http://purl.org/dc/elements/1.1/ title"
+        case "keyword": return "http://purl.org/dc/elements/1.1/ subject"
+        case "description": return "http://purl.org/dc/elements/1.1/ description"
+        case "creator": return "http://purl.org/dc/elements/1.1/ creator"
+        case "rights": return "http://purl.org/dc/elements/1.1/ rights"
+        case "contributor": return "http://purl.org/dc/elements/1.1/ contributor"
+        case "publisher": return "http://purl.org/dc/elements/1.1/ publisher"
+        case "coverage": return "http://purl.org/dc/elements/1.1/ coverage"
+        case "date": return "http://purl.org/dc/elements/1.1/ date"
+        case "identifier": return "http://purl.org/dc/elements/1.1/ identifier"
+        case "source": return "http://purl.org/dc/elements/1.1/ source"
+        case "format": return "http://purl.org/dc/elements/1.1/ format"
+        default: return nil
         }
     }
 }

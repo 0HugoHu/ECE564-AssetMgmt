@@ -2,7 +2,7 @@
 //  UserDefaultAccess.swift
 //  AssetMgmt
 //
-//  Created by Athenaost on 11/1/23.
+//  Created by Janus on 11/1/23.
 //
 
 import Foundation
@@ -12,9 +12,10 @@ func saveUserInfo(_ userInfo: UserInfoAPIResponse) {
         let data = try JSONEncoder().encode(userInfo)
         UserDefaults.standard.set(data, forKey: "userInfo")
     } catch {
-        // log.error(error)
+        logger.error("\(error)")
     }
 }
+
 
 func getUserInfo() -> UserInfoAPIResponse? {
     if let data = UserDefaults.standard.data(forKey: "userInfo") {
@@ -22,7 +23,7 @@ func getUserInfo() -> UserInfoAPIResponse? {
             let userInfo = try JSONDecoder().decode(UserInfoAPIResponse.self, from: data)
             return userInfo
         } catch {
-             logger.error("\(error)")
+            logger.error("\(error)")
         }
     }
     return nil

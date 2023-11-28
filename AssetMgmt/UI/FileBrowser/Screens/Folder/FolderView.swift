@@ -194,7 +194,7 @@ public struct FolderView: View {
                                             .id(document.id)
                                         }
                                     }
-                                    .onDelete(perform: deleteItems)
+//                                    .onDelete(perform: deleteItems)
                                     //                        }
                                 }
                                 .listStyle(InsetListStyle())
@@ -514,14 +514,5 @@ public struct FolderView: View {
         withAnimation {
             documentsStore.delete(document)
         }
-    }
-}
-
-import FilePreviews
-
-struct FolderView_Previews: PreviewProvider {
-    static var previews: some View {
-        FolderView(documentsStore: DocumentsStore_Preview(root: URL.temporaryDirectory, relativePath: "/", sorting: .date(ascending: true)), title: "Docs")
-            .environmentObject(Thumbnailer())
     }
 }

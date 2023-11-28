@@ -92,7 +92,6 @@
 		C2E947C22B0EC09F00C5F89E /* WCLShineButtonWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E947C12B0EC09F00C5F89E /* WCLShineButtonWrapper.swift */; };
 		C2E947C42B0EC14B00C5F89E /* WCLShineButton.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C2E947C32B0EC14B00C5F89E /* WCLShineButton.bundle */; };
 		C2FB20C92AEEDECA002B3FCF /* APIs.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB20C82AEEDECA002B3FCF /* APIs.swift */; };
-		C2FB20CF2AEEE0C8002B3FCF /* LogModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB20CE2AEEE0C8002B3FCF /* LogModel.swift */; };
 		C2FB20D52AEEE15B002B3FCF /* Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FB20D42AEEE15B002B3FCF /* Initialization.swift */; };
 		C2FB20E62AEEE5BF002B3FCF /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = C2FB20E52AEEE5BF002B3FCF /* Logging */; };
 /* End PBXBuildFile section */
@@ -197,7 +196,6 @@
 		C2E947C12B0EC09F00C5F89E /* WCLShineButtonWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WCLShineButtonWrapper.swift; sourceTree = "<group>"; };
 		C2E947C32B0EC14B00C5F89E /* WCLShineButton.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = WCLShineButton.bundle; sourceTree = "<group>"; };
 		C2FB20C82AEEDECA002B3FCF /* APIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIs.swift; sourceTree = "<group>"; };
-		C2FB20CE2AEEE0C8002B3FCF /* LogModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogModel.swift; sourceTree = "<group>"; };
 		C2FB20D42AEEE15B002B3FCF /* Initialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Initialization.swift; sourceTree = "<group>"; };
 		C2FB20D92AEEE25E002B3FCF /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		C2FB20DB2AEEE266002B3FCF /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -235,15 +233,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		ABBB0F832AF3252600CD812B /* DataAccessFunc */ = {
-			isa = PBXGroup;
-			children = (
-				ABBB0F842AF3254A00CD812B /* UserDefaultAccess.swift */,
-				ABBB0F862AFC79C600CD812B /* FileAccess.swift */,
-			);
-			path = DataAccessFunc;
-			sourceTree = "<group>";
-		};
 		C28274982AFDD37600C6A9DD /* Search */ = {
 			isa = PBXGroup;
 			children = (
@@ -393,6 +382,7 @@
 		C2C797292AF18116005D41DE /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				C28274992AFDD39B00C6A9DD /* Thumbnail */,
 				C2E947A62B0C58D000C5F89E /* Decoration */,
 				C2C7972A2AF18116005D41DE /* Folder */,
 				C2C7972E2AF18116005D41DE /* DocumentDetails */,
@@ -530,18 +520,10 @@
 		C2FB20C42AEEDD79002B3FCF /* DAL */ = {
 			isa = PBXGroup;
 			children = (
-				ABBB0F832AF3252600CD812B /* DataAccessFunc */,
-				C2FB20C62AEEDDDB002B3FCF /* Model */,
+				ABBB0F842AF3254A00CD812B /* UserDefaultAccess.swift */,
+				ABBB0F862AFC79C600CD812B /* FileAccess.swift */,
 			);
 			path = DAL;
-			sourceTree = "<group>";
-		};
-		C2FB20C62AEEDDDB002B3FCF /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				C2FB20CE2AEEE0C8002B3FCF /* LogModel.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		C2FB20D62AEEE20F002B3FCF /* Resources */ = {
@@ -568,7 +550,6 @@
 			isa = PBXGroup;
 			children = (
 				C2C797462AF18133005D41DE /* DirectoryBrowser.swift */,
-				C28274992AFDD39B00C6A9DD /* Thumbnail */,
 				C2C797342AF18117005D41DE /* Model */,
 				C2C797262AF18116005D41DE /* Pickers */,
 				C2C797292AF18116005D41DE /* Screens */,
@@ -778,7 +759,6 @@
 				C2C7973F2AF18117005D41DE /* DocumentAttributeRow.swift in Sources */,
 				C2E947A52B0C57B200C5F89E /* EmptyFolderView.swift in Sources */,
 				C2C2D7C02B0705FF0080C469 /* Appearance.swift in Sources */,
-				C2FB20CF2AEEE0C8002B3FCF /* LogModel.swift in Sources */,
 				C2C7973A2AF18117005D41DE /* PhotoPicker.swift in Sources */,
 				C2FB20D52AEEE15B002B3FCF /* Initialization.swift in Sources */,
 				C2C797582AF1C1F0005D41DE /* Download.swift in Sources */,

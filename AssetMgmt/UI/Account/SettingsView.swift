@@ -62,15 +62,6 @@ struct SettingsView: View {
                 }
                 
                 Section(header: Text("Actions")) {
-                    //                Button("Open Download Folders") {
-                    //                    logger.info("\(cacheURL)")
-                    //                    if UIApplication.shared.canOpenURL(cacheURL) {
-                    //                        UIApplication.shared.open(cacheURL, options: [:], completionHandler: nil)
-                    //                    } else {
-                    //                        logger.error("Failed to open folder")
-                    //                    }
-                    //                }
-                    
                     Button("Revome All Cache") {
                         UserDefaults.standard.removeObject(forKey: "userInfo")
                         deleteAllFilesInCacheFolder()
@@ -161,15 +152,6 @@ struct SettingsView: View {
             }
         } else {
             logger.error("Cannot read ACLGroups")
-        }
-    }
-}
-
-
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            SettingsView()
         }
     }
 }

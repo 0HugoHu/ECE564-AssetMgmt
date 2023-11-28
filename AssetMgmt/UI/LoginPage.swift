@@ -2,7 +2,7 @@
 //  LoginPage.swift
 //  AssetMgmt
 //
-//  Created by Athenaost on 11/12/23.
+//  Created by Janus on 11/12/23.
 //
 
 import SwiftUI

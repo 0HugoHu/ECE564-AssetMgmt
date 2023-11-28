@@ -20,20 +20,20 @@ struct SearchView: View {
             
             SearchBarView(
                 searchText: $searchViewModel.searchText,
-                          selectedCriteriaConjunction: $searchViewModel.selectedCriteriaConjunction,
-                          selectedField: $searchViewModel.selectedField,
-                          selectedCondition: $searchViewModel.selectedCondition,
-                          showAdvancedSearch: $searchViewModel.showAdvancedSearch,
-                          isSearching: $searchViewModel.isSearching,
-                          searchResults: $searchViewModel.searchResults,
-                          selectedSearchDirectoryOption:$searchViewModel.selectedSearchDirectoryOption,
-                          onCommit: {searchViewModel.search()
-                searchViewModel.updateSearchStatus()
-            },
-                          onAdvancedSearch: {
-                searchViewModel.performAdvancedSearch()
-                searchViewModel.updateSearchStatus()
-            }
+                selectedCriteriaConjunction: $searchViewModel.selectedCriteriaConjunction,
+                selectedField: $searchViewModel.selectedField,
+                selectedCondition: $searchViewModel.selectedCondition,
+                showAdvancedSearch: $searchViewModel.showAdvancedSearch,
+                isSearching: $searchViewModel.isSearching,
+                searchResults: $searchViewModel.searchResults,
+                selectedSearchDirectoryOption:$searchViewModel.selectedSearchDirectoryOption,
+                onCommit: {searchViewModel.search()
+                    searchViewModel.updateSearchStatus()
+                },
+                onAdvancedSearch: {
+                    searchViewModel.performAdvancedSearch()
+                    searchViewModel.updateSearchStatus()
+                }
             )
             // As long as the search text updates, the searchStatus will update
             .onChange(of: searchViewModel.searchText) { _ in

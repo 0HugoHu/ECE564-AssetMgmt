@@ -14,10 +14,6 @@ let logger = Logger(label: "AssetMgmt")
 struct AssetMgmtApp: App {
     @StateObject var appearanceManager = Appearances.instance
     
-    init() {
-        //        copyFilesToPicturesDirectory()
-    }
-    
     var body: some Scene {
         WindowGroup {
             ContentView()

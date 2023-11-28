@@ -22,18 +22,16 @@ class SearchViewModel: ObservableObject {
     
     init(currentDirectory: String) {
         self.currentDirectory = currentDirectory
-        // other initializations
     }
     
     func updateSearchStatus() {
         if searchText.isEmpty {
-            // Clear search results if searchText is empty
             searchResults = []
         }
-        //
+        
         isSearching = !searchText.isEmpty || !searchResults.isEmpty
     }
-
+    
     func search() {
         if showAdvancedSearch {
             performAdvancedSearch()
@@ -48,24 +46,21 @@ class SearchViewModel: ObservableObject {
         let directoryToSearch: String
         switch selectedSearchDirectoryOption {
         case .overall:
-            directoryToSearch = "/" // Assuming root directory signifies an overall search
+            directoryToSearch = "/"
         case .currentFolder:
-            directoryToSearch = currentDirectory // Specific folder search
+            directoryToSearch = currentDirectory
         }
         
-//        print("\(directoryToSearch)")
-
+        
         simpleSearch(search: searchText, directory: directoryToSearch
         ) { simpleIDResponses in
             guard let ids: [String] = simpleIDResponses?.map({ "\($0.id)" }) else {
-                // Handle the error or empty state here
                 DispatchQueue.main.async {
                     self.isLoading = false
                 }
                 return
             }
             
-            // Then, fetch the details for each ID
             getAssetDetails(ids: ids) { assetDetails in
                 DispatchQueue.main.async {
                     self.isLoading = false
@@ -83,20 +78,20 @@ class SearchViewModel: ObservableObject {
             condition: SearchFilter.OtherField(rawValue: selectedCondition) ?? .equals,
             value: searchText
         )
-
+        
         // Perform the search
-         advancedSearch(search: searchTextAdv, directory: "/", verbose: true) { assetsInfo in
-             DispatchQueue.main.async {
-                 // Always stop loading regardless of the result
-                 self.isLoading = false
-                 if let assets = assetsInfo, !assets.isEmpty {
-                     logger.info("First result name: \(assets.first!.id)")
-                     self.searchResults = assets
-                 } else {
-                     logger.info("No results found")
-                     self.searchResults = [] // Clear the search results if no assets are found
-                 }
-             }
-         }
+        advancedSearch(search: searchTextAdv, directory: "/", verbose: true) { assetsInfo in
+            DispatchQueue.main.async {
+                // Always stop loading regardless of the result
+                self.isLoading = false
+                if let assets = assetsInfo, !assets.isEmpty {
+                    logger.info("First result name: \(assets.first!.id)")
+                    self.searchResults = assets
+                } else {
+                    logger.info("No results found")
+                    self.searchResults = []
+                }
+            }
+        }
     }
 }

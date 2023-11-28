@@ -134,19 +134,3 @@ struct DocumentGrid: View {
     }
 }
 
-struct DocumentGrid_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            DocumentRow(
-                document: .constant(DocumentsStore_Preview(
-                    root: URL.temporaryDirectory,
-                    relativePath: "/", sorting: .date(ascending: true)
-                ).documents[1]),
-                documentsStore: DocumentsStore_Preview(root: URL.temporaryDirectory)
-            )
-            .environment(\.sizeCategory, .large)
-            .previewLayout(.sizeThatFits)
-            .preferredColorScheme(.dark)
-        }
-    }
-}

@@ -52,10 +52,6 @@ func downloadFiles(to: URL, ids: [String], keepDirectoryStructure: Bool = false,
         existingQueryItems.append(URLQueryItem(name: "keepDirectoryStructure", value: "true"))
     }
     
-    //    if noZip {
-    //        existingQueryItems.append(URLQueryItem(name: "noZip", value: "true"))
-    //    }
-    
     urlComponents.queryItems = existingQueryItems
     
     guard let finalURL = urlComponents.url else {
@@ -447,6 +443,7 @@ func simpleSearch(directory: String, verbose: Bool, pageSize: Int = 100, pageInd
     }
 }
 
+
 /*
  Advanced Search
  Used for file browser only
@@ -652,7 +649,6 @@ func getAssetDetails(ids: [String], completion: @escaping ([AssetInfoResponse]?)
 }
 
 
-
 /*
  Get Dublin Core Metadata
  
@@ -693,7 +689,7 @@ func getDublinCore(ids: [String], completion: @escaping ([DublinCoreResponse]?) 
     }
     
     // Log and fetch data
-//    logger.info("Dublin Core URL: \(finalURL)")
+    //    logger.info("Dublin Core URL: \(finalURL)")
     fetchData(from: finalURL, responseType: [DublinCoreResponse].self) { result in
         switch result {
         case .success(let assetInfo):
@@ -705,18 +701,19 @@ func getDublinCore(ids: [String], completion: @escaping ([DublinCoreResponse]?) 
     }
 }
 
+
 /*
-Set Dublin Core Metadata
+ Set Dublin Core Metadata
  
  - Parameters:
  - datas
-    - id
-    - fields
-        - fields Id
-        - value
-        - append: false
+ - id
+ - fields
+ - fields Id
+ - value
+ - append: false
  
-- Returns: Bool indicating success or failure
+ - Returns: Bool indicating success or failure
  */
 
 func updateDublinCore(customJSON: [String: Any], completion: @escaping (Bool) -> Void) {

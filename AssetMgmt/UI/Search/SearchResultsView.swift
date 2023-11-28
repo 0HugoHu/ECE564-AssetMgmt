@@ -24,8 +24,6 @@ struct SearchResultsView: View {
                         .padding(.top)
                         .padding(.trailing)
                         .foregroundColor(Color.primary)
-      
-                    
                 }
             }
             .navigationBarTitle(Text("MediaBeacon"))

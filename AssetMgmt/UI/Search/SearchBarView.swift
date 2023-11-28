@@ -1,4 +1,9 @@
-// Sample Search Bar
+//
+//  SearchBarView.swift
+//  AssetMgmt
+//
+//  Created by Minghui ZHU on 11/15/23.
+//
 
 import Foundation
 import SwiftUI
@@ -71,16 +76,16 @@ struct SearchBarView: View {
     
     init(
         searchText: Binding<String>,
-         selectedCriteriaConjunction: Binding<String>,
-         selectedField: Binding<String>,
-         selectedCondition: Binding<String>,
-         showAdvancedSearch: Binding<Bool>,
-         isSearching: Binding<Bool>,
-         searchResults: Binding<[AssetInfoResponse]>,
+        selectedCriteriaConjunction: Binding<String>,
+        selectedField: Binding<String>,
+        selectedCondition: Binding<String>,
+        showAdvancedSearch: Binding<Bool>,
+        isSearching: Binding<Bool>,
+        searchResults: Binding<[AssetInfoResponse]>,
         selectedSearchDirectoryOption: Binding<SearchDirectoryOptions>,
-         onCommit: @escaping () -> Void,
-
-         onAdvancedSearch: @escaping () -> Void
+        onCommit: @escaping () -> Void,
+        
+        onAdvancedSearch: @escaping () -> Void
     ) {
         self._searchText = searchText
         self._isSearching = isSearching
@@ -99,13 +104,13 @@ struct SearchBarView: View {
         HStack {
             HStack {
                 Image(systemName: "magnifyingglass")
-                    .foregroundColor(.primary) // Adaptive color for the icon
+                    .foregroundColor(.primary)
                 
                 // Search text field
                 ZStack (alignment: .leading) {
-                    if searchText.isEmpty { // Separate text for placeholder to give it the proper color
+                    if searchText.isEmpty {
                         Text("Search")
-                            .foregroundColor(.secondary) // Adaptive color for the placeholder text
+                            .foregroundColor(.secondary)
                     }
                     TextField("", text: $searchText, onEditingChanged: { isEditing in
                         self.showCancelButton = true
@@ -117,7 +122,7 @@ struct SearchBarView: View {
                     // Cancel button
                     
                     Button(action: {
-                        UIApplication.shared.endEditing(true) // this must be placed before the other commands here
+                        UIApplication.shared.endEditing(true)
                         self.searchText = ""
                         self.showCancelButton = false
                         self.isSearching = false
@@ -138,12 +143,12 @@ struct SearchBarView: View {
                 }
             }
             .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-            .foregroundColor(.secondary) // Adaptive color for the background
+            .foregroundColor(.secondary)
             .background(Color(.tertiarySystemFill))
             .cornerRadius(10.0)
         }
         .padding(.horizontal)
-        .background(Color(UIColor.systemBackground)) //
+        .background(Color(UIColor.systemBackground))
         
         if isSearching {
             VStack(spacing: 0) {
@@ -175,7 +180,7 @@ struct SearchBarView: View {
                 .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 0))
                 
                 Divider()
-
+                
                 // Field Picker
                 HStack {
                     Text("Select Field")
@@ -191,7 +196,7 @@ struct SearchBarView: View {
                 .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 0))
                 
                 Divider()
-
+                
                 // Condition Picker
                 HStack {
                     Text("Select Condition")
@@ -209,16 +214,12 @@ struct SearchBarView: View {
             .background(
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color(.tertiarySystemFill))
-//                    .padding(.horizontal)
-                    
-                    // Adaptive color for both light and dark mode
             )
             .padding(.top, 5)
             .padding(.horizontal)
-
-//            .cornerRadius(10.0)
+            
         }
-
+        
         
     }
 }

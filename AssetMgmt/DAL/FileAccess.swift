@@ -2,13 +2,14 @@
 //  FileAccess.swift
 //  AssetMgmt
 //
-//  Created by Athenaost on 11/8/23.
+//  Created by Janus on 11/8/23.
 //
 
 import Foundation
 import SwiftUI
 
 let cacheURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appending(path: "edu.duke.AssetMgmt/DownloadFiles")
+
 
 func getFilePathById(_ id: String, progress: Binding<Int64>? = nil) -> URL? {
     if let progress = UserDefaults.standard.value(forKey: "download@\(id)") as? Int64 {
@@ -36,6 +37,7 @@ func getFilePathById(_ id: String, progress: Binding<Int64>? = nil) -> URL? {
     downloadFiles(to: folderPath, ids: [id], progress: progress) {result in}
     return nil
 }
+
 
 func removeFileById(_ id: String) {
     UserDefaults.standard.removeObject(forKey: "download@\(id)")

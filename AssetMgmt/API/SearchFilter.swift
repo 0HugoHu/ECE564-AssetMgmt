@@ -8,7 +8,6 @@
 import Foundation
 
 
-
 class SearchFilter {
     // Function to form the example format with generics
     static func createSearchCriteria<T>(conjunction: Conjunction, fieldId: String, condition: T, value: String) -> String where T: RawRepresentable, T.RawValue == String {

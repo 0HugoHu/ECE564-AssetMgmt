@@ -1,3 +1,10 @@
+//
+//  DirectoryBrowser.swift
+//  AssetMgmt
+//
+//  Created by Hugooooo on 11/3/23.
+//
+
 import SwiftUI
 import FilePreviews
 
@@ -28,14 +35,3 @@ public struct DirectoryBrowser: View {
     
 }
 
-struct DirectoryBrowser_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            DirectoryBrowser()
-                .preferredColorScheme(.light)
-            
-            DirectoryBrowser()
-                .preferredColorScheme(.dark)
-        }
-    }
-}
