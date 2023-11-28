@@ -46,6 +46,8 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
         return docDirectory.appendingPathComponent(relativePath)
     }
     
+    private var confirmedDeleteFoldersNotification : NSObjectProtocol? = nil
+    
     public init(
         root: URL,
         relativePath: String = "",
@@ -82,6 +84,26 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
         }
         self.documentManager = FileManager.default
         loadViewModeFromUserDefaults()
+    }
+    
+    func initNotification(documentName : String) {
+        confirmedDeleteFoldersNotification = NotificationCenter.default.addObserver(forName: Notification.Name("ConfirmedDeleteFolders"), object: nil, queue: .main) { notification in
+            if let folderId = notification.object as? Int {
+                DispatchQueue.main.async {
+                    deleteFiles(paths: [(self.relativePath == "" ? self.remoteUrl : self.relativePath + "/") + documentName]) { response in
+                        switch response {
+                        case true:
+                            self.removeDocument(folderId)
+                            logger.info("Observer ConfirmedDeleteFolders called")
+                        case false:
+                            NotificationCenter.default.post(name: Notification.Name("DeleteFailed"), object: nil)
+                            logger.info("Failed to delete folder")
+                        }
+                    }
+                    NotificationCenter.default.removeObserver(self.confirmedDeleteFoldersNotification!)
+                }
+            }
+        }
     }
     
     fileprivate func document(from url: URL) -> Document? {
@@ -236,25 +258,10 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
                 NSLog("Error deleting file: \(error)")
             }
         } else if self.mode == .remote {
+            initNotification(documentName: document.name)
             let ids = [String(document.mediaBeaconID)]
             if document.isDirectory {
                 NotificationCenter.default.post(name: Notification.Name("BlockingDeleteFolders"), object: document.mediaBeaconID)
-                NotificationCenter.default.addObserver(forName: Notification.Name("ConfirmedDeleteFolders"), object: nil, queue: .main) { notification in
-                    if let folderId = notification.object as? Int {
-                        DispatchQueue.main.async {
-                            deleteFiles(paths: [(self.relativePath == "" ? self.remoteUrl : self.relativePath + "/") + document.name]) { response in
-                                switch response {
-                                case true:
-                                    self.removeDocument(folderId)
-                                    logger.info("Observer ConfirmedDeleteFolders called")
-                                case false:
-                                    NotificationCenter.default.post(name: Notification.Name("DeleteFailed"), object: nil)
-                                    logger.info("Failed to delete folder")
-                                }
-                            }
-                        }
-                    }
-                }
             } else {
                 deleteFiles(ids: ids) { response in
                     switch response {
@@ -413,7 +420,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
                 var documentToUpdate = documents[renameIndex]
                 
                 if document.isDirectory {
-                    renameFiles(paths: [(self.relativePath == "" ? self.remoteUrl : self.relativePath) + "/" + document.name], newNames: [newName]) { response in
+                    renameFiles(paths: [(self.relativePath == "" ? self.remoteUrl : self.relativePath + "/") + document.name], newNames: [newName]) { response in
                         switch response {
                         case true:
                             self.removeDocument(document.mediaBeaconID)

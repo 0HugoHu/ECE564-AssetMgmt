@@ -23,6 +23,9 @@ public struct FolderView: View {
         GridItem(.adaptive(minimum: 100), spacing: 20)
     ]
     
+    @State private var errorNotification : NSObjectProtocol? = nil
+    @State private var warningNotification : NSObjectProtocol? = nil
+    
     //    @ViewBuilder
     //    var listSectionHeader: some View {
     //        Text("All")
@@ -134,6 +137,7 @@ public struct FolderView: View {
         self.title = title
         self.searchViewModel = SearchViewModel(currentDirectory: documentsStore.getRelativePath())
         //        print(self.documentsStore.remoteUrl)
+        
     }
     
     public var body: some View {
@@ -275,14 +279,17 @@ public struct FolderView: View {
                 }
             })
             .onAppear {
-                NotificationCenter.default.addObserver(forName: Notification.Name("BlockingDeleteFolders"), object: nil, queue: .main) { notification in
+                self.warningNotification = NotificationCenter.default.addObserver(forName: Notification.Name("BlockingDeleteFolders"), object: nil, queue: .main) { notification in
                     if let folderId = notification.object as? Int {
                         self.folderID = folderId
                         self.showPopupWarning = true
+//                        NotificationCenter.default.removeObserver(self.warningNotification!)
                     }
                 }
-                NotificationCenter.default.addObserver(forName: Notification.Name("DeleteFailed"), object: nil, queue: .main) { notification in
+                
+                self.errorNotification = NotificationCenter.default.addObserver(forName: Notification.Name("DeleteFailed"), object: nil, queue: .main) { notification in
                     self.showPopupFail = true
+//                    NotificationCenter.default.removeObserver(self.errorNotification!)
                 }
             }
             .popup(isPresented: $showPopupSuccess) {

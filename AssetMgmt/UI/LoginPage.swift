@@ -13,6 +13,7 @@ struct LoginPage: View {
     @State private var gotoLogjcin: Bool = false
     @State private var isLoggedIn: Bool = false
     @State private var showLoginPage: Bool = false
+    @State private var loggedOutNotification : NSObjectProtocol? = nil
     
     var body: some View {
         VStack {
@@ -72,7 +73,7 @@ struct LoginPage: View {
         .onAppear() {
             currentURL = initialURL
             isLoggedIn = loggedIn()
-            NotificationCenter.default.addObserver(forName: Notification.Name("LoggedOut"), object: nil, queue: .main) { _ in
+            self.loggedOutNotification = NotificationCenter.default.addObserver(forName: Notification.Name("LoggedOut"), object: nil, queue: .main) { _ in
                 isLoggedIn = loggedIn()
             }
         }
