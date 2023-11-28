@@ -46,6 +46,7 @@ struct LoginPage: View {
                                 LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.5), .white]), startPoint: .top, endPoint: .center)
                             )
                             .edgesIgnoringSafeArea(.all)
+                            .background(Color.white)
                         
                         VStack {
                             Image("mediabeacon")

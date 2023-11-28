@@ -263,18 +263,6 @@ public struct FolderView: View {
                         .edgesIgnoringSafeArea(.all)
                     }
                 }
-                if searchViewModel.isSearching {
-                    SearchResultsView(searchText: $searchViewModel.searchText,
-                                      searchResults: $searchViewModel.searchResults,
-                                      isLoading: $searchViewModel.isLoading,
-                                      columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
-                    //                     .scaleEffect(viewModel.isSearching ? 1 : 0.5) // 1 means full size, 0.5 is half size
-                    //                        .opacity(viewModel.isSearching ? 1 : 0) // 1 for fully visible, 0 for invisible
-                    //                        .animation(.easeInOut(duration: 0.5), value: viewModel.isSearching)
-                    .frame(maxHeight: .infinity)
-                    .background(Color(UIColor.systemBackground))
-                    .edgesIgnoringSafeArea(.all)
-                }
             }
             .task {
                 loading = true

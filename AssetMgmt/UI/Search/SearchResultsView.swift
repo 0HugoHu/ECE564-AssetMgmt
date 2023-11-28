@@ -40,8 +40,6 @@ struct SearchResultsView: View {
                     ForEach(searchResults, id: \.id) { item in
                         NavigationLink(destination: DocumentDetails(document: convertToDocument(from: item), mode: .remote)) {
                             AssetThumbnailViewGrid(assetInfo: item)
-                                
-                            
                         }
                     }
                 }
