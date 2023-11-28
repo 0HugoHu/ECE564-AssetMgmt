@@ -13,13 +13,13 @@ struct SingleStringAttributeRow: View {
     @State var key: String
     @Binding var value: String
     @State private var showingEditSheet = false
-
+    
     init(id: Int, key: String, value: Binding<String>) {
         self.id = id
         self.key = key
         self._value = value
     }
-
+    
     var body: some View {
         HStack {
             Text(key)
@@ -40,7 +40,7 @@ struct SingleStringAttributeRow: View {
             EditSingleStringView(id: id, key: key, value: $value)
         }
     }
-
+    
     private func isSwipeDisabled(for key: String) -> Bool {
         return key == "Identifier" || key == "Format"
     }
@@ -51,13 +51,13 @@ struct ListStringAttributeRow: View {
     @State var key: String
     @Binding var values: [String]
     @State private var showingEditSheet = false
-
+    
     init(id: Int, key: String, values: Binding<[String]>) {
         self.id = id
         self.key = key
         self._values = values
     }
-
+    
     var body: some View {
         HStack {
             Text(key)
@@ -82,7 +82,7 @@ struct ListStringAttributeRow: View {
             EditStringListView(id: id, key: key, values: $values)
         }
     }
-
+    
     private func isSwipeDisabled(for key: String) -> Bool {
         return key == "Identifier" || key == "Format"
     }
@@ -94,15 +94,15 @@ struct EditSingleStringView: View {
     @State var key: String
     @Binding var value: String
     @Environment(\.presentationMode) var presentationMode
-
+    
     var body: some View {
         NavigationView {
             VStack {
                 TextField("Edit \(key)", text: $value, axis: .vertical)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
-
-                Spacer() // Adds spacing at the bottom
+                
+                Spacer()
             }
             .navigationBarTitle("Edit \(key)", displayMode: .inline)
             .navigationBarItems(
@@ -133,7 +133,7 @@ struct EditStringListView: View {
     @State private var newItem: String = ""
     @State private var newDate: Date = Date()
     @Environment(\.presentationMode) var presentationMode
-
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -150,11 +150,11 @@ struct EditStringListView: View {
                     }
                     .onDelete(perform: delete)
                 }
-
+                
                 if key == "Date" {
                     DatePicker("New Date", selection: $newDate, displayedComponents: .date)
                         .padding()
-
+                    
                     Button("Add New Date") {
                         addNewDate()
                     }
@@ -189,30 +189,30 @@ struct EditStringListView: View {
             )
         }
     }
-
+    
     private func addNewItem() {
         if !newItem.isEmpty {
             values.append(newItem)
-            newItem = ""  // Clear the TextField
+            newItem = ""
         }
     }
-
+    
     private func addNewDate() {
         let newDateString = getStringFromDate(newDate)
         values.append(newDateString)
-        newDate = Date()  // Reset the DatePicker
+        newDate = Date()
     }
-
+    
     private func delete(at offsets: IndexSet) {
         values.remove(atOffsets: offsets)
     }
-
+    
     private func getDateFromString(_ string: String) -> Date? {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter.date(from: string)
     }
-
+    
     private func getStringFromDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"

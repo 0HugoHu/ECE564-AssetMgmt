@@ -98,7 +98,7 @@ func getThumbnailURL(originalURLString: String) -> String {
         newURLString += "&apikey=\(UserDefaults.standard.string(forKey: "AuthToken")!)"
         return newURLString
     } else {
-        return originalURLString // Return the original if it doesn't match the expected format
+        return originalURLString
     }
 }
 

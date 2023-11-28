@@ -1,3 +1,10 @@
+//
+//  DocumentFieldsViewModel.swift
+//  AssetMgmt
+//
+//  Created by Minghui ZHU on 11/26/23.
+//
+
 import Foundation
 import SwiftUI
 
@@ -5,22 +12,10 @@ class DocumentFieldsViewModel: ObservableObject {
     @Published var dcFields: Fields
     @Published var id: Int
 
-
     init(dcFields: Fields, id: Int) {
         self.dcFields = dcFields
         self.id = id
     }
-    
-//    func updateDC() {
-//        let customJSON = dcFields.toCustomJSON(id: id)
-//        updateDublinCore(customJSON: customJSON) { success in
-//            if success {
-//                print("Update successful")
-//            } else {
-//                print("Update failed")
-//            }
-//        }
-//    }
 }
 
 extension DocumentFieldsViewModel {

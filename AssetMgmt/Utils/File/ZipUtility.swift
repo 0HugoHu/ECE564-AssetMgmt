@@ -35,22 +35,22 @@ class ZipUtility {
     static func zipFiles(_ sourceURLs: [URL], fileName: String, destinationURL: URL) throws -> URL {
         do {
             var finalDestinationURL = destinationURL.appending(path: fileName)
-
+            
             if FileManager.default.fileExists(atPath: finalDestinationURL.path) {
                 finalDestinationURL = generateUniqueDestinationURL(finalDestinationURL)
             }
-
+            
             let zipFilePath = try Zip.quickZipFiles(sourceURLs, fileName: fileName)
             
             try FileManager.default.moveItem(at: zipFilePath, to: finalDestinationURL)
-
+            
             return finalDestinationURL
         } catch {
             logger.error("\(error)")
             throw ZipError.zipFailed
         }
     }
-
+    
 }
 
 enum UnzipError: Error {

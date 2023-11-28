@@ -1,3 +1,11 @@
+//
+//  DocumentDetails.swift
+//  AssetMgmt
+//
+//  Created by ntsh (https://github.com/ntsh/DirectoryBrowser)
+//  Adapted by Hugooooo on 11/11/23.
+//
+
 import FilePreviews
 import SwiftUI
 
@@ -23,11 +31,7 @@ struct DocumentDetails: View {
         
         VStack(alignment: .center, spacing: 12) {
             List {
-                if mode == .local {
-                    ThumbnailView(url: document.url)
-                        .padding(.vertical)
-                        .onTapGesture(perform: showPreview)
-                } else if mode == .remote {
+                if mode == .remote {
                     if let thumbnailUrl = getHighQualityPreviewURL(originalURLString: document.highQualityPreviewUrl ?? "") {
                         VStack (alignment: .center) {
                             AsyncImage(url: URL(string: thumbnailUrl)) { phase in
@@ -93,31 +97,28 @@ struct DocumentDetails: View {
                     }
                     Spacer()
                 }
-            
                 
-                 if progress != 0 {
-                     if progress == -1 {
-                         DocumentAttributeRow(key: "Downloaded", value: document.formattedSize)
-                     } else {
-                         DocumentAttributeRow(key: "Downloaded", value: Int64(truncating: progress as NSNumber).formatted(ByteCountFormatStyle()))
-                     }
-                 }
-                 DocumentAttributeRow(key: "Size", value: document.formattedSize)
-                 
-                 if let created = document.created {
-                     DocumentAttributeRow(key: "Created", value: created.formatted())
-                 }
-                 
-                 if let modified = document.modified {
-                     DocumentAttributeRow(key: "Modified", value: modified.formatted())
-                 }
-                 
-                 DCSectionView(viewModel: viewModel)
-             }
-             .listStyle(InsetGroupedListStyle())
-             
-
-            
+                
+                if progress != 0 {
+                    if progress == -1 {
+                        DocumentAttributeRow(key: "Downloaded", value: document.formattedSize)
+                    } else {
+                        DocumentAttributeRow(key: "Downloaded", value: Int64(truncating: progress as NSNumber).formatted(ByteCountFormatStyle()))
+                    }
+                }
+                DocumentAttributeRow(key: "Size", value: document.formattedSize)
+                
+                if let created = document.created {
+                    DocumentAttributeRow(key: "Created", value: created.formatted())
+                }
+                
+                if let modified = document.modified {
+                    DocumentAttributeRow(key: "Modified", value: modified.formatted())
+                }
+                
+                DCSectionView(viewModel: viewModel)
+            }
+            .listStyle(InsetGroupedListStyle())
         }
         .quickLookPreview($urlToPreview)
         .navigationBarItems(trailing: HStack {

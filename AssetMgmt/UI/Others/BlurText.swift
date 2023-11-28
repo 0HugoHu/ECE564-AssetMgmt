@@ -7,24 +7,6 @@
 
 import SwiftUI
 
-struct Blur: View {
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text("Blur Animation")
-                .fontWeight(.heavy)
-                .foregroundColor(.gray)
-                .padding(.bottom, 10)
-            VStack(alignment: .leading) {
-                BlurView(text: "どうしようもない", textSize: 38, startTime: 0.41, fastAnimation: false)
-                BlurView(text: "わたしが", textSize: 38, startTime: 1.85, fastAnimation: false)
-                BlurView(text: "歩いている", textSize: 38, startTime: 2.76, fastAnimation: false)
-                BlurView(text: "種田山頭火", textSize: 16, startTime: 3.76, fastAnimation: false)
-                    .padding(.top, 30)
-            }
-        }
-    }
-}
-
 struct BlurView: View {
     let characters: Array<String.Element>
     let baseTime: Double
@@ -61,22 +43,11 @@ struct BlurView: View {
         }
         .onAppear{
             DispatchQueue.main.asyncAfter(deadline: .now() + baseTime) {
-//                if blurValue == 0{
-//                    blurValue = 10
-//                    opacity = 0.01
-//                }
-//                else {
-                    blurValue = 0
-                    opacity = 1
-//                }
+                blurValue = 0
+                opacity = 1
             }
         }
     }
 }
 
 
-struct Blur_Previews: PreviewProvider {
-    static var previews: some View {
-        Blur()
-    }
-}

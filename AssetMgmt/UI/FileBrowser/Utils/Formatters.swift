@@ -1,3 +1,10 @@
+//
+//  DocumentDetails.swift
+//  AssetMgmt
+//
+//  Created by ntsh (https://github.com/ntsh/DirectoryBrowser)
+//
+
 import Foundation
 
 let ShortTimestampFormatter: DateFormatter = {

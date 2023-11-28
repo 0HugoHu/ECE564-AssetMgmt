@@ -85,7 +85,7 @@ struct LoginPage: View {
         }
         if let timestamp = UserDefaults.standard.object(forKey: "timestamp") as? Date {
             let currentTime = Date()
-            let expiration: TimeInterval = 60 * 60 * 24
+            let expiration: TimeInterval = 60 * 60 * 24 * 7
             if currentTime.timeIntervalSince(timestamp) < expiration {
                 return true
             }

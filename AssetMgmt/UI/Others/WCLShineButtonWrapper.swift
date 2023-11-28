@@ -61,7 +61,6 @@ struct ShineButtonWrapper: UIViewRepresentable {
         }
         button.addTarget(context.coordinator, action: #selector(Coordinator.buttonValueChanged), for: .valueChanged)
         
-        // Schedule button press after 0.5 seconds
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
             button.setClicked(true)
         }
@@ -70,7 +69,6 @@ struct ShineButtonWrapper: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: WCLShineButton, context: Context) {
-        // Update the view if needed
     }
 }
 

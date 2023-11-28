@@ -1,3 +1,10 @@
+//
+//  DocumentManager.swift
+//  AssetMgmt
+//
+//  Created by ntsh (https://github.com/ntsh/DirectoryBrowser)
+//
+
 import Foundation
 
 /// Protocol defining the functions related to documents operation

@@ -21,10 +21,10 @@ func fileExtensionForContentType(_ contentType: String) -> String {
         "application/zip": "zip",
         "text/plain": "txt",
         "application/json": "json",
+        // Do not replace this 0folder, it is used to sort
         "folder": "0folder",
         "unknown": "unknown"
-        // Add more mappings as needed
     ]
-
+    
     return contentTypeToExtension[contentType] ?? "unknown"
 }

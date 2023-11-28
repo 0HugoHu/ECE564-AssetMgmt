@@ -26,34 +26,34 @@ func upload(baseURL: String, files: [URL], uploadProgress: Binding<Double>? = ni
         AF.upload(multipartFormData: { multipartFormData in
             multipartFormData.append(zipURL, withName: "file")
         }, to: baseURL, method: .post, headers: ["Content-Type": "application/zip"])
-            .uploadProgress { progress in
-                if let uploadProgress = uploadProgress {
-                    uploadProgress.wrappedValue = progress.fractionCompleted
-                }
-                print("Upload Progress: \(progress.fractionCompleted)")
+        .uploadProgress { progress in
+            if let uploadProgress = uploadProgress {
+                uploadProgress.wrappedValue = progress.fractionCompleted
             }
-            .responseData { response in
-                print(response)
-                
-                switch response.result {
-                case .success:
-                    if response.value != nil {
-                        // TODO: Write into log
-                        completion(true)
-                    } else {
-                        logger.error("Upload request is nil)")
-                        completion(false)
-                    }
-                case .failure(let error):
-                    logger.error("Upload request failed with error: \(error)")
+            print("Upload Progress: \(progress.fractionCompleted)")
+        }
+        .responseData { response in
+            print(response)
+            
+            switch response.result {
+            case .success:
+                if response.value != nil {
+                    // TODO: Write into log
+                    completion(true)
+                } else {
+                    logger.error("Upload request is nil)")
                     completion(false)
                 }
-                do {
-                    try FileManager.default.removeItem(at: zipURL)
-                } catch {
-                    logger.error("Fail to delete zipfile: \(error)")
-                }
+            case .failure(let error):
+                logger.error("Upload request failed with error: \(error)")
+                completion(false)
             }
+            do {
+                try FileManager.default.removeItem(at: zipURL)
+            } catch {
+                logger.error("Fail to delete zipfile: \(error)")
+            }
+        }
     } catch {
         logger.error("Error zipping files: \(error)")
         completion(false)

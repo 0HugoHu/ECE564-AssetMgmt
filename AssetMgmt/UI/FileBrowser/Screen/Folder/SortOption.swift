@@ -1,3 +1,11 @@
+//
+//  SortOption.swift
+//  AssetMgmt
+//
+//  Created by ntsh (https://github.com/ntsh/DirectoryBrowser)
+//  Adapted by Hugooooo on 11/19/23.
+//
+
 import Foundation
 
 public enum SortOption: Equatable {

@@ -46,15 +46,6 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
     private var relativePath: String
     private var documentManager: DocumentManager
     private let attrKeys: [URLResourceKey] = [.nameKey, .fileSizeKey, .contentModificationDateKey, .creationDateKey, .isDirectoryKey]
-    
-    private var workingDirectory: URL {
-        guard relativePath.count > 0 else {
-            return docDirectory
-        }
-        
-        return docDirectory.appendingPathComponent(relativePath)
-    }
-    
     private var confirmedDeleteFoldersNotification : NSObjectProtocol? = nil
     
     public init(
@@ -136,14 +127,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
         if let loading = loading {
             loading.wrappedValue = true
         }
-        if self.mode == .local {
-            do {
-                let allFiles = try documentManager.contentsOfDirectory(at: workingDirectory)
-                documents = allFiles.map { document(from: $0) }.compactMap{ $0 }
-            } catch let error as NSError {
-                NSLog("Error traversing files directory: \(error)")
-            }
-        } else if self.mode == .remote{
+        if self.mode == .remote{
             documents.removeAll()
             // Load all directories
             let finalPath = self.relativePath == "" ? self.remoteUrl : self.relativePath
@@ -256,17 +240,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
     }
     
     func delete(_ document: Document) {
-        if self.mode == .local {
-            do {
-                try documentManager.removeItem(at: document.url)
-                // Find current document and remove from documents array
-                if let index = documents.firstIndex(where: { $0.url == document.url }) {
-                    documents.remove(at: index)
-                }
-            } catch let error as NSError {
-                NSLog("Error deleting file: \(error)")
-            }
-        } else if self.mode == .remote {
+        if self.mode == .remote {
             initNotification(documentName: document.name)
             let ids = [String(document.mediaBeaconID)]
             if document.isDirectory {
@@ -292,23 +266,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
         var folderName = "New Folder"
         var folderNumber = 0
         
-        if self.mode == .local {
-            var folderUrl = workingDirectory.appendingPathComponent(folderName, isDirectory: true)
-            // Check if a folder with the name already exists
-            while documentManager.fileExists(atPath: folderUrl.relativePath) {
-                folderNumber += 1
-                folderName = "New Folder (\(folderNumber))"
-                folderUrl = workingDirectory.appendingPathComponent(folderName, isDirectory: true)
-            }
-            
-            // Create the new folder
-            do {
-                return try createFolder(folderName)
-            } catch {
-                print("Error creating new folder \(error)")
-                throw DocumentsStoreError.unknown
-            }
-        } else if self.mode == .remote {
+        if self.mode == .remote {
             let folderUrl = self.relativePath == "" ? self.remoteUrl : self.relativePath
             var pathName = folderUrl + "/" + folderName + "/"
             // Check if a folder with the name already exists
@@ -336,57 +294,9 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
         }
     }
     
-    @discardableResult
-    func createFolder(_ name: String) throws -> Document {
-        let target = workingDirectory.appendingPathComponent(name, isDirectory: true)
-        do {
-            try documentManager.createDirectory(at: target)
-        } catch CocoaError.fileWriteFileExists {
-            throw DocumentsStoreError.fileExists
-        }
-        
-        if let folder = document(from: target) {
-            documents.insert(folder, at: 0)
-            sort()
-            return folder
-        } else {
-            throw DocumentsStoreError.unknown
-        }
-    }
     
     func importFile(from url: URL) {
-        if self.mode == .local {
-            var suitableUrl = workingDirectory.appendingPathComponent(url.lastPathComponent)
-            
-            var retry = true
-            var retryCount = 1
-            while retry {
-                retry = false
-                
-                do {
-                    try documentManager.copyItem(at: url, to: suitableUrl)
-                    
-                    if let document = document(from: suitableUrl) {
-                        documents.insert(document, at: self.documents.endIndex)
-                        sort()
-                    }
-                } catch CocoaError.fileWriteFileExists {
-                    retry = true
-                    
-                    // append (1) to file name
-                    let fileExtension = url.pathExtension
-                    let fileNameWithoutExtension = url.deletingPathExtension().lastPathComponent
-                    let fileNameWithCountSuffix = fileNameWithoutExtension.appending(" (\(retryCount))")
-                    suitableUrl = workingDirectory.appendingPathComponent(fileNameWithCountSuffix).appendingPathExtension(fileExtension)
-                    
-                    retryCount += 1
-                    
-                    NSLog("Retry *** suitableName = \(suitableUrl.lastPathComponent)")
-                } catch let error as NSError {
-                    NSLog("Error importing file: \(error)")
-                }
-            }
-        } else if self.mode == .remote {
+        if self.mode == .remote {
             let currentDirectory = self.relativePath == "" ? self.remoteUrl : self.relativePath
             if let uploadProgress = uploadProgress {
                 uploadProgress.wrappedValue = 0.01
@@ -402,29 +312,7 @@ public class DocumentsStore: ObservableObject, DocumentImporter {
     
     @discardableResult
     func rename(document: Document, newName: String) throws -> Document {
-        if self.mode == .local {
-            let newUrl = workingDirectory.appendingPathComponent(newName, isDirectory: document.isDirectory)
-            do {
-                try documentManager.moveItem(at: document.url, to: newUrl)
-                
-                // Find current document in documents array and update the values
-                if let indexToUpdate = documents.firstIndex(where: { $0.url == document.url }) {
-                    var documentToUpdate = documents[indexToUpdate]
-                    documents.remove(at: indexToUpdate)
-                    
-                    documentToUpdate.url = newUrl
-                    documentToUpdate.name = newName
-                    documents.insert(documentToUpdate, at: 0)
-                    
-                    sort()
-                    return documentToUpdate
-                } else {
-                    throw DocumentsStoreError.fileWasDeleted
-                }
-            } catch CocoaError.fileWriteFileExists {
-                throw DocumentsStoreError.fileExists
-            }
-        } else if self.mode == .remote {
+        if self.mode == .remote {
             if let renameIndex = documents.firstIndex(where: { $0.mediaBeaconID == document.mediaBeaconID }) {
                 var documentToUpdate = documents[renameIndex]
                 

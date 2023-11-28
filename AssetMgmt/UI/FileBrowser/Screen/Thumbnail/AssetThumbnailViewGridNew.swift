@@ -15,7 +15,7 @@ struct AssetThumbnailViewGridNew: View {
     var body: some View {
         VStack {
             let thumbnailUrl = getThumbnailURL(originalURLString: url)
-         
+            
             AsyncImage(url: URL(string: thumbnailUrl)) { phase in
                 switch phase {
                 case .empty:

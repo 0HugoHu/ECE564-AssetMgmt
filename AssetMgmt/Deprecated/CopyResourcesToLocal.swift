@@ -13,21 +13,21 @@ let allowedFileExtensions: Set<String> = ["pdf", "jpg"]
 
 func copyFilesToPicturesDirectory() {
     let fileManager = FileManager.default
-
+    
     if var sourceDirectoryURL = Bundle.main.url(forResource: "Sample", withExtension: "pdf") {
         sourceDirectoryURL.deleteLastPathComponent()
         let destinationDirectoryURL = URL.picturesDirectory
-
+        
         do {
             try fileManager.createDirectory(at: destinationDirectoryURL, withIntermediateDirectories: true, attributes: nil)
         } catch {
             logger.error("Error creating destination directory: \(error)")
             return
         }
-
+        
         do {
             let sourceFiles = try fileManager.contentsOfDirectory(at: sourceDirectoryURL, includingPropertiesForKeys: nil, options: [])
-
+            
             for sourceFileURL in sourceFiles {
                 let fileExtension = sourceFileURL.pathExtension.lowercased()
                 
@@ -39,7 +39,7 @@ func copyFilesToPicturesDirectory() {
                         try fileManager.copyItem(at: sourceFileURL, to: destinationFileURL)
                         logger.info("File copied to .picturesDirectory: \(destinationFileURL.path)")
                     } else {
-//                        logger.warning("File already exists in .picturesDirectory: \(destinationFileURL.path)")
+                        //                        logger.warning("File already exists in .picturesDirectory: \(destinationFileURL.path)")
                     }
                 }
             }

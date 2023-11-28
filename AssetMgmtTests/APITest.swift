@@ -11,14 +11,13 @@ import XCTest
 final class APITest: XCTestCase {
     
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        
     }
     
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        
     }
     
-    // Important: You must first login before doing unit test
     func testGetUserInfo() throws {
         let expectation = XCTestExpectation(description: "getUserInfo completion called")
         
@@ -184,6 +183,4 @@ final class APITest: XCTestCase {
         // Actual time 0.41 s
         wait(for: [expectation], timeout: 1)
     }
-    
-    
 }

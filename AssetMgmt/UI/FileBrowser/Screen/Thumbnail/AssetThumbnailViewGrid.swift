@@ -14,7 +14,7 @@ struct AssetThumbnailViewGrid: View {
         VStack {
             
             let thumbnailUrl = getThumbnailURL(originalURLString: assetInfo.previews.thumbnail)
-         
+            
             AsyncImage(url: URL(string: thumbnailUrl)) { phase in
                 switch phase {
                 case .empty:
@@ -31,7 +31,7 @@ struct AssetThumbnailViewGrid: View {
                 @unknown default:
                     EmptyView() // Future-proofing against new cases
                 }
-    
+                
                 VStack(alignment: .leading) {
                     Text(assetInfo.name)
                         .font(Font.system(size: 14))

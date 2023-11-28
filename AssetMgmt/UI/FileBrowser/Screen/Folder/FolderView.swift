@@ -1,3 +1,11 @@
+//
+//  FolderView.swift
+//  AssetMgmt
+//
+//  Created by ntsh (https://github.com/ntsh/DirectoryBrowser)
+//  Adapted by Hugooooo on 11/3/23.
+//
+
 import SwiftUI
 
 public struct FolderView: View {
@@ -25,12 +33,6 @@ public struct FolderView: View {
     
     @State private var errorNotification : NSObjectProtocol? = nil
     @State private var warningNotification : NSObjectProtocol? = nil
-    
-    //    @ViewBuilder
-    //    var listSectionHeader: some View {
-    //        Text("All")
-    //            .background(Color.clear)
-    //    }
     
     fileprivate func sortByDateButton() -> some View {
         let sortImage: String = documentsStore.sorting.dateButtonIcon()
@@ -69,9 +71,6 @@ public struct FolderView: View {
         
         HStack {
             Menu {
-                //                Button(action: { }) {
-                //                    Label("     Select", systemImage: "checkmark.circle")
-                //                }
                 Button(action: didClickCreateFolder) {
                     Label("     New Folder", systemImage: "folder.badge.plus")
                 }
@@ -136,8 +135,6 @@ public struct FolderView: View {
         self.documentsStore = documentsStore
         self.title = title
         self.searchViewModel = SearchViewModel(currentDirectory: documentsStore.getRelativePath())
-        //        print(self.documentsStore.remoteUrl)
-        
     }
     
     public var body: some View {
@@ -182,7 +179,6 @@ public struct FolderView: View {
                         ScrollViewReader { scrollViewProxy in
                             if documentsStore.viewMode == .list {
                                 List {
-                                    //                        Section(header: listSectionHeader) {
                                     ForEach($documentsStore.documents) { document in
                                         NavigationLink(destination: navigationDestination(for: document.wrappedValue)) {
                                             DocumentRow(
@@ -194,8 +190,7 @@ public struct FolderView: View {
                                             .id(document.id)
                                         }
                                     }
-//                                    .onDelete(perform: deleteItems)
-                                    //                        }
+                                    //                                    .onDelete(perform: deleteItems)
                                 }
                                 .listStyle(InsetListStyle())
                                 .onAppear {
@@ -259,11 +254,8 @@ public struct FolderView: View {
                                           searchResults: $searchViewModel.searchResults,
                                           isLoading: $searchViewModel.isLoading,
                                           columns: [GridItem(.adaptive(minimum: 100), spacing: 20)])
-                        //                     .scaleEffect(viewModel.isSearching ? 1 : 0.5) // 1 means full size, 0.5 is half size
-                        //                        .opacity(viewModel.isSearching ? 1 : 0) // 1 for fully visible, 0 for invisible
-                        //                        .animation(.easeInOut(duration: 0.5), value: viewModel.isSearching)
                         .frame(maxHeight: .infinity)
-                        .background(Color.white) // Set a solid background color here
+                        .background(Color.white)
                         .edgesIgnoringSafeArea(.all)
                     }
                 }
@@ -283,13 +275,11 @@ public struct FolderView: View {
                     if let folderId = notification.object as? Int {
                         self.folderID = folderId
                         self.showPopupWarning = true
-//                        NotificationCenter.default.removeObserver(self.warningNotification!)
                     }
                 }
                 
                 self.errorNotification = NotificationCenter.default.addObserver(forName: Notification.Name("DeleteFailed"), object: nil, queue: .main) { notification in
                     self.showPopupFail = true
-//                    NotificationCenter.default.removeObserver(self.errorNotification!)
                 }
             }
             .popup(isPresented: $showPopupSuccess) {
@@ -299,11 +289,9 @@ public struct FolderView: View {
                     
                     VStack (alignment: .center) {
                         if uploadProgress == 1 || onlyShowPopupSuccess {
-                            ShineButtonWrapper (x: Int(centerX), y: Int(centerY), r: Int(circleSize), type: .success) {
-                                
-                            }
-                            .offset(x: min(screenWidth, screenHeight) * 0.6 / 2 - circleSize / 2, y: 0)
-                            .padding(.top, 48)
+                            ShineButtonWrapper (x: Int(centerX), y: Int(centerY), r: Int(circleSize), type: .success) { }
+                                .offset(x: min(screenWidth, screenHeight) * 0.6 / 2 - circleSize / 2, y: 0)
+                                .padding(.top, 48)
                             
                             Spacer()
                             
@@ -345,7 +333,6 @@ public struct FolderView: View {
                     .closeOnTapOutside(true)
                     .backgroundColor(.black.opacity(0.5))
             }
-            //        .frame(maxHeight: .infinity)
             .popup(isPresented: $showPopupWarning) {
                 VStack {
                     VStack {}
@@ -493,11 +480,6 @@ public struct FolderView: View {
             switch error {
             case DocumentsStoreError.remoteCreationSuccedded:
                 logger.info("\(documentsStore.documents.last?.name ?? "unknown") created remotely")
-//                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
-//                    withAnimation {
-//                        listProxy?.scrollTo(documentsStore.documents.last?.id, anchor: .bottom)
-//                    }
-//                }
             default:
                 break
             }

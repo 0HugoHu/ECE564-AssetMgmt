@@ -39,7 +39,7 @@ struct DCSectionView: View {
             }
         }
     }
-
+    
     private func displayEmptyField(for key: String) -> some View {
         Group {
             switch fieldType(for: key) {
@@ -50,7 +50,7 @@ struct DCSectionView: View {
             }
         }
     }
-
+    
     private func fieldType(for key: String) -> FieldType {
         switch key {
         case "Title", "Description", "Coverage", "Identifier", "Source", "Format":
@@ -58,10 +58,10 @@ struct DCSectionView: View {
         case "Keyword", "Creator", "Rights", "Contributor", "Publisher", "Date":
             return .list
         default:
-            return .single // Default to single if not explicitly defined
+            return .single
         }
     }
-
+    
     enum FieldType {
         case single
         case list

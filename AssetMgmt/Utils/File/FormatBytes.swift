@@ -9,7 +9,7 @@ import Foundation
 
 func formatBytes(_ bytes: Int) -> String {
     let formatter = ByteCountFormatter()
-    formatter.allowedUnits = [.useBytes, .useKB, .useMB, .useGB] // You can adjust this depending on which units you want to allow
+    formatter.allowedUnits = [.useBytes, .useKB, .useMB, .useGB]
     formatter.countStyle = .file
     return formatter.string(fromByteCount: Int64(bytes))
 }

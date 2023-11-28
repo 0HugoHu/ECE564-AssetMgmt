@@ -1,3 +1,11 @@
+//
+//  DocumentRow.swift
+//  AssetMgmt
+//
+//  Created by ntsh (https://github.com/ntsh/DirectoryBrowser)
+//  Adapted by Hugooooo on 11/5/23.
+//
+
 import FilePreviews
 import SwiftUI
 
@@ -49,12 +57,6 @@ struct DocumentRow: View {
             }) {
                 Label("Rename", systemImage: "pencil")
             }
-            //            Button(action: {}) {
-            //                Label("Move", systemImage: "folder.badge.gear")
-            //            }
-            //            Button(action: {}) {
-            //                Label("Share", systemImage: "square.and.arrow.up")
-            //            }
         }
         .onChange(of: isEditing) {
             nameEditIsFocused = $0
