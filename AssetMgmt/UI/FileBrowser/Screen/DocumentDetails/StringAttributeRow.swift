@@ -94,13 +94,17 @@ struct EditSingleStringView: View {
     @State var key: String
     @Binding var value: String
     @Environment(\.presentationMode) var presentationMode
-    
+    @State private var tempValue: String = ""
+
     var body: some View {
         NavigationView {
             VStack {
-                TextField("Edit \(key)", text: $value, axis: .vertical)
+                TextField("Edit \(key)", text: $tempValue)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
+                    .onAppear {
+                        tempValue = value
+                    }
                 
                 Spacer()
             }
@@ -110,6 +114,7 @@ struct EditSingleStringView: View {
                     presentationMode.wrappedValue.dismiss()
                 },
                 trailing: Button("Save") {
+                    value = tempValue
                     let customJSON = Fields().toJSONField(id: id, key: key, value: value)
                     print(customJSON)
                     updateDublinCore(customJSON: customJSON) { success in
@@ -133,22 +138,26 @@ struct EditStringListView: View {
     @State private var newItem: String = ""
     @State private var newDate: Date = Date()
     @Environment(\.presentationMode) var presentationMode
+    @State private var tempValues: [String] = []
     
     var body: some View {
         NavigationView {
             VStack {
                 List {
-                    ForEach($values.indices, id: \.self) { index in
+                    ForEach($tempValues.indices, id: \.self) { index in
                         if key == "Date" {
                             DatePicker("Select Date", selection: Binding(
-                                get: { self.getDateFromString(self.values[index]) ?? Date() },
-                                set: { self.values[index] = self.getStringFromDate($0) }
+                                get: { self.getDateFromString(self.tempValues[index]) ?? Date() },
+                                set: { self.tempValues[index] = self.getStringFromDate($0) }
                             ), displayedComponents: .date)
                         } else {
-                            TextField("Edit Value", text: $values[index])
+                            TextField("Edit Value", text: $tempValues[index])
                         }
                     }
                     .onDelete(perform: delete)
+                }
+                .onAppear {
+                    tempValues = values
                 }
                 
                 if key == "Date" {
@@ -175,6 +184,7 @@ struct EditStringListView: View {
                     presentationMode.wrappedValue.dismiss()
                 },
                 trailing: Button("Save") {
+                    values = tempValues
                     let customJSON = Fields().toJSONField(id: id, key: key, value: values)
                     print(customJSON)
                     updateDublinCore(customJSON: customJSON) { success in
@@ -192,19 +202,19 @@ struct EditStringListView: View {
     
     private func addNewItem() {
         if !newItem.isEmpty {
-            values.append(newItem)
+            tempValues.append(newItem)
             newItem = ""
         }
     }
     
     private func addNewDate() {
         let newDateString = getStringFromDate(newDate)
-        values.append(newDateString)
+        tempValues.append(newDateString)
         newDate = Date()
     }
     
     private func delete(at offsets: IndexSet) {
-        values.remove(atOffsets: offsets)
+        tempValues.remove(atOffsets: offsets)
     }
     
     private func getDateFromString(_ string: String) -> Date? {
