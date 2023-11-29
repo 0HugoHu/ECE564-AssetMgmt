@@ -121,28 +121,45 @@ struct Fields: Codable, Equatable {
 }
 
 extension Fields {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        if let titleString = try? container.decode(String.self, forKey: .title) {
+            title = titleString
+        } else if let titleArray = try? container.decode([String].self, forKey: .title), let firstTitle = titleArray.first {
+            title = firstTitle
+        } else {
+            title = nil
+        }
+
+        keyword = try? container.decode([String].self, forKey: .keyword)
+        description = try? container.decode(String.self, forKey: .description)
+        creator = try? container.decode([String].self, forKey: .creator)
+        rights = try? container.decode([String].self, forKey: .rights)
+        contributor = try? container.decode([String].self, forKey: .contributor)
+        publisher = try? container.decode([String].self, forKey: .publisher)
+        coverage = try? container.decode(String.self, forKey: .coverage)
+        date = try? container.decode([String].self, forKey: .date)
+        identifier = try? container.decode(String.self, forKey: .identifier)
+        source = try? container.decode(String.self, forKey: .source)
+        format = try? container.decode(String.self, forKey: .format)
+    }
+}
+
+extension Fields {
     func toJSONField(id: Int, key: String, value: Any) -> [String: Any] {
         var fieldsArray: [[String: Any]] = []
-        print(key)
         guard let codingKey = codingKey(for: key.lowercased()) else { return ["id": id, "fields": []] }
-        
         if let stringValue = value as? String {
-            // Handle the case where value is a String
             fieldsArray.append(["fieldId": codingKey, "value": stringValue, "append": false])
         } else if let arrayValue = value as? [String] {
-            // Handle the case where value is an Array of Strings
-            print(arrayValue)
-            
             fieldsArray.append(["fieldId": codingKey, "value": arrayValue, "append": false])
-            
         } else {
-            // Handle other types or report an error
             print("Invalid type for value. Only String or [String] are supported.")
         }
         
         return ["id": id, "fields": fieldsArray]
     }
-    
     
     private func codingKey(for label: String) -> String? {
         switch label {
