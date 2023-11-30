@@ -49,7 +49,10 @@ enum SearchDirectoryOptions: String, CaseIterable, Identifiable {
     var id: String { self.rawValue }
 }
 
-
+/*
+ The Basic Layout of the Search Bar is inspired by:
+ https://github.com/UPetersen/SwiftUI-SearchBar
+ */
 struct SearchBarView: View {
     @Binding var searchText: String
     @State private var showCancelButton: Bool = false
@@ -72,7 +75,6 @@ struct SearchBarView: View {
     
     var onAdvancedSearch: () -> Void
     var onCommit: () -> Void
-    
     
     init(
         searchText: Binding<String>,
@@ -117,10 +119,9 @@ struct SearchBarView: View {
                     }, onCommit: onCommit).foregroundColor(.primary)
                 }
                 
-                
                 if showCancelButton  {
-                    // Cancel button
                     
+                    // Cancel button
                     Button(action: {
                         UIApplication.shared.endEditing(true)
                         self.searchText = ""
@@ -217,10 +218,6 @@ struct SearchBarView: View {
             )
             .padding(.top, 5)
             .padding(.horizontal)
-            
         }
-        
-        
     }
 }
-

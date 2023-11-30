@@ -35,7 +35,6 @@ struct SearchView: View {
                     searchViewModel.updateSearchStatus()
                 }
             )
-            // As long as the search text updates, the searchStatus will update
             .onChange(of: searchViewModel.searchText) { _ in
                 if !searchViewModel.searchText.isEmpty {
                     searchViewModel.search()
@@ -63,4 +62,3 @@ struct SearchView: View {
 #Preview {
     SearchView()
 }
-

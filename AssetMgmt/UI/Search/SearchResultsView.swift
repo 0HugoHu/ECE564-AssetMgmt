@@ -49,4 +49,3 @@ struct SearchResultsView: View {
         .background(Color(UIColor.systemBackground))
     }
 }
-
