@@ -18,7 +18,7 @@ The Duke Asset Management iOS Mobile App serves as a mobile gateway to MediaBeac
 
 ### Problems
 
-MediaBeacon, as the cornerstone of Duke's digital storage, houses over 4 million digital assets, including images, PDFs, videos, and more. Despite its vast capacity and robust web server, MediaBeacon's lack of a mobile application has been a notable shortfall. Users at Duke have frequently reported that this gap in mobile accessibility significantly hampers their work efficiency. The absence of a mobile interface limits the usability and accessibility of the system, particularly for users who rely on mobile devices for their work.
+[MediaBeacon](https://oit.duke.edu/service/mediabeacon/), as the cornerstone of Duke's digital storage, houses over 4 million digital assets, including images, PDFs, videos, and more. Despite its vast capacity and robust web server, MediaBeacon's lack of a mobile application has been a notable shortfall. Users at Duke have frequently reported that this gap in mobile accessibility significantly hampers their work efficiency. The absence of a mobile interface limits the usability and accessibility of the system, particularly for users who rely on mobile devices for their work.
 
 ### Solution Impacts
 In response to these issues, we have developed a tailored iOS app for MediaBeacon. This solution brings two major impacts:
