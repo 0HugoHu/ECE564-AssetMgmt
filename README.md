@@ -35,17 +35,47 @@ In response to these issues, we have developed a tailored iOS app for MediaBeaco
 
 ### 1. Login
 
-| Login Page | |
-| :---: | :---: |
-| <img src="images/login-0.png" width="300" />|<img src="images/login-1.png" width="300" />|
+- Initiate a redirect to the Duke OAuth authentication page.
+- Upon successful authentication, securely store the **AuthToken** within the iOS **UserDefaults** system.
+- Note that the AuthToken remains valid for a period of **7 days**.
+- After authentication and token storage, navigate to the main folder page.
+
+<table>
+  <tr>
+    <!-- Header spanning across two columns -->
+    <th colspan="2" style="text-align:center;">Login Page</th>
+  </tr>
+  <tr style="text-align:center;">
+    <!-- Images in individual cells, centered -->
+    <td><img src="images/login-0.png" style="width:300px; height:auto;" /></td>
+    <td><img src="images/login-1.png" style="width:300px; height:auto;" /></td>
+  </tr>
+</table>
 
 
 
 ### 2. Browse Folder​
 
-| Browse Folder | |
-| :---: | :---: |
-| <img src="images/folder-0.png" width="300" />|<img src="images/folder-1.png" width="300" />|
+- Switch between **Icon** or **List** view using the toggle on the top-right menu bar.
+- Organize files by **Name**, **Date**, or **Type**, with options for both ascending and descending order.
+- Ensure all operations load **asynchronously**, with a **Retry Mechanism** for enhanced reliability.
+
+<table>
+  <tr>
+    <!-- Header spanning across two columns -->
+    <th colspan="2" style="text-align:center;">Browse Folder </th>
+  </tr>
+  <tr style="text-align:center;">
+    <!-- Images in individual cells, centered -->
+    <td><img src="images/folder-0.png" style="width:300px; height:auto;" /></td>
+    <td><img src="images/folder-1.png" style="width:300px; height:auto;" /></td>
+  </tr>
+    <tr style="text-align:center;">
+    <!-- Images in individual cells, centered -->
+    <td><img src="images/folder-2.png" style="width:300px; height:auto;" /></td>
+    <td><img src="images/folder-3.png" style="width:300px; height:auto;" /></td>
+  </tr>
+</table>
 
 
 
@@ -61,7 +91,7 @@ In response to these issues, we have developed a tailored iOS app for MediaBeaco
 
 ## How to Run 
 
-
+![Alt text](image-4.png)
 
 ## 1. Project Management (Notion)
 
