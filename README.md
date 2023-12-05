@@ -114,6 +114,7 @@ APIs are implemented for:
 
 ### 4. ACL (Access Control List)
 
+Access Control Lists (ACLs) are a security mechanism that defines who has access to assets, buckets, networks, storage, and files. ACLs can also define what level of access users have
 - ACL is supported at the server end.
 - Each URL query contains `acl_id` as parameter, or default ACL will be used.
 
@@ -129,6 +130,8 @@ APIs are implemented for:
 </table>
 
 ### 5. Search
+
+The search feature is engineered to process keyword inputs and retrieve corresponding assets that match the criteria.
 
 - The search functionality within the app is designed with dual scope for user convenience:
     - **Overall**: Allows users to search across all available content.
@@ -149,7 +152,7 @@ APIs are implemented for:
 </table>
 
 ### 6. Advance Search
-- Allow users to add restrictions on dates, folder names and file names, and allows special logical conditions.
+- Allow users to add restrictions on **dates**, **folder names** and **file names**, and allows special *logical conditions*.
 - This example is to list all the files in the folder “Sample” and its sub-folders.
 
 <table>
@@ -179,7 +182,6 @@ APIs are implemented for:
 
 ### 8. File Preview
 
-
 <table>
   <tr>
     <!-- Header spanning across two columns -->
@@ -200,6 +202,17 @@ Themes:
 - New Year Theme
 - Duke Theme
 
+<table>
+  <tr>
+    <!-- Header spanning across two columns -->
+    <th colspan="1" style="text-align:center;">Themes </th>
+  </tr>
+  <tr style="text-align:center;">
+    <!-- Images in individual cells, centered -->
+    <td><img src="images/theme-0.png" style="width:620px; height:auto;" /></td>
+
+</table>
+
 Appearance:
 - Light Mode
 - Dark Mode
@@ -208,11 +221,7 @@ Appearance:
 <table>
   <tr>
     <!-- Header spanning across two columns -->
-    <th colspan="1" style="text-align:center;">Themes & Modes </th>
-  </tr>
-  <tr style="text-align:center;">
-    <!-- Images in individual cells, centered -->
-    <td><img src="images/theme-0.png" style="width:620px; height:auto;" /></td>
+    <th colspan="1" style="text-align:center;"> Modes </th>
   </tr>
     <tr style="text-align:center;">
     <!-- Images in individual cells, centered -->
@@ -221,15 +230,14 @@ Appearance:
 </table>
 
 
-
-
+## Test
 
 ## Running Environment
 
 ## How to Run 
 
 
-## 1. Project Management (Notion)
+## Project Management (Notion)
 
 - Sprint 1:
 - Sprint 2:
@@ -255,6 +263,3 @@ This project utilizes several open-source libraries:
 These libraries have significantly contributed to the functionality of this app.
 
 ### Sponsor..
-
-
-## Test
