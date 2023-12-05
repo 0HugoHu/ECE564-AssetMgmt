@@ -6,6 +6,7 @@ Jiaoyang Chen, Hugo Hu, Minghui Zhu
 
 <img src="images/logo.png" width="100" height="100">
 
+
 ## Table of Contents
 
 
@@ -81,7 +82,127 @@ In response to these issues, we have developed a tailored iOS app for MediaBeaco
 
 ### 3. File Operations​
 
-### 4. ...
+APIs are implemented for:
+1. Create a new folder
+2. Rename a folder or file
+3. Upload photos from local
+4. Delete a folder or file
+    - Warning: Deleting Folder
+    - Error: If not exists now
+
+<table>
+  <tr>
+    <!-- Header spanning across two columns -->
+    <th colspan="2" style="text-align:center;">File Operations </th>
+  </tr>
+  <tr style="text-align:center;">
+    <!-- Images in individual cells, centered -->
+    <td><img src="images/rename-folder-0.png" style="width:300px; height:auto;" /></td>
+    <td><img src="images/rename-folder-1.png" style="width:300px; height:auto;" /></td>
+  </tr>
+    <tr style="text-align:center;">
+    <!-- Images in individual cells, centered -->
+    <td><img src="images/upload-files-0.png" style="width:300px; height:auto;" /></td>
+
+  </tr>
+</table>
+
+GIFS
+
+### 4. ACL
+
+### 5. Search
+
+- Search xxxx.
+- The search functionality within the app is designed with dual scope for user convenience:
+    - **Overall**: Allows users to search across all available content.
+    - **Current Folder**: Searches are limited to the folder currently being viewed, with the folder's path included in the URL for precise results.
+
+- The **number of matches** is displayed on the top right.
+
+<table>
+  <tr>
+    <!-- Header spanning across two columns -->
+    <th colspan="2" style="text-align:center;">Search </th>
+  </tr>
+  <tr style="text-align:center;">
+    <!-- Images in individual cells, centered -->
+    <td><img src="images/search-0.png" style="width:300px; height:auto;" /></td>
+    <td><img src="images/search-1.png" style="width:300px; height:auto;" /></td>
+  </tr>
+</table>
+
+### 6. Advance Search
+- Allow users to add restrictions on dates, folder names and file names, and allows special logical conditions.
+- This example is to list all the files in the folder “Sample” and its sub-folders.
+
+<table>
+  <tr>
+    <!-- Header spanning across two columns -->
+    <th colspan="2" style="text-align:center;">Advance Search </th>
+  </tr>
+  <tr style="text-align:center;">
+    <!-- Images in individual cells, centered -->
+    <td><img src="images/adv-search-0.png" style="width:300px; height:auto;" /></td>
+    <td><img src="images/adv-search-1.png" style="width:300px; height:auto;" /></td>
+  </tr>
+</table>
+
+### 7. File Details
+
+<table>
+  <tr>
+    <!-- Header spanning across two columns -->
+    <th colspan="1" style="text-align:center;">File Details </th>
+  </tr>
+  <tr style="text-align:center;">
+    <!-- Images in individual cells, centered -->
+    <td><img src="images/file-details.png" style="width:620px; height:auto;" /></td>
+  </tr>
+</table>
+
+### 8. File Preview
+
+
+<table>
+  <tr>
+    <!-- Header spanning across two columns -->
+    <th colspan="1" style="text-align:center;">File Preview </th>
+  </tr>
+  <tr style="text-align:center;">
+    <!-- Images in individual cells, centered -->
+    <td><img src="images/file-preview.png" style="width:620px; height:auto;" /></td>
+  </tr>
+</table>
+
+### 9. Themes & Modes
+
+Themes:
+
+- Default Theme
+- Christmas Theme
+- New Year Theme
+- Duke Theme
+
+Appearance:
+- Light Mode
+- Dark Mode
+- System Setting
+
+<table>
+  <tr>
+    <!-- Header spanning across two columns -->
+    <th colspan="1" style="text-align:center;">Themes & Modes </th>
+  </tr>
+  <tr style="text-align:center;">
+    <!-- Images in individual cells, centered -->
+    <td><img src="images/theme-0.png" style="width:620px; height:auto;" /></td>
+  </tr>
+    <tr style="text-align:center;">
+    <!-- Images in individual cells, centered -->
+    <td><img src="images/theme-1.png" style="width:620px; height:auto;" /></td>
+  </tr>
+</table>
 
 
 
@@ -91,7 +212,6 @@ In response to these issues, we have developed a tailored iOS app for MediaBeaco
 
 ## How to Run 
 
-![Alt text](image-4.png)
 
 ## 1. Project Management (Notion)
 
@@ -102,8 +222,23 @@ In response to these issues, we have developed a tailored iOS app for MediaBeaco
 
 
 ## Acknowledge
-Library refernece
 
-Sponsor..
+### Library Reference
+
+This project utilizes several open-source libraries:
+
+- `Alamofire v5.8.1` - for efficient HTTP networking, supporting resuming interrupted transmissions and handling large file uploads.
+- `DirectoryBrowser v0.1.0` - for displaying files in a list view within the app.
+- `FilePreviews v0.2.0` - for generating file previews and thumbnails, leveraging native iOS features.
+- `PopupView v2.8.3` - for customizable floating dialog animations.
+- `Swift-log v1.5.3` - for logging, particularly in concurrent environments.
+- `SwiftUI Text Animation Library v0.1.0` - for adding text animations within SwiftUI.
+- `WCLShineButton v1.0.8` - for sophisticated button animations in UIKit.
+- `Zip v2.1.2` - for compressing and decompressing files locally using Swift.
+
+These libraries have significantly contributed to the functionality of this app.
+
+### Sponsor..
 
 
+## Test
