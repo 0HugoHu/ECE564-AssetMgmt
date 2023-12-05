@@ -1,7 +1,8 @@
 # Duke Asset Management iOS Mobile App 
 
-</table>
+
 Jiaoyang Chen, Hugo Hu, Minghui Zhu
+
 
 <img src="images/logo.png" width="100" height="100">
 
@@ -25,9 +26,7 @@ In response to these issues, we have developed a tailored iOS app for MediaBeaco
 
 2. **Workflow Improvement**: The app is designed to streamline the workflow process. By providing mobile access to MediaBeacon's vast repository, it enhances user productivity and accessibility. This improvement in workflow not only makes the process more efficient but also more adaptable to the modern needs of mobile-centric users.
 
-
 ## 2. Project Structure
-
 
 ![Project Structure](images/project-structure.png)
 
@@ -36,7 +35,19 @@ In response to these issues, we have developed a tailored iOS app for MediaBeaco
 
 ### 1. Login
 
+| Login Page | |
+| :---: | :---: |
+| <img src="images/login-0.png" width="300" />|<img src="images/login-1.png" width="300" />|
+
+
+
 ### 2. Browse Folder​
+
+| Browse Folder | |
+| :---: | :---: |
+| <img src="images/folder-0.png" width="300" />|<img src="images/folder-1.png" width="300" />|
+
+
 
 ### 3. File Operations​
 
