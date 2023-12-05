@@ -93,27 +93,43 @@ APIs are implemented for:
 <table>
   <tr>
     <!-- Header spanning across two columns -->
-    <th colspan="2" style="text-align:center;">File Operations </th>
+    <th colspan="3" style="text-align:center;">File Operations </th>
   </tr>
   <tr style="text-align:center;">
     <!-- Images in individual cells, centered -->
     <td><img src="images/rename-folder-0.png" style="width:300px; height:auto;" /></td>
     <td><img src="images/rename-folder-1.png" style="width:300px; height:auto;" /></td>
+    <td><img src="images/upload-files-0.png" 
+    style="width:300px; height:auto;" /></td>
   </tr>
     <tr style="text-align:center;">
     <!-- Images in individual cells, centered -->
-    <td><img src="images/upload-files-0.png" style="width:300px; height:auto;" /></td>
+    <td><img src="images/gif-0.gif" style="width:300px; height:auto;" /></td>
+    <td><img src="images/gif-1.gif" style="width:300px; height:auto;" /></td>
 
   </tr>
 </table>
 
-GIFS
 
-### 4. ACL
+
+### 4. ACL (Access Control List)
+
+- ACL is supported at the server end.
+- Each URL query contains `acl_id` as parameter, or default ACL will be used.
+
+<table>
+  <tr>
+    <!-- Header spanning across two columns -->
+    <th colspan="1" style="text-align:center;"> ACL </th>
+  </tr>
+  <tr style="text-align:center;">
+    <!-- Images in individual cells, centered -->
+    <td><img src="images/acl.png" style="width:540px; height:auto;" /></td>
+  </tr>
+</table>
 
 ### 5. Search
 
-- Search xxxx.
 - The search functionality within the app is designed with dual scope for user convenience:
     - **Overall**: Allows users to search across all available content.
     - **Current Folder**: Searches are limited to the folder currently being viewed, with the folder's path included in the URL for precise results.
