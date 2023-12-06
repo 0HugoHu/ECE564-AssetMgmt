@@ -1,16 +1,15 @@
-# Duke Asset Management iOS Mobile App 
+# Duke Asset Management iOS App 
 
 
-Jiaoyang Chen, Hugo Hu, Minghui Zhu
+Jiaoyang Chen, [Hugo Hu](https://github.com/0hugohu), [Minghui Zhu](https://github.com/zhuminghui17)
+
+Unpublished Work © 2023 Duke University
 
 
 <img src="images/logo.png" width="100" height="100">
 
 
-## Table of Contents
-
-
-## 1. Introduction
+## 0. Introduction
 
 ### Overview
 
@@ -27,24 +26,24 @@ In response to these issues, we have developed a tailored iOS app for MediaBeaco
 
 2. **Workflow Improvement**: The app is designed to streamline the workflow process. By providing mobile access to MediaBeacon's vast repository, it enhances user productivity and accessibility. This improvement in workflow not only makes the process more efficient but also more adaptable to the modern needs of mobile-centric users.
 
-## 2. Project Structure
+## 1. Project Structure
 
 ![Project Structure](images/project-structure.png)
 
+## 2. How to Run 
+Clone this repo and open the `DukeAssetMgmt.xcodeproj` file in Xcode. Then, run the app on a simulator or a real device with default scheme.
 
-## Function List / Feature Demo
+## 3. Demo
 
-### 1. Login
+### 3.1. Authentication
 
-- Initiate a redirect to the Duke OAuth authentication page.
-- Upon successful authentication, securely store the **AuthToken** within the iOS **UserDefaults** system.
-- Note that the AuthToken remains valid for a period of **7 days**.
-- After authentication and token storage, navigate to the main folder page.
+- Redirect to the Duke OAuth authentication page
+- Upon successful authentication, securely store the **AuthToken** within the iOS **UserDefaults** system. The AuthToken remains valid for a period of **7 days**
 
 <table>
   <tr>
     <!-- Header spanning across two columns -->
-    <th colspan="2" style="text-align:center;">Login Page</th>
+    <th colspan="2" style="text-align:center;">Authentication Page</th>
   </tr>
   <tr style="text-align:center;">
     <!-- Images in individual cells, centered -->
@@ -55,11 +54,11 @@ In response to these issues, we have developed a tailored iOS app for MediaBeaco
 
 
 
-### 2. Browse Folder​
+### 3.2. Browse Folder​
 
-- Switch between **Icon** or **List** view using the toggle on the top-right menu bar.
-- Organize files by **Name**, **Date**, or **Type**, with options for both ascending and descending order.
-- Ensure all operations load **asynchronously**, with a **Retry Mechanism** for enhanced reliability.
+- Switch between **Icon** or **List** view using the toggle on the top-right menu bar
+- Organize files by **Name**, **Date**, or **Type**, with options for both ascending and descending order
+- Ensure all operations load **asynchronously**, with a **Retry Mechanism** for enhanced reliability
 
 <table>
   <tr>
@@ -80,15 +79,13 @@ In response to these issues, we have developed a tailored iOS app for MediaBeaco
 
 
 
-### 3. File Operations​
+### 3.3. File Operations​
 
-APIs are implemented for:
+Basic file operations are supported, including:
 1. Create a new folder
 2. Rename a folder or file
-3. Upload photos from local
-4. Delete a folder or file
-    - Warning: Deleting Folder
-    - Error: If not exists now
+3. Upload photos from the local
+4. Delete a folder or file (If deleting a folder, it will be deleted recursively, and a warning is shown; if the file/folder is not existing, an error is shown)
 
 <table>
   <tr>
@@ -112,11 +109,11 @@ APIs are implemented for:
 
 
 
-### 4. ACL (Access Control List)
+### 3.4. ACL (Access Control List)
 
-Access Control Lists (ACLs) are a security mechanism that defines who has access to assets, buckets, networks, storage, and files. ACLs can also define what level of access users have
-- ACL is supported at the server end.
-- Each URL query contains `acl_id` as parameter, or default ACL will be used.
+Access Control Lists (ACLs) are a security mechanism that defines who has access to a specific group of assets.
+- ACL is supported at the MediaBeacon server end
+- User can switch ACL in setting tab
 
 <table>
   <tr>
@@ -129,15 +126,15 @@ Access Control Lists (ACLs) are a security mechanism that defines who has access
   </tr>
 </table>
 
-### 5. Search
+### 3.5. Search
 
-The search feature is engineered to process keyword inputs and retrieve corresponding assets that match the criteria.
+Note that the search only works in the current ACL (searching across all ACLs is not supported)
 
 - The search functionality within the app is designed with dual scope for user convenience:
-    - **Overall**: Allows users to search across all available content.
-    - **Current Folder**: Searches are limited to the folder currently being viewed, with the folder's path included in the URL for precise results.
+    - **Overall**: Allows users to search across all available content
+    - **Current Folder**: Searches are limited to the folder currently being viewed, with the folder's path included in the URL for precise results
 
-- The **number of matches** is displayed on the top right.
+- The **number of matches** is displayed on the top right
 
 <table>
   <tr>
@@ -151,9 +148,8 @@ The search feature is engineered to process keyword inputs and retrieve correspo
   </tr>
 </table>
 
-### 6. Advance Search
-- Allow users to add restrictions on **dates**, **folder names** and **file names**, and allows special *logical conditions*.
-- This example is to list all the files in the folder “Sample” and its sub-folders.
+### 3.6. Advance Search
+Allow users to add restrictions on **dates**, **folder names** and **file names**, and allows special *logical conditions*
 
 <table>
   <tr>
@@ -167,7 +163,9 @@ The search feature is engineered to process keyword inputs and retrieve correspo
   </tr>
 </table>
 
-### 7. File Details
+### 3.7. File Details
+
+Dublin Core Data can be modified in the **File Details** page. The changes will be synchronized with the MediaBeacon server.
 
 <table>
   <tr>
@@ -180,7 +178,8 @@ The search feature is engineered to process keyword inputs and retrieve correspo
   </tr>
 </table>
 
-### 8. File Preview
+### 3.8. File Preview
+Use the native iOS viewer for most file types, including: PDF, PNG, JPEG, GIF, MP4, MOV, RAW, TXT, etc.
 
 <table>
   <tr>
@@ -193,10 +192,9 @@ The search feature is engineered to process keyword inputs and retrieve correspo
   </tr>
 </table>
 
-### 9. Themes & Modes
+### 3.9. Themes & Modes
 
-Themes:
-
+We currently support 4 themes:
 - Default Theme
 - Christmas Theme
 - New Year Theme
@@ -213,7 +211,7 @@ Themes:
 
 </table>
 
-Appearance:
+And we support 3 modes:
 - Light Mode
 - Dark Mode
 - System Setting
@@ -230,24 +228,45 @@ Appearance:
 </table>
 
 
-## Test
+## 4. Testing
 
-## Running Environment
+### 4.1. Unit Test
+All core API calls are tested using unit tests. The test cases are located in the `DukeAssetMgmtTests/APITests.swift` file.
 
-## How to Run 
+```swift
+func testAdvancedSearch() throws {
+    let expectation = XCTestExpectation(description: "advancedSearch completion called")
+    let searchText = SearchFilter.createSearchCriteria(conjunction: .and, fieldId: "directory_id", condition: SearchFilter.OtherField.equals, value: "204788")
+    
+    advancedSearch(search: searchText, directory: "/", verbose: true) { assetsInfo in
+        XCTAssertNotNil(assetsInfo)
+        logger.info("First result name: \(assetsInfo![0].id)")
+        expectation.fulfill()
+    }
+    
+    // Actual time 0.53 s
+    wait(for: [expectation], timeout: 1)
+}
+```
+
+### 4.2. UI Test
+Currently we just have manual UI tests to ensure this app works well on iPhone 13, iPhone 14, and iphone 15 series (including Max and Pro). We will add more UI tests in the future.
+
+Note that although this app can run on iPad, it is not optimized for iPad yet.
 
 
-## Project Management (Notion)
+## 5. Project Management (Notion)
 
-- Sprint 1:
-- Sprint 2:
-- Sprint 3:
+- Sprint 1: Authentication, PDF Viewer, Upload and Download, API Infrastructure (October 30, 2023 → November 6, 2023)
+- Sprint 2: File Browser, Search, File Operations (November 7, 2023 → November 15, 2023)
+- Sprint 3: Advanced Search, Dublin Core Data, ACL, Theme (November 16, 2023 → November 28, 2023)
+
+## 6. Full List of API Calls
+
+![](images/apis.png)
 
 
-
-## Acknowledge
-
-### Library Reference
+## 7. Acknowledgements
 
 This project utilizes several open-source libraries:
 
@@ -260,6 +279,6 @@ This project utilizes several open-source libraries:
 - `WCLShineButton v1.0.8` - for sophisticated button animations in UIKit.
 - `Zip v2.1.2` - for compressing and decompressing files locally using Swift.
 
-These libraries have significantly contributed to the functionality of this app.
+## 8. License
 
-### Sponsor..
+MIT License
