@@ -14,7 +14,6 @@ struct AccountInfoView: View {
     @State var uiDecoration : UIImage?
     
     var body: some View {
-        let gridWidth = screenWidth / 2
         ZStack {
             if let uiDecoration {
                 Image(uiImage: uiDecoration)
