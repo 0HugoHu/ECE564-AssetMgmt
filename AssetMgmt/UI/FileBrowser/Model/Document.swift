@@ -53,7 +53,7 @@ func convertToDocument(from assetInfo: AssetInfoResponse) -> Document {
                     name: name,
                     url: url,
                     size: size,
-                    created: nil, // If you have creation date info, use it here
+                    created: nil, 
                     modified: modifiedDate,
                     highQualityPreviewUrl: highQualityPreviewUrl,
                     type: type)
