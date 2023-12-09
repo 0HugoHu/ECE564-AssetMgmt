@@ -1,7 +1,7 @@
 # Duke Asset Management iOS App 
 
 
-Jiaoyang Chen, [Hugo Hu](https://github.com/0hugohu), [Minghui Zhu](https://github.com/zhuminghui17)
+[Hugo Hu](https://github.com/0hugohu), [Jiaoyang Chen](https://github.com/MxHoChay), [Minghui Zhu](https://github.com/zhuminghui17)
 
 Unpublished Work © 2023 Duke University
 
